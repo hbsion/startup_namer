@@ -1,0 +1,1 @@
+typedef void Callable<T>(T value);
