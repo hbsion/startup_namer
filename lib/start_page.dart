@@ -8,7 +8,7 @@ class StartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Center(
-        child: Image.asset("assets/banner.jpg")
+        child: Image.asset("assets/banner_1.jpg")
     );
   }
 }

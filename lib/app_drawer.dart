@@ -25,7 +25,7 @@ class AppDrawer extends StatelessWidget {
 //            alignment: const Alignment(0.6, 0.6),
 //            children: <Widget>[
 //              Image.asset(
-//                "assets/banner.jpg",
+//                "assets/banner_1.jpg",
 //                fit: BoxFit.cover,
 //                height: 100.0,
 //              ),
@@ -43,7 +43,7 @@ class AppDrawer extends StatelessWidget {
 ////            child: new Text('Svan Play!'),
 ////            decoration: new BoxDecoration(
 ////                image: new DecorationImage(
-////                    image: new AssetImage("assets/banner.jpg"))),
+////                    image: new AssetImage("assets/banner_1.jpg"))),
 ////          ),
 //          new ListTile(
 //            title: new Text('Start Page'),
@@ -147,7 +147,7 @@ class ContactsDemoState extends State<ContactsDemo> {
     return new Theme(
       data: new ThemeData(
         brightness: Brightness.light,
-        primarySwatch: Colors.indigo,
+        primarySwatch: Colors.blueGrey,
         platform: Theme.of(context).platform,
       ),
       child: new Scaffold(
@@ -194,15 +194,15 @@ class ContactsDemoState extends State<ContactsDemo> {
                     ),
                     // This gradient ensures that the toolbar icons are distinct
                     // against the background image.
-                    const DecoratedBox(
-                      decoration: const BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: const Alignment(0.0, -1.0),
-                          end: const Alignment(0.0, -0.4),
-                          colors: const <Color>[const Color(0x60000000), const Color(0x00000000)],
-                        ),
-                      ),
-                    ),
+//                    const DecoratedBox(
+//                      decoration: const BoxDecoration(
+//                        gradient: const LinearGradient(
+//                          begin: const Alignment(0.0, -1.0),
+//                          end: const Alignment(0.0, -0.4),
+//                          colors: const <Color>[const Color(0x60000000), const Color(0x00000000)],
+//                        ),
+//                      ),
+//                    ),
                   ],
                 ),
               ),
