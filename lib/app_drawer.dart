@@ -12,19 +12,28 @@ class MenuEntry {
   MenuEntry({this.title, this.sport, this.league, this.region, this.count = 0});
 }
 
-final List<MenuEntry> higlights = [
+final List<MenuEntry> highlights = [
   new MenuEntry(title: "Home"),
   new MenuEntry(title: "Live Right Now"),
   new MenuEntry(title: "Starting Soon"),
 ];
 
 final popular = [
-  new MenuEntry(sport: "Football", region: "Sweden", league: "Allsvenskan", count: 1569),
-  new MenuEntry(sport: "Football", region: "Sweden", league: "Superettan", count: 1005),
-  new MenuEntry(sport: "Football", region: "England", league: "Premier League", count: 3987),
-  new MenuEntry(sport: "Football", region: "Italy", league: "Serie A", count: 1178),
-  new MenuEntry(sport: "Football", region: "Spain", league: "LaLiga", count: 2236),
-  new MenuEntry(sport: "Ice Hockey", region: "Sweden", league: "SHL", count: 111),
+  new MenuEntry(
+      sport: "Football", region: "Sweden", league: "Allsvenskan", count: 1569),
+  new MenuEntry(
+      sport: "Football", region: "Sweden", league: "Superettan", count: 1005),
+  new MenuEntry(
+      sport: "Football",
+      region: "England",
+      league: "Premier League",
+      count: 3987),
+  new MenuEntry(
+      sport: "Football", region: "Italy", league: "Serie A", count: 1178),
+  new MenuEntry(
+      sport: "Football", region: "Spain", league: "LaLiga", count: 2236),
+  new MenuEntry(
+      sport: "Ice Hockey", region: "Sweden", league: "SHL", count: 111),
   new MenuEntry(sport: "Ice Hockey", league: "NHL", count: 1231),
   new MenuEntry(sport: "Basketball", league: "NBA", count: 10),
   new MenuEntry(sport: "Tennis", count: 182),
@@ -98,11 +107,15 @@ class MenuEntryRow extends StatelessWidget {
     } else if (entry.league != null) {
       row.add(new Text(entry.league));
       row.add(new Padding(
-          padding: EdgeInsets.only(left: 4.0), child: new Text(entry.sport, style: theme.textTheme.caption)));
+          padding: EdgeInsets.only(left: 4.0),
+          child: new Text(entry.sport, style: theme.textTheme.caption)));
       if (entry.region != null) {
-        row.add(new Padding(padding: EdgeInsets.only(left: 2.0), child: new Text("/", style: theme.textTheme.caption)));
         row.add(new Padding(
-            padding: EdgeInsets.only(left: 2.0), child: new Text(entry.region, style: theme.textTheme.caption)));
+            padding: EdgeInsets.only(left: 2.0),
+            child: new Text("/", style: theme.textTheme.caption)));
+        row.add(new Padding(
+            padding: EdgeInsets.only(left: 2.0),
+            child: new Text(entry.region, style: theme.textTheme.caption)));
       }
     } else {
       row.add(new Text(entry.sport));
@@ -113,8 +126,12 @@ class MenuEntryRow extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 8.0),
           child: Row(
             children: <Widget>[
-              new Expanded(child: new Row(children: row, crossAxisAlignment: CrossAxisAlignment.end)),
-              new Text(entry.count.toString(), style: Theme.of(context).textTheme.caption)
+              new Expanded(
+                  child: new Row(
+                      children: row,
+                      crossAxisAlignment: CrossAxisAlignment.end)),
+              new Text(entry.count.toString(),
+                  style: Theme.of(context).textTheme.caption)
             ],
           ),
         ),
@@ -125,13 +142,43 @@ class MenuEntryRow extends StatelessWidget {
 enum AppBarBehavior { normal, pinned, floating, snapping }
 
 class AppMenu extends StatelessWidget {
-  static final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  static final GlobalKey<ScaffoldState> _scaffoldKey =
+      new GlobalKey<ScaffoldState>();
   final double _appBarHeight = 150.0;
 
   AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> entries = [
+      new ExpansionTile(
+          title: new Text(""),
+          initiallyExpanded: true,
+          children: highlights.map((entry) => new MenuEntryRow(entry)).toList()),
+      new ExpansionTile(
+          title: new Text("Popular"),
+          initiallyExpanded: true,
+          children: popular.map((entry) => new MenuEntryRow(entry))
+              .toList()),
+      new ExpansionTile(
+          title: new Text("Sports"),
+          initiallyExpanded: true,
+          children: sports.map((entry) => new MenuEntryRow(entry))
+              .toList()),
+      new ExpansionTile(
+          title: new Text("More Sports"),
+          initiallyExpanded: true,
+          children: moreSports.map((entry) => new MenuEntryRow(entry))
+              .toList()),
+
+    ];
+//        ;
+    //entries.add(new Text("Popular"));
+//    entries.addAll(popular.map((entry) => new MenuEntryRow(entry)).toList());
+//    entries.add(new ExpansionTile(
+//        title: new Text("Popular"),
+//        children: );
+
     return new Theme(
       data: new ThemeData(
         brightness: Brightness.dark,
@@ -145,7 +192,8 @@ class AppMenu extends StatelessWidget {
             new SliverAppBar(
               expandedHeight: _appBarHeight,
               pinned: _appBarBehavior == AppBarBehavior.pinned,
-              floating: _appBarBehavior == AppBarBehavior.floating || _appBarBehavior == AppBarBehavior.snapping,
+              floating: _appBarBehavior == AppBarBehavior.floating ||
+                  _appBarBehavior == AppBarBehavior.snapping,
               snap: _appBarBehavior == AppBarBehavior.snapping,
               flexibleSpace: new FlexibleSpaceBar(
                 title: const Text('Svan Play!'),
@@ -162,7 +210,7 @@ class AppMenu extends StatelessWidget {
               ),
             ),
             new SliverList(
-              delegate: new SliverChildListDelegate(popular.map((entry) => new MenuEntryRow(entry)).toList()),
+              delegate: new SliverChildListDelegate(entries),
             ),
           ],
         ),
