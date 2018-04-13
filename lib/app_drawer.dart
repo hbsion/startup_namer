@@ -100,8 +100,7 @@ class MenuEntryRow extends StatelessWidget {
       row.add(new Padding(
           padding: EdgeInsets.only(left: 4.0), child: new Text(entry.sport, style: theme.textTheme.caption)));
       if (entry.region != null) {
-        row.add(new Padding(
-            padding: EdgeInsets.only(left: 2.0), child: new Text("/", style: theme.textTheme.caption)));
+        row.add(new Padding(padding: EdgeInsets.only(left: 2.0), child: new Text("/", style: theme.textTheme.caption)));
         row.add(new Padding(
             padding: EdgeInsets.only(left: 2.0), child: new Text(entry.region, style: theme.textTheme.caption)));
       }
@@ -109,14 +108,17 @@ class MenuEntryRow extends StatelessWidget {
       row.add(new Text(entry.sport));
     }
 
-    return new Padding(
-        padding: EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 8.0),
-        child: Row(
-          children: <Widget>[
-            new Expanded(child: new Row(children: row, crossAxisAlignment: CrossAxisAlignment.end)),
-            new Text(entry.count.toString(), style: Theme.of(context).textTheme.caption)
-          ],
-        ));
+    return new InkWell(
+        child: new Padding(
+          padding: EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 8.0),
+          child: Row(
+            children: <Widget>[
+              new Expanded(child: new Row(children: row, crossAxisAlignment: CrossAxisAlignment.end)),
+              new Text(entry.count.toString(), style: Theme.of(context).textTheme.caption)
+            ],
+          ),
+        ),
+        onTap: Feedback.wrapForTap(() => print("Tapapapa"), context));
   }
 }
 
