@@ -118,7 +118,7 @@ class MenuEntryRow extends StatelessWidget {
             ],
           ),
         ),
-        onTap: Feedback.wrapForTap(() => print("Tapapapa"), context));
+        onTap: () => print("Tapapapa"));
   }
 }
 
