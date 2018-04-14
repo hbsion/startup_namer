@@ -26,7 +26,7 @@ SportSection buildTile(int i) {
 List<Widget> buildRows(int section) {
   List<Widget> data = [];
 
-  for (int row = 0; row < 5; row++) {
+  for (int row = 0; row < 100; row++) {
     data.add(buildRow(section, row));
   }
 
@@ -36,7 +36,7 @@ List<Widget> buildRows(int section) {
 final Map<Key, bool> expanded = Map();
 
 Widget buildRow(int section, int row) {
-  return new EventListItemWidget();
+  return new EventListItemWidget(key: Key("$section - $row"),);
 }
 
 class SportSection extends StatefulWidget {
@@ -70,16 +70,35 @@ class SportSectionState extends State<SportSection> {
 
   @override
   Widget build(BuildContext context) {
-    var sectionHeader = new InkWell(
-      onTap: () =>  setState(() {
-        _expanded = !_expanded;
-        expanded[key] = _expanded;
-      }),
-      child: Container(
-        padding: EdgeInsets.all(16.0),
-        child: new Row(children: <Widget>[title]),
-      ),
+    var sectionHeader = new Container(
+        color: Colors.white,
+        child: new Material(
+            color: Colors.transparent,
+            child: new InkWell(
+                onTap: () =>
+                    setState(() {
+                      _expanded = !_expanded;
+                      expanded[key] = _expanded;
+                    }),
+                child: new Column(
+                  children: <Widget>[
+                    new Container(
+                        padding: EdgeInsets.all(16.0),
+                        child: Row(
+                          children: <Widget>[
+                            new Expanded(child: title),
+                            new Text(children.length.toString())
+                          ],
+                        )
+                    ),
+                    new Divider(color: Color.fromARGB(255, 0xd1, 0xd1, 0xd1), height: 2.0)
+                  ],
+                )
+            )
+        )
     );
+
+
     List<Widget> widgets = [];
     widgets.add(sectionHeader);
 
