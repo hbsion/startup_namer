@@ -114,7 +114,10 @@ class MenuEntryRow extends StatelessWidget {
           child: Row(
             children: <Widget>[
               new Expanded(child: new Row(children: row, crossAxisAlignment: CrossAxisAlignment.end)),
-              new Text(entry.count.toString(), style: Theme.of(context).textTheme.caption)
+              new Text(entry.count.toString(), style: Theme
+                  .of(context)
+                  .textTheme
+                  .caption)
             ],
           ),
         ),
@@ -150,12 +153,6 @@ class AppMenu extends StatelessWidget {
           initiallyExpanded: true,
           children: moreSports.map((entry) => new MenuEntryRow(entry)).toList()),
     ];
-//        ;
-    //entries.add(new Text("Popular"));
-//    entries.addAll(popular.map((entry) => new MenuEntryRow(entry)).toList());
-//    entries.add(new ExpansionTile(
-//        title: new Text("Popular"),
-//        children: );
 
     return new Theme(
       data: new ThemeData(
@@ -169,26 +166,20 @@ class AppMenu extends StatelessWidget {
           slivers: <Widget>[
             new SliverAppBar(
               expandedHeight: _appBarHeight,
-              pinned: _appBarBehavior == AppBarBehavior.pinned,
-              floating: _appBarBehavior == AppBarBehavior.floating || _appBarBehavior == AppBarBehavior.snapping,
-              snap: _appBarBehavior == AppBarBehavior.snapping,
+              pinned: false, //_appBarBehavior == AppBarBehavior.pinned,
+              floating: true, //_appBarBehavior == AppBarBehavior.floating || _appBarBehavior == AppBarBehavior.snapping,
+              snap: false, //_appBarBehavior == AppBarBehavior.snapping,
               flexibleSpace: new FlexibleSpaceBar(
                 title: const Text('Svan Play!'),
                 background: new Stack(
                   fit: StackFit.expand,
                   children: <Widget>[
-                    new Image.asset(
-                      'assets/banner.jpg',
-                      fit: BoxFit.cover,
-                      height: _appBarHeight,
-                    ),
+                    new Image.asset('assets/banner.jpg', fit: BoxFit.cover, height: _appBarHeight),
                   ],
                 ),
               ),
             ),
-            new SliverList(
-              delegate: new SliverChildListDelegate(entries),
-            ),
+            new SliverList(delegate: new SliverChildListDelegate(entries)),
           ],
         ),
       ),

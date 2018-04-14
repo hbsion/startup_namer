@@ -125,8 +125,8 @@ class SportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new ListView(
-      children: tiles,
+    return new SliverList(
+      delegate: new SliverChildListDelegate(tiles),
     );
   }
 }
