@@ -47,15 +47,21 @@ class _AppState extends State<App> {
               pinned: false,
               floating: true,
               snap: false,
-              //_appBarBehavior == AppBarBehavior.snapping,
-              flexibleSpace: new FlexibleSpaceBar(
-                title: const Text('Svan Play!'),
-                background: new Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    new Image.asset('assets/banner.jpg', fit: BoxFit.cover, height: 56.0),
-                  ],
-                ),
+              flexibleSpace: new Stack(
+                alignment: const Alignment(-0.6, 0.5),
+                children: <Widget>[
+                  new Row(children: <Widget>[
+                    new Expanded(child: new Image.asset('assets/banner_1.jpg', fit: BoxFit.cover, height: 80.0)),
+                  ]),
+                  new Text(
+                      "Home",
+                      style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 21.0,
+                          fontWeight: FontWeight.w500
+                      )
+                  )
+                ],
               ),
             ),
             page
