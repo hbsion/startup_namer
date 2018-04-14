@@ -10,6 +10,10 @@ class DrawerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: appTitle,
+      theme: new ThemeData(
+        brightness: Brightness.light,
+        primaryColor: Colors.black
+      ),
       home: new App(title: appTitle),
     );
   }
@@ -25,10 +29,10 @@ class App extends StatefulWidget {
   _AppState createState() {
     return new _AppState(title);
   }
-}
+}                                          
 
 class _AppState extends State<App> {
-  Widget page = new StartPage();
+  Widget page = new SportPage();
   final String title;
 
   _AppState(this.title);
