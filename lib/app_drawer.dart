@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:startup_namer/pages/home_page.dart';
 import 'package:startup_namer/pages/live_right_now_page.dart';
 import 'package:startup_namer/pages/sport_page.dart';
@@ -133,12 +132,20 @@ class MenuEntryRow extends StatelessWidget {
             ],
           ),
         ),
-        onTap: _navigate(context)
+        onTap: _navigate(context, entry)
     );
   }
 
-  _navigate(BuildContext context) {
-    return () => Navigator.of(context).push(new MaterialPageRoute(builder: entry.builder ?? (context) => new SportPage()));
+  _navigate(BuildContext context, MenuEntry entry) {
+    return () {
+      Navigator.pop(context);
+      Navigator.of(context).push(new MaterialPageRoute(builder: entry.builder ?? (context) =>
+      new SportPage(
+        sport: entry.sport,
+        league: entry.league,
+        region: entry.region,
+      )));
+    };
   }
 }
 

@@ -27,6 +27,11 @@ class SectionListViewState extends State<SectionListView> {
           childCount: _childCount(),
         )
     );
+//    );
+//    return new ListView.builder(
+//        itemCount: _childCount(),
+//        itemBuilder: _buildRow
+//    );
   }
 
 
@@ -45,7 +50,7 @@ class SectionListViewState extends State<SectionListView> {
         return _buildSectionHeader(section);
       } else if (expanded[section.title]) {
         cursor++;
-       // debugPrint("Expanded Section finding row at cursor: " + cursor.toString() + " index: " + index.toString());
+        // debugPrint("Expanded Section finding row at cursor: " + cursor.toString() + " index: " + index.toString());
 
         if (index < (cursor + section.children.length)) {
           return _buildListItem(section.children[index - cursor]);
@@ -78,7 +83,7 @@ class SectionListViewState extends State<SectionListView> {
           count: section.children.length,
           onTap: () {
             setState(() {
-               expanded[section.title] = !expanded[section.title];
+              expanded[section.title] = !expanded[section.title];
             });
           },
         )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:startup_namer/pages/event_page.dart';
 
 class EventListItemWidget extends StatelessWidget {
 
@@ -14,7 +15,7 @@ class EventListItemWidget extends StatelessWidget {
           new Padding(
               padding: EdgeInsets.only(bottom: 8.0),
               child: new InkWell(
-                  onTap: () => print("List tap"),
+                  onTap: navigate(context),
                   child: new Row(children: <Widget>[
                     EventTimeWidget(),
                     new Expanded(child: new EventInfoWidget()),
@@ -25,6 +26,12 @@ class EventListItemWidget extends StatelessWidget {
           new Padding(padding: EdgeInsets.all(4.0)),
           new Divider(color: Color.fromARGB(255, 0xd1, 0xd1, 0xd1), height: 1.0)
         ]));
+  }
+
+  VoidCallback navigate(BuildContext context) {
+    return () => Navigator.push(context, new MaterialPageRoute(
+        builder: (ctx) => new EventPage())
+    );
   }
 }
 

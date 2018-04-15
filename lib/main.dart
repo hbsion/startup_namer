@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/drawer_app.dart';
 import 'package:startup_namer/pages/home_page.dart';
 
 void main() => runApp(new MyApp());

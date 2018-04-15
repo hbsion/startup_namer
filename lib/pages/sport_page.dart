@@ -1,62 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/app_drawer.dart';
+import 'package:startup_namer/views/SportsView.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
-import 'package:startup_namer/widgets/event_list_widget.dart';
-import 'package:startup_namer/widgets/section_header.dart';
-import 'package:startup_namer/widgets/section_list_view.dart';
 
-List<ListSection> tiles = buildSections();
 
-List<ListSection> buildSections() {
-  List<ListSection> data = [];
+class SportPage extends StatefulWidget {
+  final String sport;
+  final String league;
+  final String region;
 
-  for (int i = 0; i < 200; i++) {
-    data.add(buildTile(i));
+  SportPage({Key key, this.sport, this.league, this.region}) : super(key: key);
+
+  @override
+  _SportPageState createState() {
+    return new _SportPageState(sport, league, region);
   }
-  return data;
 }
 
-ListSection buildTile(int i) {
-  ListSection tile = new ListSection(
-    initiallyExpanded: i == 0,
-    title: "Tile-" + i.toString(),
-    children: buildRows(i),
-  );
+class _SportPageState extends State<SportPage> {
+  final String sport;
+  final String league;
+  final String region;
+  final List<Widget> _views = [];
+  final ScrollController _scrollController = new ScrollController();
+  final PageController _pageController = new PageController();
+  int _index = 0;
 
-  return tile;
-}
-
-List<Widget> buildRows(int section) {
-  List<Widget> data = [];
-
-  for (int row = 0; row < 100; row++) {
-    data.add(buildRow(section, row));
+  _SportPageState(this.sport, this.league, this.region) {
+    _views.add(
+        new SportView(key: new Key("matches"),
+            sport: sport,
+            league: league,
+            region: region,
+            prefix: "Matches-")
+    );
+    _views.add(
+        new SportView(key: new Key("competitions"),
+            sport: sport,
+            league: league,
+            region: region,
+            prefix: "Competitions-")
+    );
   }
-
-  return data;
-}
-
-//final Map<Key, bool> expanded = Map();
-
-Widget buildRow(int section, int row) {
-  return new EventListItemWidget(key: Key("$section - $row"),);
-}
-
-class SportPage extends StatelessWidget {
-  final String title;
-
-  SportPage({Key key, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: new CustomScrollView(
-          slivers: <Widget>[
-            new AppToolbar(title: "Sport"),
-            new SectionListView(sections: tiles)
-          ],
+        body: new PageView(
+            controller: _pageController,
+            onPageChanged: (index) => setState(() => _index = index),
+            children: <Widget>[
+              _buildPageView(0),
+              _buildPageView(1),
+            ]
         ),
-        drawer: new AppDrawer()
+        bottomNavigationBar: new BottomNavigationBar(
+          currentIndex: _index,
+          onTap: (index) {
+            setState(() => _index = index);
+            _pageController.animateToPage(index,
+                curve: new ElasticInCurve(0.01),
+                duration: new Duration(microseconds: 200));
+          },
+          items: <BottomNavigationBarItem>[
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.all_inclusive),
+                title: new Text("Matches")),
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.home),
+                title: new Text("Competitions")),
+          ],
+        )
     );
   }
+
+  Widget _buildPageView(int index) {
+    return new Scaffold(
+        body: new CustomScrollView(
+          slivers: <Widget>[
+            new AppToolbar(title: _buildTitle(index)),
+            _views[index]
+          ],
+        )
+    );
+  }
+
+  String _buildTitle(int index) {
+    return (league ?? sport);
+  }
+
+//  _scrollToTop() {
+//    _scrollController.animateTo(
+//      0.0,
+//      duration: const Duration(microseconds: 1),
+//      curve: new ElasticInCurve(0.01),
+//    );
+//  }
+
 }
