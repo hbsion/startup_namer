@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:startup_namer/callable.dart';
+import 'package:startup_namer/pages/home_page.dart';
+import 'package:startup_namer/pages/live_right_now_page.dart';
+import 'package:startup_namer/pages/sport_page.dart';
+import 'package:startup_namer/pages/starting_soon_page.dart';
+import 'package:startup_namer/util/callable.dart';
 
 class MenuEntry {
   final String title;
@@ -8,14 +12,22 @@ class MenuEntry {
   final String league;
   final String region;
   final int count;
+  final WidgetBuilder builder;
 
-  MenuEntry({this.title, this.sport, this.league, this.region, this.count = 0});
+  MenuEntry({
+    this.title,
+    this.sport,
+    this.league,
+    this.region,
+    this.count = 0,
+    this.builder});
+
 }
 
 final List<MenuEntry> highlights = [
-  new MenuEntry(title: "Odds Lobby"),
-  new MenuEntry(title: "Live Right Now"),
-  new MenuEntry(title: "Starting Soon"),
+  new MenuEntry(title: "Odds Lobby", builder: (context) => new HomePage()),
+  new MenuEntry(title: "Live Right Now", builder: (context) => new LiveRightNowPage()),
+  new MenuEntry(title: "Starting Soon", builder: (context) => new StartingSoonPage()),
 ];
 
 final popular = [
@@ -74,7 +86,7 @@ class AppDrawer extends StatelessWidget {
   final String title;
   final Callable<Widget> onSelect;
 
-  AppDrawer({Key key, this.title, @required this.onSelect}) : super(key: key);
+  AppDrawer({Key key, this.title, this.onSelect}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -121,17 +133,19 @@ class MenuEntryRow extends StatelessWidget {
             ],
           ),
         ),
-        onTap: () => print("Tapapapa"));
+        onTap: _navigate(context)
+    );
+  }
+
+  _navigate(BuildContext context) {
+    return () => Navigator.of(context).push(new MaterialPageRoute(builder: entry.builder ?? (context) => new SportPage()));
   }
 }
 
-enum AppBarBehavior { normal, pinned, floating, snapping }
-
 class AppMenu extends StatelessWidget {
-  static final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  //static final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final double _appBarHeight = 150.0;
 
-  AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
 
   @override
   Widget build(BuildContext context) {
@@ -158,17 +172,22 @@ class AppMenu extends StatelessWidget {
       data: new ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.blueGrey,
-        platform: Theme.of(context).platform,
+        platform: Theme
+            .of(context)
+            .platform,
       ),
       child: new Scaffold(
-        key: _scaffoldKey,
+        //key: _scaffoldKey,
         body: new CustomScrollView(
           slivers: <Widget>[
             new SliverAppBar(
               expandedHeight: _appBarHeight,
-              pinned: false, //_appBarBehavior == AppBarBehavior.pinned,
-              floating: true, //_appBarBehavior == AppBarBehavior.floating || _appBarBehavior == AppBarBehavior.snapping,
-              snap: false, //_appBarBehavior == AppBarBehavior.snapping,
+              pinned: false,
+              //_appBarBehavior == AppBarBehavior.pinned,
+              floating: true,
+              //_appBarBehavior == AppBarBehavior.floating || _appBarBehavior == AppBarBehavior.snapping,
+              snap: false,
+              //_appBarBehavior == AppBarBehavior.snapping,
               flexibleSpace: new FlexibleSpaceBar(
                 title: const Text('Svan Play!'),
                 background: new Stack(

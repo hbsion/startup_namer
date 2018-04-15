@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/app_drawer.dart';
-import 'package:startup_namer/sport_page.dart';
+import 'package:startup_namer/pages/sport_page.dart';
+import 'package:startup_namer/pages/home_page.dart';
+import 'package:startup_namer/widgets/app_toolbar.dart';
 
 class DrawerApp extends StatelessWidget {
   final appTitle = 'Play!';
@@ -13,7 +15,7 @@ class DrawerApp extends StatelessWidget {
           brightness: Brightness.light,
           primaryColor: Colors.black
       ),
-      home: new App(title: appTitle),
+      home: new HomePage()
     );
   }
 }
@@ -39,40 +41,26 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      //appBar: new AppBar(title: new Text(title)),
-        body: new CustomScrollView(
-          slivers: <Widget>[
-            new SliverAppBar(
-              expandedHeight: 56.0,
-              pinned: false,
-              floating: true,
-              snap: false,
-              flexibleSpace: new Stack(
-                alignment: const Alignment(-0.6, 0.5),
-                children: <Widget>[
-                  new Row(children: <Widget>[
-                    new Expanded(child: new Image.asset('assets/banner_1.jpg', fit: BoxFit.cover, height: 80.0)),
-                  ]),
-                  new Text(
-                      "Home",
-                      style: new TextStyle(
-                          color: Colors.white,
-                          fontSize: 21.0,
-                          fontWeight: FontWeight.w500
-                      )
-                  )
-                ],
-              ),
-            ),
-            page
-          ],
-        ),
-        drawer: new AppDrawer(onSelect: (Widget page) {
-          setState(() {
-            this.page = page;
-          });
-        }
-        )
+      body: new CustomScrollView(
+        slivers: <Widget>[
+          new AppToolbar(title: "Home"),
+          page
+        ],
+      ),
+      drawer: new AppDrawer(onSelect: (Widget page) {
+        setState(() {
+          this.page = page;
+        });
+      }
+      ),
+      bottomNavigationBar: new BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          new BottomNavigationBarItem(
+              icon: new Icon(Icons.all_inclusive), title: new Text("Hello"), backgroundColor: Colors.cyan),
+          new BottomNavigationBarItem(
+              icon: new Icon(Icons.home), title: new Text("Hello"), backgroundColor: Colors.lightGreen),
+        ],
+      ),
     );
   }
 }
