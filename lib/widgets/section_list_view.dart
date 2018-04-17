@@ -27,11 +27,6 @@ class SectionListViewState extends State<SectionListView> {
           childCount: _childCount(),
         )
     );
-//    );
-//    return new ListView.builder(
-//        itemCount: _childCount(),
-//        itemBuilder: _buildRow
-//    );
   }
 
 

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppToolbar extends StatelessWidget {
   final String title;
+  final VoidCallback onNavPress;
 
-  const AppToolbar({Key key, this.title}) : super(key: key);
+  const AppToolbar({Key key, this.title, this.onNavPress}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +13,7 @@ class AppToolbar extends StatelessWidget {
       pinned: false,
       floating: true,
       snap: false,
+      leading: onNavPress != null ? new IconButton(icon: new Icon(Icons.dehaze), onPressed: onNavPress) : null,
       flexibleSpace: new Stack(
         alignment: const Alignment(-0.6, 0.5),
         children: <Widget>[

@@ -125,10 +125,7 @@ class MenuEntryRow extends StatelessWidget {
           child: Row(
             children: <Widget>[
               new Expanded(child: new Row(children: row, crossAxisAlignment: CrossAxisAlignment.end)),
-              new Text(entry.count.toString(), style: Theme
-                  .of(context)
-                  .textTheme
-                  .caption)
+              new Text(entry.count.toString(), style: Theme.of(context).textTheme.caption)
             ],
           ),
         ),
@@ -178,11 +175,9 @@ class AppMenu extends StatelessWidget {
     return new Theme(
       data: new ThemeData(
         brightness: Brightness.dark,
-        primarySwatch: Colors.blueGrey,
-        platform: Theme
-            .of(context)
-            .platform,
-      ),
+        accentColor: Theme.of(context).accentColor,
+        platform: Theme.of(context).platform)
+      ,
       child: new Scaffold(
         //key: _scaffoldKey,
         body: new CustomScrollView(

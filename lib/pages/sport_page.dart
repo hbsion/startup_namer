@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:startup_namer/app_drawer.dart';
 import 'package:startup_namer/views/SportsView.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
 
@@ -45,22 +46,20 @@ class _SportPageState extends State<SportPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: new PageView(
-            controller: _pageController,
-            onPageChanged: (index) => setState(() => _index = index),
-            children: <Widget>[
-              _buildPageView(0),
-              _buildPageView(1),
-            ]
-        ),
+        drawer: new AppDrawer(),
+        body: new Builder(builder: (ctx) {
+          return new PageView(
+              controller: _pageController,
+              onPageChanged: _handlePageChanged,
+              children: <Widget>[
+                _buildPageView(0, _openDrawer(ctx)),
+                _buildPageView(1, _openDrawer(ctx)),
+              ]
+          );
+        }),
         bottomNavigationBar: new BottomNavigationBar(
           currentIndex: _index,
-          onTap: (index) {
-            setState(() => _index = index);
-            _pageController.animateToPage(index,
-                curve: new ElasticInCurve(0.01),
-                duration: new Duration(microseconds: 200));
-          },
+          onTap: _handleTabTap,
           items: <BottomNavigationBarItem>[
             new BottomNavigationBarItem(
                 icon: new Icon(Icons.all_inclusive),
@@ -73,11 +72,27 @@ class _SportPageState extends State<SportPage> {
     );
   }
 
-  Widget _buildPageView(int index) {
+  VoidCallback _openDrawer(BuildContext context) {
+    return () => Scaffold.of(context).openDrawer();
+  }
+
+  void _handlePageChanged(int index) {
+    setState(() => _index = index);
+  }
+
+  void _handleTabTap(int index) {
+    setState(() => _index = index);
+
+    _pageController.animateToPage(index,
+        curve: new ElasticInCurve(0.01),
+        duration: new Duration(microseconds: 200));
+  }
+
+  Widget _buildPageView(int index, VoidCallback openDrawer) {
     return new Scaffold(
         body: new CustomScrollView(
           slivers: <Widget>[
-            new AppToolbar(title: _buildTitle(index)),
+            new AppToolbar(title: _buildTitle(index), onNavPress: openDrawer),
             _views[index]
           ],
         )
@@ -88,12 +103,5 @@ class _SportPageState extends State<SportPage> {
     return (league ?? sport);
   }
 
-//  _scrollToTop() {
-//    _scrollController.animateTo(
-//      0.0,
-//      duration: const Duration(microseconds: 1),
-//      curve: new ElasticInCurve(0.01),
-//    );
-//  }
 
 }
