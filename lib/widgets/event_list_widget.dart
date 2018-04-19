@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:startup_namer/app_theme.dart';
 import 'package:startup_namer/pages/event_page.dart';
 
 class EventListItemWidget extends StatelessWidget {
@@ -24,7 +25,7 @@ class EventListItemWidget extends StatelessWidget {
               )),
           new BetOfferWidget(),
           new Padding(padding: EdgeInsets.all(4.0)),
-          new Divider(color: Color.fromARGB(255, 0xd1, 0xd1, 0xd1), height: 1.0)
+          new Divider(color: AppTheme.of(context).list.itemDivider, height: 1.0),
         ]));
   }
 

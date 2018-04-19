@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/pages/home_page.dart';
 import 'package:startup_namer/pages/live_right_now_page.dart';
+import 'package:startup_namer/pages/settings_page.dart';
 import 'package:startup_namer/pages/sport_page.dart';
 import 'package:startup_namer/pages/starting_soon_page.dart';
 import 'package:startup_namer/util/callable.dart';
@@ -84,6 +85,7 @@ final moreSports = [
 class AppDrawer extends StatelessWidget {
   final String title;
   final Callable<Widget> onSelect;
+
 
   AppDrawer({Key key, this.title, this.onSelect}) : super(key: key);
 
@@ -174,31 +176,61 @@ class AppMenu extends StatelessWidget {
 
     return new Theme(
       data: new ThemeData(
-        brightness: Brightness.dark,
-        accentColor: Theme.of(context).accentColor,
-        platform: Theme.of(context).platform)
+          brightness: Brightness.dark,
+          accentColor: Theme
+              .of(context)
+              .accentColor,
+          platform: Theme
+              .of(context)
+              .platform)
       ,
       child: new Scaffold(
         //key: _scaffoldKey,
         body: new CustomScrollView(
           slivers: <Widget>[
             new SliverAppBar(
-              expandedHeight: _appBarHeight,
-              pinned: false,
-              //_appBarBehavior == AppBarBehavior.pinned,
-              floating: true,
-              //_appBarBehavior == AppBarBehavior.floating || _appBarBehavior == AppBarBehavior.snapping,
-              snap: false,
-              //_appBarBehavior == AppBarBehavior.snapping,
-              flexibleSpace: new FlexibleSpaceBar(
-                title: const Text('Svan Play!'),
-                background: new Stack(
-                  fit: StackFit.expand,
-                  children: <Widget>[
-                    new Image.asset('assets/banner.jpg', fit: BoxFit.cover, height: _appBarHeight),
-                  ],
+                expandedHeight: _appBarHeight,
+                pinned: false,
+                floating: true,
+                snap: false,
+                flexibleSpace: new FlexibleSpaceBar(
+                  title: new Text("Svan Play!"),
+                  background: new Stack(
+                    fit: StackFit.expand,
+                    children: <Widget>[
+                      new Image.asset('assets/banner.jpg', fit: BoxFit.cover, height: _appBarHeight),
+                    ],
+                  ),
                 ),
-              ),
+                actions: <Widget>[
+                  new IconButton(
+                    icon: const Icon(Icons.create),
+                    tooltip: 'Edit',
+                    onPressed: () {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (context) => new SettingsPage())
+                        );
+                    },
+                  ),
+                  new PopupMenuButton<Brightness>(
+                    onSelected: (Brightness value) {
+//                      setState(() {
+//                        _appBarBehavior = value;
+//                      });
+                    },
+                    itemBuilder: (BuildContext context) =>
+                    <PopupMenuItem<Brightness>>[
+                      const PopupMenuItem<Brightness>(
+                          value: Brightness.dark,
+                          child: const Text('Dark Theme')
+                      ),
+                      const PopupMenuItem<Brightness>(
+                          value: Brightness.light,
+                          child: const Text('Light Theme')
+                      ),
+                    ],
+                  ),
+                ]
             ),
             new SliverList(delegate: new SliverChildListDelegate(entries)),
           ],

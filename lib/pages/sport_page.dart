@@ -13,32 +13,31 @@ class SportPage extends StatefulWidget {
 
   @override
   _SportPageState createState() {
-    return new _SportPageState(sport, league, region);
+    return new _SportPageState();
   }
 }
 
 class _SportPageState extends State<SportPage> {
-  final String sport;
-  final String league;
-  final String region;
+
   final List<Widget> _views = [];
-  final ScrollController _scrollController = new ScrollController();
   final PageController _pageController = new PageController();
   int _index = 0;
-
-  _SportPageState(this.sport, this.league, this.region) {
+  
+  @override
+  void initState() {
+    super.initState();
     _views.add(
         new SportView(key: new Key("matches"),
-            sport: sport,
-            league: league,
-            region: region,
+            sport: widget.sport,
+            league: widget.league,
+            region: widget.region,
             prefix: "Matches-")
     );
     _views.add(
         new SportView(key: new Key("competitions"),
-            sport: sport,
-            league: league,
-            region: region,
+            sport: widget.sport,
+            league: widget.league,
+            region: widget.region,
             prefix: "Competitions-")
     );
   }
@@ -100,7 +99,7 @@ class _SportPageState extends State<SportPage> {
   }
 
   String _buildTitle(int index) {
-    return (league ?? sport);
+    return (widget.league ?? widget.sport);
   }
 
 

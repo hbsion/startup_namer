@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:startup_namer/app_theme.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
@@ -9,8 +10,9 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appTheme = AppTheme.of(context);
     return new Container(
-        color: Colors.white,
+        color: appTheme.list.headerBackground,
         child: new Material(
             color: Colors.transparent,
             child: new InkWell(
@@ -26,7 +28,7 @@ class SectionHeader extends StatelessWidget {
                           ],
                         )
                     ),
-                    new Divider(color: Color.fromARGB(255, 0xd1, 0xd1, 0xd1), height: 2.0)
+                    new Divider(color: appTheme.list.headerDivider, height: 2.0)
                   ],
                 )
             )
