@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:startup_namer/models/main_model.dart';
 import 'package:startup_namer/pages/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(new MainApp());
 
@@ -10,6 +11,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+//    SharedPreferences prefs = SharedPreferences.getInstance();
     return new ScopedModel<MainModel>(
         model: new MainModel(),
         child: new ScopedModelDescendant<MainModel>(

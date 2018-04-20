@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:startup_namer/app_theme.dart';
+import 'package:startup_namer/models/main_model.dart';
+import 'package:startup_namer/models/odds_format.dart';
 import 'package:startup_namer/pages/event_page.dart';
 
 class EventListItemWidget extends StatelessWidget {
@@ -25,14 +28,18 @@ class EventListItemWidget extends StatelessWidget {
               )),
           new BetOfferWidget(),
           new Padding(padding: EdgeInsets.all(4.0)),
-          new Divider(color: AppTheme.of(context).list.itemDivider, height: 1.0),
+          new Divider(color: AppTheme
+              .of(context)
+              .list
+              .itemDivider, height: 1.0),
         ]));
   }
 
   VoidCallback navigate(BuildContext context) {
-    return () => Navigator.push(context, new MaterialPageRoute(
-        builder: (ctx) => new EventPage())
-    );
+    return () =>
+        Navigator.push(context, new MaterialPageRoute(
+            builder: (ctx) => new EventPage())
+        );
   }
 }
 
@@ -63,7 +70,10 @@ class EventTimeWidget extends StatelessWidget {
                     ],
                     chartType: CircularChartType.Pie,
                   ),
-                  new Text("12:34", style: Theme.of(context).textTheme.caption)
+                  new Text("12:34", style: Theme
+                      .of(context)
+                      .textTheme
+                      .caption)
                 ]))
 
     );
@@ -92,23 +102,38 @@ class BetOfferWidget extends StatelessWidget {
 class OutcomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Container(
-        height: 38.0,
-        padding: EdgeInsets.all(3.0),
-        decoration: new BoxDecoration(
-          borderRadius: BorderRadius.circular(3.0),
-          color: Color.fromRGBO(0x00, 0xad, 0xc9, 1.0),
-        ),
-        child: new Material(
-          color: Colors.transparent,
-          child: new InkWell(
-              onTap: () => print("outcome tap " + DateTime.now().toString()),
-              child: new Row(
-                children: <Widget>[
-                  new Expanded(child: new Text("Home", style: new TextStyle(color: Colors.white, fontSize: 12.0))),
-                  new Text("1.23", style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold))
-                ],
-              )),
-        ));
+    return new ScopedModelDescendant<MainModel>(
+        builder: (context, child, model) {
+          return new Container(
+              height: 38.0,
+              padding: EdgeInsets.all(3.0),
+              decoration: new BoxDecoration(
+                borderRadius: BorderRadius.circular(3.0),
+                color: Color.fromRGBO(0x00, 0xad, 0xc9, 1.0),
+              ),
+              child: new Material(
+                color: Colors.transparent,
+                child: new InkWell(
+                    onTap: () => print("outcome tap " + DateTime.now().toString()),
+                    child: new Row(
+                      children: <Widget>[
+                        new Expanded(
+                            child: new Text("Home", style: new TextStyle(color: Colors.white, fontSize: 12.0))),
+                        new Text(
+                            _formatOdds(1.23, model.oddsFormat),
+                            style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold))
+                      ],
+                    )),
+              ));
+        });
   }
+
+  String _formatOdds(double odds, OddsFormat format) {
+    return odds.toString() + (format == OddsFormat.Decimal
+        ? "d" : format == OddsFormat.Fractional
+        ? "f"
+        : "a"
+    );
+  }
+
 }

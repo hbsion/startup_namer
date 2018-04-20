@@ -10,6 +10,7 @@ dependencies:
   cupertino_icons: ^0.1.0
   flutter_circular_chart: "^0.0.2"
   scoped_model: "^0.2.0"
+  shared_preferences: "^0.4.1"
 
 dev_dependencies:
   flutter_test:

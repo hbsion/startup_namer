@@ -3,7 +3,6 @@ import 'package:startup_namer/pages/home_page.dart';
 import 'package:startup_namer/pages/live_right_now_page.dart';
 import 'package:startup_namer/pages/settings_page.dart';
 import 'package:startup_namer/pages/sport_page.dart';
-import 'package:startup_namer/pages/starting_soon_page.dart';
 import 'package:startup_namer/util/callable.dart';
 
 class MenuEntry {
@@ -27,7 +26,7 @@ class MenuEntry {
 final List<MenuEntry> highlights = [
   new MenuEntry(title: "Odds Lobby", builder: (context) => new HomePage()),
   new MenuEntry(title: "Live Right Now", builder: (context) => new LiveRightNowPage()),
-  new MenuEntry(title: "Starting Soon", builder: (context) => new StartingSoonPage()),
+  new MenuEntry(title: "Starting Soon", builder: (context) => new SettingsPage()),
 ];
 
 final popular = [
@@ -127,7 +126,10 @@ class MenuEntryRow extends StatelessWidget {
           child: Row(
             children: <Widget>[
               new Expanded(child: new Row(children: row, crossAxisAlignment: CrossAxisAlignment.end)),
-              new Text(entry.count.toString(), style: Theme.of(context).textTheme.caption)
+              new Text(entry.count.toString(), style: Theme
+                  .of(context)
+                  .textTheme
+                  .caption)
             ],
           ),
         ),
@@ -207,9 +209,10 @@ class AppMenu extends StatelessWidget {
                     icon: const Icon(Icons.create),
                     tooltip: 'Edit',
                     onPressed: () {
-                        Navigator.of(context).push(new MaterialPageRoute(
-                            builder: (context) => new SettingsPage())
-                        );
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(new MaterialPageRoute(
+                          builder: (context) => new SettingsPage())
+                      );
                     },
                   ),
                   new PopupMenuButton<Brightness>(
