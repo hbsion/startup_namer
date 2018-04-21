@@ -10,14 +10,12 @@ class SectionListView extends StatefulWidget {
   const SectionListView({Key key, this.sections}) : super(key: key);
 
   @override
-  SectionListViewState createState() => new SectionListViewState(sections);
+  _SectionListViewState createState() => new _SectionListViewState();
 }
 
-class SectionListViewState extends State<SectionListView> {
-  final List<ListSection> sections;
-  final Map<String, bool> expanded = {};
+class _SectionListViewState extends State<SectionListView> {
+  Map<String, bool> _expanded = {};
 
-  SectionListViewState(this.sections);
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +31,26 @@ class SectionListViewState extends State<SectionListView> {
   @override
   void initState() {
     super.initState();
-    sections.forEach((section) => expanded[section.title] = section.initiallyExpanded);
+    _expanded = PageStorage.of(context)?.readState(context, identifier: widget.key) ?? {};
+
+    if (_expanded.isEmpty) {
+      widget.sections.forEach((section) => _expanded[section.title] = section.initiallyExpanded);
+    }
   }
+
+  void _saveState() {
+    PageStorage.of(context)?.writeState(context, _expanded, identifier: widget.key);
+  }
+
 
   Widget _buildRow(BuildContext context, int index) {
     int cursor = 0;
 
-    for (var section in sections) {
+    for (var section in widget.sections) {
       if (cursor == index) {
         //debugPrint("Section found a cursor: " + cursor.toString() + " index: " + index.toString());
         return _buildSectionHeader(section);
-      } else if (expanded[section.title]) {
+      } else if (_expanded[section.title]) {
         cursor++;
         // debugPrint("Expanded Section finding row at cursor: " + cursor.toString() + " index: " + index.toString());
 
@@ -61,9 +68,9 @@ class SectionListViewState extends State<SectionListView> {
   }
 
   _childCount() {
-    int childCount = sections.length;
-    for (var section in sections) {
-      if (expanded.containsKey(section.title)) {
+    int childCount = widget.sections.length;
+    for (var section in widget.sections) {
+      if (_expanded.containsKey(section.title)) {
         childCount += section.children.length;
       }
     }
@@ -78,7 +85,8 @@ class SectionListViewState extends State<SectionListView> {
           count: section.children.length,
           onTap: () {
             setState(() {
-              expanded[section.title] = !expanded[section.title];
+              _expanded[section.title] = !_expanded[section.title];
+              _saveState();
             });
           },
         )

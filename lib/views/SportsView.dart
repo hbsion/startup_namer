@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:startup_namer/widgets/event_list_widget.dart';
 import 'package:startup_namer/widgets/section_list_view.dart';
 
-
-class SportView extends StatelessWidget {
+class SportView extends StatefulWidget {
   final String sport;
   final String league;
   final String region;
@@ -11,12 +10,17 @@ class SportView extends StatelessWidget {
 
   const SportView({Key key, this.sport, this.league, this.region, this.prefix}) : super(key: key);
 
+  @override
+  _SportViewState createState() => new _SportViewState();
+}
 
+class _SportViewState extends State<SportView> {
   @override
   Widget build(BuildContext context) {
-    return new SectionListView(sections: buildSections(prefix));
+    return new SectionListView(
+        key: new PageStorageKey(widget.prefix),
+        sections: buildSections(widget.prefix));
   }
-
 }
 
 

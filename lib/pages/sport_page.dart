@@ -19,28 +19,11 @@ class SportPage extends StatefulWidget {
 
 class _SportPageState extends State<SportPage> {
 
-  final List<Widget> _views = [];
-  final PageController _pageController = new PageController();
+  final GlobalKey<ScaffoldState> _matchesKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _outrightsKey = new GlobalKey<ScaffoldState>();
+
+  final PageController _pageController = new PageController(keepPage: true);
   int _index = 0;
-  
-  @override
-  void initState() {
-    super.initState();
-    _views.add(
-        new SportView(key: new Key("matches"),
-            sport: widget.sport,
-            league: widget.league,
-            region: widget.region,
-            prefix: "Matches-")
-    );
-    _views.add(
-        new SportView(key: new Key("competitions"),
-            sport: widget.sport,
-            league: widget.league,
-            region: widget.region,
-            prefix: "Competitions-")
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +34,34 @@ class _SportPageState extends State<SportPage> {
               controller: _pageController,
               onPageChanged: _handlePageChanged,
               children: <Widget>[
-                _buildPageView(0, _openDrawer(ctx)),
-                _buildPageView(1, _openDrawer(ctx)),
+                new Scaffold(
+                    key: _matchesKey,
+                    body: new CustomScrollView(
+                      key: new PageStorageKey("xxx"),
+                      slivers: <Widget>[
+                        new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
+                        new SportView(
+                            sport: widget.sport,
+                            league: widget.league,
+                            region: widget.region,
+                            prefix: " Matches-")
+                      ],
+                    )
+                ),
+                new Scaffold(
+                    key: _outrightsKey,
+                    body: new CustomScrollView(
+                      key: new PageStorageKey("yyy"),
+                      slivers: <Widget>[
+                        new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
+                        new SportView(
+                            sport: widget.sport,
+                            league: widget.league,
+                            region: widget.region,
+                            prefix: "Outrights-")
+                      ],
+                    )
+                ),
               ]
           );
         }),
@@ -65,7 +74,7 @@ class _SportPageState extends State<SportPage> {
                 title: new Text("Matches")),
             new BottomNavigationBarItem(
                 icon: new Icon(Icons.home),
-                title: new Text("Competitions")),
+                title: new Text("Outrights")),
           ],
         )
     );
@@ -87,20 +96,7 @@ class _SportPageState extends State<SportPage> {
         duration: new Duration(microseconds: 200));
   }
 
-  Widget _buildPageView(int index, VoidCallback openDrawer) {
-    return new Scaffold(
-        body: new CustomScrollView(
-          slivers: <Widget>[
-            new AppToolbar(title: _buildTitle(index), onNavPress: openDrawer),
-            _views[index]
-          ],
-        )
-    );
-  }
-
-  String _buildTitle(int index) {
+  String _buildTitle() {
     return (widget.league ?? widget.sport);
   }
-
-
 }

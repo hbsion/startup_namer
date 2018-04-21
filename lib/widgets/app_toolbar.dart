@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppToolbar extends StatelessWidget implements PreferredSizeWidget{
+class AppToolbar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback onNavPress;
 
@@ -30,6 +30,12 @@ class AppToolbar extends StatelessWidget implements PreferredSizeWidget{
           )
         ],
       ),
+//      bottom: new TabBar(
+//        tabs: [
+//          new Tab(text: 'tab1'),
+//          new Tab(text: 'tab2'),
+//        ],
+//      ),
     );
   }
 
