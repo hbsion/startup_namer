@@ -1,35 +1,35 @@
 import 'extended_info.dart';
 
-class Participant {
+class EventParticipant {
   final int id; //participantId: number;
   final String name;
   final bool scratched;
   final bool nonRunner;
   final int startNumber;
-  final ExtendedInfo extendedInfo;
+  final ExtendedInfo extended;
 
-  Participant({this.id, this.name, this.scratched, this.nonRunner, this.startNumber, this.extendedInfo});
+  EventParticipant({this.id, this.name, this.scratched, this.nonRunner, this.startNumber, this.extended});
 
-  Participant.fromJson(Map<String, dynamic> json) : this (
+  EventParticipant.fromJson(Map<String, dynamic> json) : this (
     id: json["participantId"],
     name: json["name"],
     scratched: json["scratched"] ?? false,
     nonRunner: json["nonRunner"] ?? false,
     startNumber: json["startNumber"],
-    extendedInfo: ExtendedInfo.fromJson(json["extendedInfo"])
+    extended: ExtendedInfo.fromJson(json["extended"])
   );
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Participant &&
+          other is EventParticipant &&
               runtimeType == other.runtimeType &&
               id == other.id &&
               name == other.name &&
               scratched == other.scratched &&
               nonRunner == other.nonRunner &&
               startNumber == other.startNumber &&
-              extendedInfo == other.extendedInfo;
+              extended == other.extended;
 
   @override
   int get hashCode =>
@@ -38,11 +38,11 @@ class Participant {
       scratched.hashCode ^
       nonRunner.hashCode ^
       startNumber.hashCode ^
-      extendedInfo.hashCode;
+      extended.hashCode;
 
   @override
   String toString() {
-    return 'Participant{id: $id, name: $name, scratched: $scratched, nonRunner: $nonRunner, startNumber: $startNumber, extendedInfo: $extendedInfo}';
+    return 'Participant{id: $id, name: $name, scratched: $scratched, nonRunner: $nonRunner, startNumber: $startNumber, extendedInfo: $extended}';
   }
 
 }

@@ -1,15 +1,15 @@
-class Path {
+class GroupPath {
   final int id;
   final String name;
   final String termKey;
 
-  Path({this.id, this.name, this.termKey});
+  GroupPath({this.id, this.name, this.termKey});
 
-  factory Path.fromJson(Map<String, dynamic> json) {
+  factory GroupPath.fromJson(Map<String, dynamic> json) {
     if (json != null) {
-      return new Path(
+      return new GroupPath(
         id: json["id"],
-        name: json["id"],
+        name: json["name"],
         termKey: json["termKey"],
       );
     }
@@ -19,7 +19,7 @@ class Path {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Path &&
+          other is GroupPath &&
               runtimeType == other.runtimeType &&
               id == other.id &&
               name == other.name &&
