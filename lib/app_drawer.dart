@@ -87,7 +87,7 @@ class AppDrawer extends StatelessWidget {
   final Callable<Widget> onSelect;
 
 
-  AppDrawer({Key key, this.title, this.onSelect}) : super(key: key);
+   AppDrawer({Key key, this.title, this.onSelect}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

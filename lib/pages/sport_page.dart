@@ -91,9 +91,11 @@ class _SportPageState extends State<SportPage> {
   void _handleTabTap(int index) {
     setState(() => _index = index);
 
-    _pageController.animateToPage(index,
-        curve: new ElasticInCurve(0.01),
-        duration: new Duration(microseconds: 200));
+    _pageController.animateToPage(
+        index,
+        curve: new ElasticInCurve(),
+        duration: new Duration(microseconds: 200)
+    );
   }
 
   String _buildTitle() {

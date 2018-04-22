@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:startup_namer/views/search_view.dart';
 
-class AppToolbar extends StatelessWidget implements PreferredSizeWidget {
+class AppToolbar extends StatelessWidget {
   final String title;
   final VoidCallback onNavPress;
 
@@ -13,6 +14,9 @@ class AppToolbar extends StatelessWidget implements PreferredSizeWidget {
       pinned: false,
       floating: true,
       snap: false,
+      actions: <Widget>[
+        new IconButton(icon: const Icon(Icons.search), onPressed: _search(context))
+      ],
       leading: onNavPress != null ? new IconButton(icon: new Icon(Icons.dehaze), onPressed: onNavPress) : null,
       flexibleSpace: new Stack(
         alignment: const Alignment(-0.6, 0.5),
@@ -30,16 +34,15 @@ class AppToolbar extends StatelessWidget implements PreferredSizeWidget {
           )
         ],
       ),
-//      bottom: new TabBar(
-//        tabs: [
-//          new Tab(text: 'tab1'),
-//          new Tab(text: 'tab2'),
-//        ],
-//      ),
     );
   }
 
-  // TODO: implement preferredSize
-  @override
-  Size get preferredSize => new Size.fromHeight(80.0);
+  VoidCallback _search(BuildContext context) {
+    return () {
+      Navigator.of(context).push(new MaterialPageRoute(
+          builder: (context) => new SearchView()
+      )
+      );
+    };
+  }
 }
