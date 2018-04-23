@@ -34,6 +34,7 @@ class Event {
   final int sortOrder;
   final DateTime prematchEnd;
   final String meetingId;
+  int mainBetOfferId;
 
   Event({this.id,
     this.name,

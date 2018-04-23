@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:startup_namer/data/betoffer.dart';
+import 'package:startup_namer/data/betoffer_tags.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/outcome.dart';
 
@@ -29,7 +30,20 @@ Future<EventResponse> fetchListView({
 
   var eventWithBettoffers = responseJson["events"];
   for (var eventJson in eventWithBettoffers) {
-    events.add(Event.fromJson(eventJson["event"]));
+    var event = Event.fromJson(eventJson["event"]);
+    events.add(event);
+
+    for (var boJson in eventJson["betOffers"]) {
+      var bo = BetOffer.fromJson(boJson);
+      if (bo.tags.contains(BetOfferTags.main))  {
+        event.mainBetOfferId = bo.id;
+      }
+      betOffers.add(bo);
+
+      for (var outcomeJson in boJson["outcomes"]) {
+        outcomes.add(Outcome.fromJson(outcomeJson));
+      }
+    }
   }
 
   return new EventResponse(

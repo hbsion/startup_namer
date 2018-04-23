@@ -1,21 +1,29 @@
 import 'package:meta/meta.dart';
 
-import "outcome_criterion.dart";
+import 'cashout_status.dart';
 import "odds.dart";
+import "outcome_criterion.dart";
+import 'outcome_status.dart';
 
 class Outcome {
   final int id;
-  final int betOfferId;
   final String label;
   final Odds odds;
-  final String type;
-  final DateTime changedDate;
-  final String status;
-  final String participant;
-  final int participantId;
   final int line;
-  final bool homeTeamMember;
+  final String distance;
+  final bool scratched;
+  final int startNr;
+  final List<int> prevOdds;
   final OutcomeCriterion criterion;
+  final String participant;
+  final bool popular;
+  final String type;
+  final bool homeTeamMember;
+  final int betOfferId;
+  final DateTime changedDate;
+  final int participantId;
+  final OutcomeStatus status;
+  final CashoutStatus cashoutStatus;
 
   Outcome({
     @required this.id,
@@ -29,22 +37,34 @@ class Outcome {
     this.participantId,
     this.line,
     this.homeTeamMember,
-    this.criterion
+    this.criterion,
+    this.distance,
+    this.scratched,
+    this.startNr,
+    this.prevOdds,
+    this.popular,
+    this.cashoutStatus
   });
 
   Outcome.fromJson(Map<String, dynamic> json) : this(
-    id: json["id"],
-    betOfferId: json["betOfferId"],
-    label: json["label"],
-    type: json["type"],
-    odds: Odds.fromJson(json),
-    criterion: OutcomeCriterion.fromJson(json["criterion"]),
-    status: json["status"],
-    participant: json["participant"],
-    participantId: json["participantId"],
-    line: json["line"],
-    homeTeamMember: json["homeTeamMember"] ?? false,
-    changedDate: json["changedDate"] != null ? DateTime.parse(json["changedDate"]) : null,
+      id: json["id"],
+      betOfferId: json["betOfferId"],
+      label: json["label"],
+      type: json["type"],
+      changedDate: json["changedDate"] != null ? DateTime.parse(json["changedDate"]) : null,
+      status: toOutcomeStatus(json["status"]),
+      cashoutStatus: toCashoutStatue(json["cashoutStatus"]),
+      odds: Odds.fromJson(json),
+      participant: json["participant"],
+      participantId: json["participantId"],
+      line: json["line"],
+      homeTeamMember: json["homeTeamMember"] ?? false,
+      criterion: OutcomeCriterion.fromJson(json["criterion"]),
+      distance: json["distance"],
+      scratched: json["scratched"] ?? false,
+      startNr: json["startNr"],
+      popular: json["popular"],
+      prevOdds: ((json["prevOdds"] ?? []) as List<dynamic>).map<int>((i) => i).toList()
   );
 
   @override
@@ -53,36 +73,48 @@ class Outcome {
           other is Outcome &&
               runtimeType == other.runtimeType &&
               id == other.id &&
-              betOfferId == other.betOfferId &&
               label == other.label &&
               odds == other.odds &&
-              type == other.type &&
-              changedDate == other.changedDate &&
-              status == other.status &&
-              participant == other.participant &&
-              participantId == other.participantId &&
               line == other.line &&
+              distance == other.distance &&
+              scratched == other.scratched &&
+              startNr == other.startNr &&
+              prevOdds == other.prevOdds &&
+              criterion == other.criterion &&
+              participant == other.participant &&
+              popular == other.popular &&
+              type == other.type &&
               homeTeamMember == other.homeTeamMember &&
-              criterion == other.criterion;
+              betOfferId == other.betOfferId &&
+              changedDate == other.changedDate &&
+              participantId == other.participantId &&
+              status == other.status &&
+              cashoutStatus == other.cashoutStatus;
 
   @override
   int get hashCode =>
       id.hashCode ^
-      betOfferId.hashCode ^
       label.hashCode ^
       odds.hashCode ^
-      type.hashCode ^
-      changedDate.hashCode ^
-      status.hashCode ^
-      participant.hashCode ^
-      participantId.hashCode ^
       line.hashCode ^
+      distance.hashCode ^
+      scratched.hashCode ^
+      startNr.hashCode ^
+      prevOdds.hashCode ^
+      criterion.hashCode ^
+      participant.hashCode ^
+      popular.hashCode ^
+      type.hashCode ^
       homeTeamMember.hashCode ^
-      criterion.hashCode;
+      betOfferId.hashCode ^
+      changedDate.hashCode ^
+      participantId.hashCode ^
+      status.hashCode ^
+      cashoutStatus.hashCode;
 
   @override
   String toString() {
-    return 'Outcome{id: $id, betOfferId: $betOfferId, label: $label, odds: $odds, type: $type, changedDate: $changedDate, status: $status, participant: $participant, participantId: $participantId, line: $line, homeTeamMember: $homeTeamMember, criterion: $criterion}';
+    return 'Outcome{id: $id, label: $label, odds: $odds, line: $line, distance: $distance, scratched: $scratched, startNr: $startNr, prevOdds: $prevOdds, criterion: $criterion, participant: $participant, popular: $popular, type: $type, homeTeamMember: $homeTeamMember, betOfferId: $betOfferId, changedDate: $changedDate, participantId: $participantId, status: $status, cashoutStatus: $cashoutStatus}';
   }
 
 

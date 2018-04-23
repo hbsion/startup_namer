@@ -1,66 +1,73 @@
-import 'bet_offer_type.dart';
+import 'betoffer_type.dart';
+import 'cashout_status.dart';
 import 'criterion.dart';
 import 'each_way.dart';
-import 'pba.dart';
+import 'outcome_criterion.dart';
 
 class BetOffer {
   final int id;
-  final int eventId;
-  final bool live;
-  final Criterion criterion;
-  final BetOfferType betOfferType;
-  final Pba pba;
-  final bool cashIn;
-  final List<int> outcomes;
-  final bool main;
-  final bool prematch;
-  final String cashOutStatus;
-  final String categoryName;
   final bool suspended;
-  final bool open;
+  final DateTime closed;
+  final Criterion criterion;
   final String extra;
-  final bool startingPrice;
+  final BetOfferType betOfferType;
+  final int placeLimit;
+  final int eventId;
+  final List<int> outcomes;
+  final bool place;
   final EachWay eachWay;
+  final OutcomeCriterion scorerType;
+  final List<String> tags;
+  final CashoutStatus cashOutStatus;
+  final int sortOrder;
+  final int from;
+  final int to;
+  final String description;
+
   //     oddsStats: OddsStats;
+  // combinableOutcomes
+
 
   BetOffer({
     this.id,
     this.eventId,
-    this.live,
     this.criterion,
     this.betOfferType,
-    this.pba,
-    this.cashIn,
     this.outcomes,
-    this.main,
-    this.prematch,
     this.cashOutStatus,
-    this.categoryName,
     this.suspended,
-    this.open,
     this.extra,
-    this.startingPrice,
-    this.eachWay
+    this.eachWay,
+    this.closed,
+    this.placeLimit,
+    this.place,
+    this.scorerType,
+    this.tags,
+    this.sortOrder,
+    this.from,
+    this.to,
+    this.description,
   });
 
   BetOffer.fromJson(Map<String, dynamic> json) : this (
     id: json["id"],
-    eventId: json["eventId"],
-    live: json["live"] ?? false,
-    criterion: Criterion.fromJson(json["criterion"]),
-    betOfferType: BetOfferType.fromJson(json["criterion"]),
-    pba: Pba.fromJson(json["pba"]),
-    cashIn: json["cashIn"],
-    outcomes: ((json["outcomes"] ?? []) as List<Map<String, dynamic>>).map<int>((j) => j["id"]),
-    main: json["main"] ?? false,
-    prematch: json["prematch"] ?? false,
-    cashOutStatus: json["cashOutStatus"],
-    categoryName: json["categoryName"],
     suspended: json["suspended"] ?? false,
-    open: json["open"] ?? false,
+    closed: json["closed"] != null ? DateTime.parse(json["closed"]) : null,
+    criterion: Criterion.fromJson(json["criterion"]),
     extra: json["extra"],
-    startingPrice: json["startingPrice"],
+    betOfferType: BetOfferType.fromJson(json["criterion"]),
+    placeLimit: json["placeLimit"],
+    eventId: json["eventId"],
+    outcomes: ((json["outcomes"] ?? []) as List<dynamic>).map<int>((j) => j["id"]).toList(growable: false),
+    tags: ((json["tags"] ?? []) as List<dynamic>).map<String>((j) => j).toList(growable: false),
+    place: json["place"] ?? false,
     eachWay: EachWay.fromJson(json["eachWay"]),
+    scorerType: OutcomeCriterion.fromJson(json["scorerType"]),
+    cashOutStatus: toCashoutStatue(json["cashOutStatus"]),
+    sortOrder: json["sortOrder"],
+    from: json["from"],
+    to: json["to"],
+    description: json["description"],
   );
 
   @override
@@ -69,46 +76,48 @@ class BetOffer {
           other is BetOffer &&
               runtimeType == other.runtimeType &&
               id == other.id &&
-              eventId == other.eventId &&
-              live == other.live &&
-              criterion == other.criterion &&
-              betOfferType == other.betOfferType &&
-              pba == other.pba &&
-              cashIn == other.cashIn &&
-              outcomes == other.outcomes &&
-              main == other.main &&
-              prematch == other.prematch &&
-              cashOutStatus == other.cashOutStatus &&
-              categoryName == other.categoryName &&
               suspended == other.suspended &&
-              open == other.open &&
+              closed == other.closed &&
+              criterion == other.criterion &&
               extra == other.extra &&
-              startingPrice == other.startingPrice &&
-              eachWay == other.eachWay;
+              betOfferType == other.betOfferType &&
+              placeLimit == other.placeLimit &&
+              eventId == other.eventId &&
+              outcomes == other.outcomes &&
+              place == other.place &&
+              eachWay == other.eachWay &&
+              scorerType == other.scorerType &&
+              tags == other.tags &&
+              cashOutStatus == other.cashOutStatus &&
+              sortOrder == other.sortOrder &&
+              from == other.from &&
+              to == other.to &&
+              description == other.description;
 
   @override
   int get hashCode =>
       id.hashCode ^
-      eventId.hashCode ^
-      live.hashCode ^
-      criterion.hashCode ^
-      betOfferType.hashCode ^
-      pba.hashCode ^
-      cashIn.hashCode ^
-      outcomes.hashCode ^
-      main.hashCode ^
-      prematch.hashCode ^
-      cashOutStatus.hashCode ^
-      categoryName.hashCode ^
       suspended.hashCode ^
-      open.hashCode ^
+      closed.hashCode ^
+      criterion.hashCode ^
       extra.hashCode ^
-      startingPrice.hashCode ^
-      eachWay.hashCode;
+      betOfferType.hashCode ^
+      placeLimit.hashCode ^
+      eventId.hashCode ^
+      outcomes.hashCode ^
+      place.hashCode ^
+      eachWay.hashCode ^
+      scorerType.hashCode ^
+      tags.hashCode ^
+      cashOutStatus.hashCode ^
+      sortOrder.hashCode ^
+      from.hashCode ^
+      to.hashCode ^
+      description.hashCode;
 
   @override
   String toString() {
-    return 'BetOffer{id: $id, eventId: $eventId, live: $live, criterion: $criterion, betOfferType: $betOfferType, pba: $pba, cashIn: $cashIn, outcomes: $outcomes, main: $main, prematch: $prematch, cashOutStatus: $cashOutStatus, categoryName: $categoryName, suspended: $suspended, open: $open, extra: $extra, startingPrice: $startingPrice, eachWay: $eachWay}';
+    return 'BetOffer{id: $id, suspended: $suspended, closed: $closed, criterion: $criterion, extra: $extra, betOfferType: $betOfferType, placeLimit: $placeLimit, eventId: $eventId, outcomes: $outcomes, place: $place, eachWay: $eachWay, scorerType: $scorerType, tags: $tags, cashOutStatus: $cashOutStatus, sortOrder: $sortOrder, from: $from, to: $to, description: $description}';
   }
 
 

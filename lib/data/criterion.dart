@@ -12,7 +12,7 @@ class Criterion {
       return Criterion(
           id: json["id"],
           label: json["label"],
-          order: json["order"] ?? []
+          order: ((json["order"] ?? []) as List<dynamic>).map<int>((i) => i).toList(growable: false)
       );
     }
     return null;
