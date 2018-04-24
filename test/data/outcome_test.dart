@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:startup_namer/data/cashout_status.dart';
 import 'package:startup_namer/data/outcome.dart';
 import 'package:startup_namer/data/outcome_status.dart';
+import 'package:startup_namer/data/outcome_type.dart';
 import 'package:test/test.dart';
 
 
@@ -40,7 +41,7 @@ main() {
     expect(c.odds.american, "-125");
     expect(c.odds.fractional, "4/5");
     expect(c.participant, "Newcastle United");
-    expect(c.type, "OT_ONE");
+    expect(c.type, OutcomeType.ONE);
     expect(c.betOfferId, 2118600641);
     expect(c.changedDate, DateTime.utc(2018, 4, 22, 17, 23, 29));
     expect(c.participantId, 1000000044);

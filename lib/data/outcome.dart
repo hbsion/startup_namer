@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:startup_namer/data/outcome_type.dart';
 
 import 'cashout_status.dart';
 import "odds.dart";
@@ -17,7 +18,7 @@ class Outcome {
   final OutcomeCriterion criterion;
   final String participant;
   final bool popular;
-  final String type;
+  final OutcomeType type;
   final bool homeTeamMember;
   final int betOfferId;
   final DateTime changedDate;
@@ -50,7 +51,7 @@ class Outcome {
       id: json["id"],
       betOfferId: json["betOfferId"],
       label: json["label"],
-      type: json["type"],
+      type: toOutcomeType(json["type"]),
       changedDate: json["changedDate"] != null ? DateTime.parse(json["changedDate"]) : null,
       status: toOutcomeStatus(json["status"]),
       cashoutStatus: toCashoutStatue(json["cashOutStatus"]),
