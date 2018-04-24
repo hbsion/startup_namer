@@ -53,7 +53,7 @@ class Outcome {
       type: json["type"],
       changedDate: json["changedDate"] != null ? DateTime.parse(json["changedDate"]) : null,
       status: toOutcomeStatus(json["status"]),
-      cashoutStatus: toCashoutStatue(json["cashoutStatus"]),
+      cashoutStatus: toCashoutStatue(json["cashOutStatus"]),
       odds: Odds.fromJson(json),
       participant: json["participant"],
       participantId: json["participantId"],

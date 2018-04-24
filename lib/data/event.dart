@@ -96,6 +96,7 @@ class Event {
     teamColors: TeamColors.fromJson(json["teamColors"]),
     sortOrder: json["sortOrder"],
     prematchEnd: json["prematchEnd"] != null ? DateTime.parse(json["prematchEnd"]) : null,
+    meetingId: json["meetingId"]
   );
 
   @override

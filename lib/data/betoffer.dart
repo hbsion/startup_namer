@@ -55,7 +55,7 @@ class BetOffer {
     closed: json["closed"] != null ? DateTime.parse(json["closed"]) : null,
     criterion: Criterion.fromJson(json["criterion"]),
     extra: json["extra"],
-    betOfferType: BetOfferType.fromJson(json["criterion"]),
+    betOfferType: BetOfferType.fromJson(json["betOfferType"]),
     placeLimit: json["placeLimit"],
     eventId: json["eventId"],
     outcomes: ((json["outcomes"] ?? []) as List<dynamic>).map<int>((j) => j["id"]).toList(growable: false),

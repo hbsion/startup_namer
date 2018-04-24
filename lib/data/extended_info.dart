@@ -1,3 +1,6 @@
+import 'package:startup_namer/data/last_run_days.dart';
+import 'package:startup_namer/data/race_history_stat.dart';
+
 import 'form_figures.dart';
 
 class ExtendedInfo {
@@ -9,6 +12,8 @@ class ExtendedInfo {
   final bool hasIcon;
   final String trainerName;
   final List<FormFigures> formFigures;
+  final List<LastRunDays> lastRunDays;
+  final List<RaceHistoryStat> raceHistoryStat;
 
   ExtendedInfo({
     this.startNumber,
@@ -18,7 +23,9 @@ class ExtendedInfo {
     this.editorial,
     this.hasIcon,
     this.trainerName,
-    this.formFigures
+    this.formFigures,
+    this.lastRunDays,
+    this.raceHistoryStat,
   });
 
   factory ExtendedInfo.fromJson(Map<String, dynamic> json) {
@@ -31,8 +38,9 @@ class ExtendedInfo {
           editorial: json["editorial"],
           trainerName: json["trainerName"],
           hasIcon: json["hasIcon"] ?? false,
-          formFigures: ((json["formFigures"] ?? []) as List<Map<String, dynamic>>).map((j) => FormFigures.fromJson(j))
-
+          formFigures: ((json["formFigures"] ?? []) as List<dynamic>).map<FormFigures>((j) => FormFigures.fromJson(j)).toList(),
+          lastRunDays: ((json["lastRunDays"] ?? []) as List<dynamic>).map<LastRunDays>((j) => LastRunDays.fromJson(j)).toList(),
+          raceHistoryStat: ((json["raceHistoryStat"] ?? []) as List<dynamic>).map<RaceHistoryStat>((j) => RaceHistoryStat.fromJson(j)).toList()
       );
     }
     return null;
@@ -50,7 +58,9 @@ class ExtendedInfo {
               editorial == other.editorial &&
               hasIcon == other.hasIcon &&
               trainerName == other.trainerName &&
-              formFigures == other.formFigures;
+              formFigures == other.formFigures &&
+              lastRunDays == other.lastRunDays &&
+              raceHistoryStat == other.raceHistoryStat;
 
   @override
   int get hashCode =>
@@ -61,11 +71,13 @@ class ExtendedInfo {
       editorial.hashCode ^
       hasIcon.hashCode ^
       trainerName.hashCode ^
-      formFigures.hashCode;
+      formFigures.hashCode ^
+      lastRunDays.hashCode ^
+      raceHistoryStat.hashCode;
 
   @override
   String toString() {
-    return 'ExtendedInfo{startNumber: $startNumber, driverName: $driverName, age: $age, weight: $weight, editorial: $editorial, hasIcon: $hasIcon, trainerName: $trainerName, formFigures: $formFigures}';
+    return 'ExtendedInfo{startNumber: $startNumber, driverName: $driverName, age: $age, weight: $weight, editorial: $editorial, hasIcon: $hasIcon, trainerName: $trainerName, formFigures: $formFigures, lastRunDays: $lastRunDays, raceHistoryStat: $raceHistoryStat}';
   }
 
 

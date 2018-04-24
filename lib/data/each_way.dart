@@ -12,7 +12,7 @@ class EachWay {
           terms: json["terms"] ?? [],
           fractionMilli: json["fractionMilli"],
           placeLimit: json["placeLimit"],
-          tags: json["tags"] ?? []
+          tags: ((json["tags"] ?? []) as List<dynamic>).map<String>((t) => t).toList()
       );
     }
     return null;
