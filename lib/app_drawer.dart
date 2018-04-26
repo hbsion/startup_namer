@@ -16,9 +16,9 @@ class MenuEntry {
 
   MenuEntry({
     this.title,
-    this.sport,
-    this.league,
-    this.region,
+    this.sport = "all",
+    this.league= "all",
+    this.region= "all",
     this.count = 0,
     this.builder});
 
@@ -108,11 +108,11 @@ class MenuEntryRow extends StatelessWidget {
     List<Widget> row = [];
     if (entry.title != null) {
       row.add(new Text(entry.title));
-    } else if (entry.league != null) {
+    } else if (entry.league != "all") {
       row.add(new Text(entry.league));
       row.add(new Padding(
           padding: EdgeInsets.only(left: 4.0), child: new Text(entry.sport, style: theme.textTheme.caption)));
-      if (entry.region != null) {
+      if (entry.region != "all") {
         row.add(new Padding(padding: EdgeInsets.only(left: 2.0), child: new Text("/", style: theme.textTheme.caption)));
         row.add(new Padding(
             padding: EdgeInsets.only(left: 2.0), child: new Text(entry.region, style: theme.textTheme.caption)));

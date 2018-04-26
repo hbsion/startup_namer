@@ -10,7 +10,8 @@ class SportPage extends StatefulWidget {
   final String region;
   final String participant;
 
-  SportPage({Key key, this.sport, this.league, this.region, this.participant = "all"}) : super(key: key);
+  SportPage({Key key, this.sport, this.region, this.league, this.participant = "all"})
+      : assert(sport !=null), assert(region !=null), assert(league !=null), assert(participant !=null), super(key: key);
 
   @override
   _SportPageState createState() {
