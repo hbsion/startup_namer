@@ -8,8 +8,9 @@ class SportPage extends StatefulWidget {
   final String sport;
   final String league;
   final String region;
+  final String participant;
 
-  SportPage({Key key, this.sport, this.league, this.region}) : super(key: key);
+  SportPage({Key key, this.sport, this.league, this.region, this.participant = "all"}) : super(key: key);
 
   @override
   _SportPageState createState() {
@@ -37,28 +38,28 @@ class _SportPageState extends State<SportPage> {
                 new Scaffold(
                     key: _matchesKey,
                     body: new CustomScrollView(
-                      key: new PageStorageKey("xxx"),
+                      key: new PageStorageKey("matches"),
                       slivers: <Widget>[
                         new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
                         new SportView(
                             sport: widget.sport,
                             league: widget.league,
                             region: widget.region,
-                            prefix: " Matches-")
+                            filter: "matches")
                       ],
                     )
                 ),
                 new Scaffold(
                     key: _outrightsKey,
                     body: new CustomScrollView(
-                      key: new PageStorageKey("yyy"),
+                      key: new PageStorageKey("competitions"),
                       slivers: <Widget>[
                         new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
                         new SportView(
                             sport: widget.sport,
                             league: widget.league,
                             region: widget.region,
-                            prefix: "Outrights-")
+                            filter: "competitions")
                       ],
                     )
                 ),
