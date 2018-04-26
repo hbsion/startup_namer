@@ -20,4 +20,22 @@ main() {
 
     expect(key1 == key2, false);
   });
+
+  test("Hashcode should match", () {
+    EventCollectionKey key1 = new EventCollectionKey(
+        type: EventCollectionType.ListView, selector: ["football", "sweden", "allsevenskan"]);
+    EventCollectionKey key2 = new EventCollectionKey(
+        type: EventCollectionType.ListView, selector: ["football", "sweden", "allsevenskan"]);
+
+    expect(key1.hashCode, key2.hashCode);
+  });
+
+  test("Hashcode should not match", () {
+    EventCollectionKey key1 = new EventCollectionKey(
+        type: EventCollectionType.ListView, selector: ["football", "sweden", "allsevenskan"]);
+    EventCollectionKey key2 = new EventCollectionKey(
+        type: EventCollectionType.ListView, selector: ["football", "england", "allsevenskan"]);
+
+    expect(key1.hashCode == key2.hashCode, false);
+  });
 }

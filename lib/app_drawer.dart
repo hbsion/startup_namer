@@ -143,9 +143,9 @@ class MenuEntryRow extends StatelessWidget {
       Navigator.pop(context);
       Navigator.of(context).push(new MaterialPageRoute(builder: entry.builder ?? (context) =>
       new SportPage(
-        sport: entry.sport,
-        league: entry.league,
-        region: entry.region,
+        sport: entry.sport.toLowerCase().replaceAll(" ", "_"),
+        league: entry.league.toLowerCase().replaceAll(" ", "_"),
+        region: entry.region.toLowerCase().replaceAll(" ", "_"),
       )));
     };
   }

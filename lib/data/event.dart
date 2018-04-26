@@ -141,36 +141,7 @@ class Event {
   }
 
   @override
-  int get hashCode =>
-      id.hashCode ^
-      name.hashCode ^
-      homeName.hashCode ^
-      awayName.hashCode ^
-      start.hashCode ^
-      originalStartTime.hashCode ^
-      group.hashCode ^
-      groupId.hashCode ^
-      path.hashCode ^
-      nonLiveBoCount.hashCode ^
-      liveBoCount.hashCode ^
-      tags.hashCode ^
-      sport.hashCode ^
-      state.hashCode ^
-      distance.hashCode ^
-      eventNumber.hashCode ^
-      nameDetails.hashCode ^
-      editorial.hashCode ^
-      raceClass.hashCode ^
-      raceType.hashCode ^
-      trackType.hashCode ^
-      going.hashCode ^
-      participants.hashCode ^
-      rank.hashCode ^
-      groupSortOrder.hashCode ^
-      teamColors.hashCode ^
-      sortOrder.hashCode ^
-      prematchEnd.hashCode ^
-      meetingId.hashCode;
+  int get hashCode => id;
 
   @override
   String toString() {

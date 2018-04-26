@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:startup_namer/data/event_collection.dart';
+import 'package:startup_namer/data/event_collection_key.dart';
+import 'package:startup_namer/store/actions.dart';
+import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/event_list_widget.dart';
 import 'package:startup_namer/widgets/section_list_view.dart';
 
@@ -6,12 +10,25 @@ class SportView extends StatelessWidget {
   final String sport;
   final String league;
   final String region;
+  final String participant;
   final String filter;
 
-  const SportView({Key key, this.sport, this.league, this.region, this.filter}) : super(key: key);
+  const SportView({Key key, this.sport, this.league, this.region, this.participant, this.filter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    EventCollectionKey key = new EventCollectionKey(
+        type: EventCollectionType.ListView,
+        selector: [sport, region, league, participant, filter]
+    );
+    return new StoreConnector<EventCollection>(
+        mapper: (store) => store.collectionStore.collection(key),
+        action: listViewAction(sport: sport, region: region, league: league, participant: participant, filter: filter),
+        builder: _build
+    );
+  }
+
+  Widget _build(BuildContext context, EventCollection model) {
     return new SectionListView(
         key: new PageStorageKey(filter),
         sections: buildSections(filter));

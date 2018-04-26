@@ -25,9 +25,15 @@ class EventCollectionKey {
               const ListEquality().equals(selector, other.selector);
 
   @override
-  int get hashCode =>
-      type.hashCode ^
-      selector.hashCode;
+  int get hashCode {
+    int hash = type.hashCode;
+
+    for (var s in selector) {
+      hash = hash ^ s.hashCode;
+    }
+
+    return hash;
+  }
 
   @override
   String toString() {

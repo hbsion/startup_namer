@@ -6,7 +6,6 @@ import 'package:startup_namer/store/store.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:rxdart/rxdart.dart';
 
-
 class EventStore implements Store {
   final Map<int, BehaviorSubject<Event>> _events = new HashMap();
 

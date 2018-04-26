@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/app_drawer.dart';
-import 'package:startup_namer/views/SportsView.dart';
+import 'package:startup_namer/views/list_view.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
 
 
@@ -45,6 +45,7 @@ class _SportPageState extends State<SportPage> {
                             sport: widget.sport,
                             league: widget.league,
                             region: widget.region,
+                            participant: widget.participant,
                             filter: "matches")
                       ],
                     )
@@ -59,6 +60,7 @@ class _SportPageState extends State<SportPage> {
                             sport: widget.sport,
                             league: widget.league,
                             region: widget.region,
+                            participant: widget.participant,
                             filter: "competitions")
                       ],
                     )

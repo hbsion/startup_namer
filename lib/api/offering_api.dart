@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:startup_namer/data/betoffer.dart';
 import 'package:startup_namer/data/betoffer_tags.dart';
@@ -17,7 +18,6 @@ Future<EventResponse> fetchListView({
   String region = "all",
   String participant = "all",
   String filter = "matches"}) async {
-
   var url = "${ApiConstants.host}/offering/v2018/${ApiConstants
       .offering}/listView/$sport/$region/$league/$participant/$filter.json?lang=${ApiConstants
       .lang}&market=${ApiConstants.market}&categoryGroup=COMBINED&displayDefault=true";
@@ -36,7 +36,7 @@ Future<EventResponse> fetchListView({
 
     for (var boJson in eventJson["betOffers"]) {
       var bo = BetOffer.fromJson(boJson);
-      if (bo.tags.contains(BetOfferTags.main))  {
+      if (bo.tags.contains(BetOfferTags.main)) {
         event.mainBetOfferId = bo.id;
       }
       betOffers.add(bo);
@@ -48,9 +48,10 @@ Future<EventResponse> fetchListView({
   }
 
   return new EventResponse(
-    key: new EventCollectionKey(type: EventCollectionType.ListView, selector: [sport,region, league, participant, filter]),
-    events: events,
-    betoffers: betOffers,
-    outcomes: outcomes
+      key: new EventCollectionKey(
+          type: EventCollectionType.ListView, selector: [sport, region, league, participant, filter]),
+      events: events,
+      betoffers: betOffers,
+      outcomes: outcomes
   );
 }

@@ -10,14 +10,11 @@ class AppStore {
   final EventStore eventStore = new EventStore();
   final EventCollectionStore collectionStore = new EventCollectionStore();
 
-
   AppStore() {
     _stores..add(eventStore)..add(collectionStore);
   }
 
   void dispatch(ActionType type, action) {
-    for (var store in _stores) {
-      store.dispatch(type, action);
-    }
+    _stores.forEach((store) => store.dispatch(type, action));
   }
 }
