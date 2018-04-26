@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:startup_namer/data/last_run_days.dart';
 import 'package:startup_namer/data/race_history_stat.dart';
 
@@ -58,9 +59,9 @@ class ExtendedInfo {
               editorial == other.editorial &&
               hasIcon == other.hasIcon &&
               trainerName == other.trainerName &&
-              formFigures == other.formFigures &&
-              lastRunDays == other.lastRunDays &&
-              raceHistoryStat == other.raceHistoryStat;
+              const DeepCollectionEquality().equals(formFigures, other.formFigures) &&
+              const DeepCollectionEquality().equals(lastRunDays, other.lastRunDays) &&
+              const DeepCollectionEquality().equals(raceHistoryStat, other.raceHistoryStat);
 
   @override
   int get hashCode =>

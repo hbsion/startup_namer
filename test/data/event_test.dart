@@ -451,4 +451,11 @@ main() {
     expect(c.meetingId, "38197");
     expect(c.teamColors, isNotNull);
   });
+
+  test("Events should be equal", () {
+    var event1 = Event.fromJson(json.decode(text));
+    var event2 = Event.fromJson(json.decode(text));
+
+    expect(event1 == event2, true);
+  });
 }

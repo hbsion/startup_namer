@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 class EachWay {
   final String terms;
   final int fractionMilli;
@@ -26,7 +28,7 @@ class EachWay {
               terms == other.terms &&
               fractionMilli == other.fractionMilli &&
               placeLimit == other.placeLimit &&
-              tags == other.tags;
+              const ListEquality().equals(tags, other.tags);
 
   @override
   int get hashCode =>

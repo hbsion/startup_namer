@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:startup_namer/data/betoffer.dart';
 import 'package:startup_namer/data/betoffer_tags.dart';
 import 'package:startup_namer/data/event.dart';
+import 'package:startup_namer/data/event_collection_key.dart';
 import 'package:startup_namer/data/outcome.dart';
 
 import 'api_constants.dart';
@@ -47,6 +48,7 @@ Future<EventResponse> fetchListView({
   }
 
   return new EventResponse(
+    key: new EventCollectionKey(type: EventCollectionType.ListView, selector: [sport,region, league, participant, filter]),
     events: events,
     betoffers: betOffers,
     outcomes: outcomes

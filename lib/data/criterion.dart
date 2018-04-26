@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 
 class Criterion {
@@ -25,7 +26,7 @@ class Criterion {
               runtimeType == other.runtimeType &&
               id == other.id &&
               label == other.label &&
-              order == other.order;
+              const ListEquality().equals(order, other.order);
 
   @override
   int get hashCode =>

@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import 'event_participant.dart';
 import 'event_state.dart';
 import 'group_path.dart';
@@ -26,6 +28,7 @@ class Event {
   final String raceType;
   final String trackType;
   final String going;
+
   // timeform
   final List<EventParticipant> participants;
   final int rank;
@@ -35,6 +38,7 @@ class Event {
   final DateTime prematchEnd;
   final String meetingId;
   int mainBetOfferId;
+  List<int> betoffers = [];
 
   Event({this.id,
     this.name,
@@ -68,40 +72,40 @@ class Event {
 
 
   Event.fromJson(Map<String, dynamic> json) : this (
-    id: json["id"],
-    name: json["name"],
-    homeName: json["homeName"],
-    awayName: json["awayName"],
-    start: json["start"] != null ? DateTime.parse(json["start"]) : null,
-    originalStartTime: json["originalStartTime"],
-    group: json["group"],
-    groupId: json["groupId"],
-    path: ((json["path"] ?? []) as List<dynamic>).map((j) => GroupPath.fromJson(j)).toList(),
-    nonLiveBoCount: json["nonLiveBoCount"],
-    liveBoCount: json["liveBoCount"],
-    tags: ((json["tags"] ?? []) as List<dynamic>).map<String>((o) => o.toString()).toList(),
-    sport: json["sport"],
-    state: toEventState(json["state"]),
-    distance: json["distance"],
-    eventNumber: json["eventNumber"],
-    nameDetails: json["nameDetails"],
-    editorial: json["editorial"],
-    raceClass: json["raceClass"],
-    raceType: json["raceType"],
-    trackType: json["trackType"],
-    going: json["going"],
-    participants: ((json["participants"] ?? []) as List<dynamic>).map((j) => EventParticipant.fromJson(j)).toList(),
-    rank: json["rank"],
-    groupSortOrder: json["groupSortOrder"],
-    teamColors: TeamColors.fromJson(json["teamColors"]),
-    sortOrder: json["sortOrder"],
-    prematchEnd: json["prematchEnd"] != null ? DateTime.parse(json["prematchEnd"]) : null,
-    meetingId: json["meetingId"]
+      id: json["id"],
+      name: json["name"],
+      homeName: json["homeName"],
+      awayName: json["awayName"],
+      start: json["start"] != null ? DateTime.parse(json["start"]) : null,
+      originalStartTime: json["originalStartTime"],
+      group: json["group"],
+      groupId: json["groupId"],
+      path: ((json["path"] ?? []) as List<dynamic>).map((j) => GroupPath.fromJson(j)).toList(),
+      nonLiveBoCount: json["nonLiveBoCount"],
+      liveBoCount: json["liveBoCount"],
+      tags: ((json["tags"] ?? []) as List<dynamic>).map<String>((o) => o.toString()).toList(),
+      sport: json["sport"],
+      state: toEventState(json["state"]),
+      distance: json["distance"],
+      eventNumber: json["eventNumber"],
+      nameDetails: json["nameDetails"],
+      editorial: json["editorial"],
+      raceClass: json["raceClass"],
+      raceType: json["raceType"],
+      trackType: json["trackType"],
+      going: json["going"],
+      participants: ((json["participants"] ?? []) as List<dynamic>).map((j) => EventParticipant.fromJson(j)).toList(),
+      rank: json["rank"],
+      groupSortOrder: json["groupSortOrder"],
+      teamColors: TeamColors.fromJson(json["teamColors"]),
+      sortOrder: json["sortOrder"],
+      prematchEnd: json["prematchEnd"] != null ? DateTime.parse(json["prematchEnd"]) : null,
+      meetingId: json["meetingId"]
   );
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
+  bool operator ==(Object other) {
+    return identical(this, other) ||
           other is Event &&
               runtimeType == other.runtimeType &&
               id == other.id &&
@@ -112,10 +116,10 @@ class Event {
               originalStartTime == other.originalStartTime &&
               group == other.group &&
               groupId == other.groupId &&
-              path == other.path &&
+              const DeepCollectionEquality().equals(path, other.path) &&
               nonLiveBoCount == other.nonLiveBoCount &&
               liveBoCount == other.liveBoCount &&
-              tags == other.tags &&
+              const ListEquality().equals(tags, other.tags) &&
               sport == other.sport &&
               state == other.state &&
               distance == other.distance &&
@@ -126,13 +130,15 @@ class Event {
               raceType == other.raceType &&
               trackType == other.trackType &&
               going == other.going &&
-              participants == other.participants &&
+              const DeepCollectionEquality().equals(participants, other.participants) &&
               rank == other.rank &&
               groupSortOrder == other.groupSortOrder &&
               teamColors == other.teamColors &&
               sortOrder == other.sortOrder &&
               prematchEnd == other.prematchEnd &&
-              meetingId == other.meetingId;
+              meetingId == other.meetingId &&
+              const ListEquality().equals(betoffers, other.betoffers);
+  }
 
   @override
   int get hashCode =>
@@ -170,5 +176,5 @@ class Event {
   String toString() {
     return 'Event{id: $id, name: $name, homeName: $homeName, awayName: $awayName, start: $start, originalStartTime: $originalStartTime, group: $group, groupId: $groupId, path: $path, nonLiveBoCount: $nonLiveBoCount, liveBoCount: $liveBoCount, tags: $tags, sport: $sport, state: $state, distance: $distance, eventNumber: $eventNumber, nameDetails: $nameDetails, editorial: $editorial, raceClass: $raceClass, raceType: $raceType, trackType: $trackType, going: $going, participants: $participants, rank: $rank, groupSortOrder: $groupSortOrder, teamColors: $teamColors, sortOrder: $sortOrder, prematchEnd: $prematchEnd, meetingId: $meetingId}';
   }
-  
+
 }

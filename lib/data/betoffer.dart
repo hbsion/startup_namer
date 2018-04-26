@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import 'betoffer_type.dart';
 import 'cashout_status.dart';
 import 'criterion.dart';
@@ -71,8 +73,8 @@ class BetOffer {
   );
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
+  bool operator ==(Object other) {
+    return identical(this, other) ||
           other is BetOffer &&
               runtimeType == other.runtimeType &&
               id == other.id &&
@@ -83,16 +85,17 @@ class BetOffer {
               betOfferType == other.betOfferType &&
               placeLimit == other.placeLimit &&
               eventId == other.eventId &&
-              outcomes == other.outcomes &&
+              const ListEquality().equals(outcomes, other.outcomes)  &&
               place == other.place &&
               eachWay == other.eachWay &&
               scorerType == other.scorerType &&
-              tags == other.tags &&
+              const ListEquality().equals(tags, other.tags)  &&
               cashOutStatus == other.cashOutStatus &&
               sortOrder == other.sortOrder &&
               from == other.from &&
               to == other.to &&
               description == other.description;
+  }
 
   @override
   int get hashCode =>
