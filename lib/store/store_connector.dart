@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_provider.dart';
 import 'package:startup_namer/util/callable.dart';
+import 'package:startup_namer/util/flowable.dart';
 
 typedef Widget WidgetModelBuilder<T>(BuildContext context, T model);
-typedef Observable<T> Mapper<T>(AppStore appStore);
+typedef Flowable<T> Mapper<T>(AppStore appStore);
 
 class StoreConnector<T> extends StatelessWidget {
   final WidgetModelBuilder<T> builder;
@@ -54,8 +54,10 @@ class _State<T> extends State<_StoreConnector<T>> {
 
   @override
   void initState() {
-    _subscription = widget.mapper(widget.appStore).listen((data) {
-      if (mounted) {
+    var mapper = widget.mapper(widget.appStore);
+    _snapshot = mapper.value;
+    _subscription = mapper.listen((data) {
+      if (mounted && data != _snapshot) {
         setState(() {
           _snapshot = data;
         });

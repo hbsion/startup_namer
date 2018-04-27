@@ -7,6 +7,7 @@ import 'package:startup_namer/data/event_collection.dart';
 import 'package:startup_namer/data/event_collection_key.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/store.dart';
+import 'package:startup_namer/util/flowable.dart';
 import 'package:startup_namer/util/func.dart';
 
 
@@ -16,7 +17,7 @@ class EventCollectionStore implements Store {
 
   EventCollectionStore(this.eventResolver);
 
-  Observable<EventCollection> collection(EventCollectionKey key) {
+  Flowable<EventCollection> collection(EventCollectionKey key) {
 
     print("collection query: " + key.toString() + " hash: " + key.hashCode.toString());
     var subject = _collections[key];
@@ -24,7 +25,7 @@ class EventCollectionStore implements Store {
       subject = new BehaviorSubject<EventCollection>();
       _collections[key] = subject;
     }
-    return subject.observable;
+    return new Flowable(subject);
   }
 
   @override

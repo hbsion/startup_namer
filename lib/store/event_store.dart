@@ -5,17 +5,18 @@ import 'package:startup_namer/api/event_response.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/store.dart';
+import 'package:startup_namer/util/flowable.dart';
 
 class EventStore implements Store {
   final Map<int, BehaviorSubject<Event>> _events = new HashMap();
 
-  Observable<Event> event(int id) {
+  Flowable<Event> event(int id) {
     var subject = _events[id];
     if (subject == null) {
       subject = new BehaviorSubject<Event>();
       _events[id] = subject;
     }
-    return subject.observable;
+    return new Flowable(subject);
   }
 
   List<Event> snapshot(List<int> ids) {
