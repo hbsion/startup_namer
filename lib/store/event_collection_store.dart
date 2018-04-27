@@ -18,11 +18,11 @@ class EventCollectionStore implements Store {
 
   Observable<EventCollection> collection(EventCollectionKey key) {
 
-    print("collection query: " + key.toString());
+    print("collection query: " + key.toString() + " hash: " + key.hashCode.toString());
     var subject = _collections[key];
     if (subject == null) {
       subject = new BehaviorSubject<EventCollection>();
-      _collections[key];
+      _collections[key] = subject;
     }
     return subject.observable;
   }
@@ -38,7 +38,7 @@ class EventCollectionStore implements Store {
         );
         collection.eventIds.sort((a,b) => a.compareTo(b));
 
-        print("Event response: " + response.key.toString());
+        print("Event response: " + response.key.toString() + " hash: " + response.key.hashCode.toString());
         var subject = _collections[response.key];
         if (subject != null) {
           if (subject.value != collection) {

@@ -13,7 +13,7 @@ class EventStore implements Store {
     var subject = _events[id];
     if (subject == null) {
       subject = new BehaviorSubject<Event>();
-      _events[id];
+      _events[id] = subject;
     }
     return subject.observable;
   }
