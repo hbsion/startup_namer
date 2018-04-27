@@ -7,12 +7,18 @@ import 'package:startup_namer/data/event_collection.dart';
 import 'package:startup_namer/data/event_collection_key.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/store.dart';
+import 'package:startup_namer/util/func.dart';
 
 
 class EventCollectionStore implements Store {
   final Map<EventCollectionKey, BehaviorSubject<EventCollection>> _collections = new HashMap();
+  final Func<List<int>, List<Event>> eventResolver;
+
+  EventCollectionStore(this.eventResolver);
 
   Observable<EventCollection> collection(EventCollectionKey key) {
+
+    print("collection query: " + key.toString());
     var subject = _collections[key];
     if (subject == null) {
       subject = new BehaviorSubject<EventCollection>();
@@ -32,6 +38,7 @@ class EventCollectionStore implements Store {
         );
         collection.eventIds.sort((a,b) => a.compareTo(b));
 
+        print("Event response: " + response.key.toString());
         var subject = _collections[response.key];
         if (subject != null) {
           if (subject.value != collection) {

@@ -14,6 +14,6 @@ main() {
     var c = ShirtColors.fromJson(json.decode(text));
 
     expect(c.shirtColor1, "#ffffff");
-    expect(c.shirtColor1, "#eeeeee");
+    expect(c.shirtColor2, "#eeeeee");
   });
 }

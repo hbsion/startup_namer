@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:startup_namer/data/event_collection.dart';
 import 'package:startup_namer/data/event_collection_key.dart';
@@ -23,12 +24,25 @@ class SportView extends StatelessWidget {
     );
     return new StoreConnector<EventCollection>(
         mapper: (store) => store.collectionStore.collection(key),
-        action: listViewAction(sport: sport, region: region, league: league, participant: participant, filter: filter),
+        action: listViewAction(sport: sport,
+            region: region,
+            league: league,
+            participant: participant,
+            filter: filter),
         builder: _build
     );
   }
 
   Widget _build(BuildContext context, EventCollection model) {
+    if (model == null) {
+      return new SliverFillRemaining(
+        child: new Container(
+          child: new Center(
+            child: new CupertinoActivityIndicator(),
+          ),
+        ),
+      );
+    }
     return new SectionListView(
         key: new PageStorageKey(filter),
         sections: buildSections(filter));

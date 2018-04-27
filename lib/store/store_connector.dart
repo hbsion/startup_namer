@@ -10,7 +10,7 @@ import 'package:startup_namer/util/callable.dart';
 typedef Widget WidgetModelBuilder<T>(BuildContext context, T model);
 typedef Observable<T> Mapper<T>(AppStore appStore);
 
-class StoreConnector<T> extends StatefulWidget {
+class StoreConnector<T> extends StatelessWidget {
   final WidgetModelBuilder<T> builder;
   final Mapper<T> mapper;
   final Callable<Dispatcher> action;
@@ -21,15 +21,51 @@ class StoreConnector<T> extends StatefulWidget {
         super(key: key);
 
   @override
+  Widget build(BuildContext context) {
+    return new _StoreConnector(
+      appStore: StoreProvider.of(context),
+      builder: builder,
+      mapper: mapper,
+      action: action,
+    );
+  }
+}
+
+class _StoreConnector<T> extends StatefulWidget {
+  final AppStore appStore;
+  final WidgetModelBuilder<T> builder;
+  final Mapper<T> mapper;
+  final Callable<Dispatcher> action;
+
+  const _StoreConnector({Key key, @required this.builder, @required this.mapper, this.action, this.appStore})
+      :assert(builder != null),
+        assert(mapper != null),
+        assert(appStore != null),
+        super(key: key);
+
+  @override
   _State createState() => new _State<T>();
 
 }
 
-class _State<T> extends State<StoreConnector<T>> {
+class _State<T> extends State<_StoreConnector<T>> {
   T _snapshot;
   StreamSubscription<T> _subscription;
-  AppStore _appStore;
 
+  @override
+  void initState() {
+    _subscription = widget.mapper(widget.appStore).listen((data) {
+      if (mounted) {
+        setState(() {
+          _snapshot = data;
+        });
+      }
+    });
+    if (widget.action != null) {
+      widget.action(widget.appStore.dispatch);
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -52,19 +88,6 @@ class _State<T> extends State<StoreConnector<T>> {
 
   @override
   Widget build(BuildContext context) {
-    if (_appStore == null) {
-      _appStore = StoreProvider.of(context);
-      _subscription = widget.mapper(_appStore).listen((data) {
-        if (mounted) {
-          setState(() {
-            _snapshot = data;
-          });
-        }
-      });
-      if (widget.action != null) {
-        widget.action(_appStore.dispatch);
-      }
-    }
     return widget.builder(context, _snapshot);
   }
 

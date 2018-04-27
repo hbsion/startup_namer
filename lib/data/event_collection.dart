@@ -7,7 +7,8 @@ class EventCollection {
   final EventCollectionKey key;
   final List<int> eventIds;
 
-  EventCollection({@required this.key, this.eventIds = const []})
+  EventCollection({@required this.key,
+    this.eventIds = const []})
       : assert (key != null),
         assert(eventIds != null);
 
@@ -24,6 +25,5 @@ class EventCollection {
   int get hashCode =>
       key.hashCode ^
       eventIds.hashCode;
-
 
 }

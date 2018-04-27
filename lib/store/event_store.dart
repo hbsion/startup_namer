@@ -1,10 +1,10 @@
 import 'dart:collection';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/api/event_response.dart';
 import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/store/store.dart';
 import 'package:startup_namer/store/action_type.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:startup_namer/store/store.dart';
 
 class EventStore implements Store {
   final Map<int, BehaviorSubject<Event>> _events = new HashMap();
@@ -18,9 +18,15 @@ class EventStore implements Store {
     return subject.observable;
   }
 
+  List<Event> snapshot(List<int> ids) {
+    return _events.values.map((subject) => subject.value)
+        .where((e) => e != null)
+        .toList(growable: false);
+  }
+
   @override
   void dispatch(ActionType type, action) {
-    switch(type) {
+    switch (type) {
       case ActionType.EventResponse:
         EventResponse response = action;
         for (var event in response.events) {
