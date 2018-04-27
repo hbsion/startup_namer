@@ -20,8 +20,9 @@ class EventStore implements Store {
   }
 
   List<Event> snapshot(List<int> ids) {
-    return _events.values.map((subject) => subject.value)
-        .where((e) => e != null)
+    return ids.map((id) => _events[id])
+        .where((subject) => subject != null)
+        .map((subject) => subject.value)
         .toList(growable: false);
   }
 

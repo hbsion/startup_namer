@@ -7,7 +7,7 @@ import 'package:startup_namer/store/store_provider.dart';
 import 'package:startup_namer/util/callable.dart';
 import 'package:startup_namer/util/flowable.dart';
 
-typedef Widget WidgetModelBuilder<T>(BuildContext context, T model);
+typedef Widget WidgetModelBuilder<T>(BuildContext context, T model, AppStore store);
 typedef Flowable<T> Mapper<T>(AppStore appStore);
 
 class StoreConnector<T> extends StatelessWidget {
@@ -90,7 +90,7 @@ class _State<T> extends State<_StoreConnector<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, _snapshot);
+    return widget.builder(context, _snapshot, widget.appStore);
   }
 
 }

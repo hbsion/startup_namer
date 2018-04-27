@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:startup_namer/widgets/section_header.dart';
 
 
@@ -54,10 +53,10 @@ class _SectionListViewState extends State<SectionListView> {
         cursor++;
         // debugPrint("Expanded Section finding row at cursor: " + cursor.toString() + " index: " + index.toString());
 
-        if (index < (cursor + section.children.length)) {
-          return _buildListItem(section.children[index - cursor]);
+        if (index < (cursor + section.count)) {
+          return _buildListItem(section.builder(context, index - cursor));
         } else {
-          cursor += section.children.length;
+          cursor += section.count;
         }
       } else {
         cursor++;
@@ -71,7 +70,7 @@ class _SectionListViewState extends State<SectionListView> {
     int childCount = widget.sections.length;
     for (var section in widget.sections) {
       if (_expanded.containsKey(section.title)) {
-        childCount += section.children.length;
+        childCount += section.count;
       }
     }
 
@@ -82,7 +81,7 @@ class _SectionListViewState extends State<SectionListView> {
     return new _SectionListItem(key: new Key(section.title),
         child: new SectionHeader(
           title: section.title,
-          count: section.children.length,
+          count: section.count,
           onTap: () {
             setState(() {
               _expanded[section.title] = !_expanded[section.title];
@@ -101,13 +100,11 @@ class _SectionListViewState extends State<SectionListView> {
   }
 }
 
-class ListSection {
-  final String title;
-  final List<Widget> children;
-  final bool initiallyExpanded;
-
-  ListSection({@required this.children, this.title = "", this.initiallyExpanded = false})
-      : assert(children != null);
+abstract class ListSection {
+  String get title;
+  IndexedWidgetBuilder get builder;
+  int get count;
+  bool get initiallyExpanded;
 }
 
 class _SectionListItem extends StatelessWidget {

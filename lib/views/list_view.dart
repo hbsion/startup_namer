@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_collection.dart';
 import 'package:startup_namer/data/event_collection_key.dart';
+import 'package:startup_namer/data/event_state.dart';
 import 'package:startup_namer/store/actions.dart';
+import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
+import 'package:startup_namer/util/dates.dart';
 import 'package:startup_namer/widgets/event_list_widget.dart';
 import 'package:startup_namer/widgets/section_list_view.dart';
 
@@ -33,7 +37,7 @@ class SportView extends StatelessWidget {
     );
   }
 
-  Widget _build(BuildContext context, EventCollection model) {
+  Widget _build(BuildContext context, EventCollection model, AppStore store) {
     if (model == null) {
       return new SliverFillRemaining(
         child: new Container(
@@ -45,40 +49,120 @@ class SportView extends StatelessWidget {
     }
     return new SectionListView(
         key: new PageStorageKey(filter),
-        sections: buildSections(filter));
+        sections: _buildData(model, store)
+    );
+  }
+
+  List<_SportSection> _buildData(EventCollection model, AppStore store) {
+    bool byLeague = league == "all";
+    var sections = _groupEvents(store.eventStore.snapshot(model.eventIds), byLeague ? _groupByLeague : _groupByDate);
+
+    return sections;
+  }
+
+  List<_SportSection> _groupEvents(List<Event> events, GroupBy groupBy) {
+    List<_SportSection> sections = [];
+
+    events.forEach((e) => groupBy(e, sections));
+
+    return sections;
+  }
+
+  void _groupByLeague(Event event, List<_SportSection> sections) {
+    var inPlay = event.state == EventState.STARTED;
+
+    var dt = date(event.start);
+    _SportSection selected;
+
+    String league;
+
+    if (event.path.length == 3) {
+      league = event.path[1].name + " / " + event.path[2].name;
+    } else if (event.path.length == 2) {
+      league = event.path[1].name;
+    } else {
+      league = event.group;
+    }
+    for (var section in sections) {
+      if (section.live && inPlay) {
+        selected = section;
+      } else if (!section.live && !inPlay && section.league == league) {
+        selected = section;
+      }
+    }
+    if (selected == null) {
+      selected = new _SportSection()
+        ..live = inPlay
+        ..date = dt
+        ..league = league
+        ..title = league;
+      sections.add(selected);
+    }
+
+    selected.events.add(event);
+  }
+
+  void _groupByDate(Event event, List<_SportSection> sections) {
+    var inPlay = event.state == EventState.STARTED;
+
+    var dt = date(event.start);
+    _SportSection selected;
+    for (var section in sections) {
+      if (inPlay && section.live) {
+        selected = section;
+        break;
+      } else if (!inPlay && !section.live && section.date == dt) {
+        selected = section;
+        break;
+      }
+    }
+
+    if (selected == null) {
+      selected = new _SportSection()
+        ..live = inPlay
+        ..date = dt
+        ..league = ""
+        ..title = dt.toString();
+      sections.add(selected);
+    }
+
+    selected.events.add(event);
+  }
+
+}
+
+typedef GroupBy = void Function(Event event, List<_SportSection> sections);
+typedef SortBy = int Function(ListSection a, ListSection b);
+
+class _SportSection extends ListSection {
+  DateTime date;
+  List<Event> events = [];
+  bool live;
+  String league;
+  bool _initiallyExpanded = false;
+  String _title = "";
+
+  @override
+  IndexedWidgetBuilder get builder => (context, index) => _buildEventRow(context, events[index]);
+
+  @override
+  int get count => events.length;
+
+  @override
+  bool get initiallyExpanded => _initiallyExpanded;
+
+  set initiallyExpanded(bool value) {
+    _initiallyExpanded = value;
+  }
+
+  @override
+  String get title => _title;
+
+  set title(String value) {
+    _title = value;
   }
 }
 
-
-List<ListSection> buildSections(String prefix) {
-  List<ListSection> data = [];
-
-  for (int i = 0; i < 200; i++) {
-    data.add(buildTile(i, prefix));
-  }
-  return data;
-}
-
-ListSection buildTile(int i, String prefix) {
-  ListSection tile = new ListSection(
-    initiallyExpanded: i == 0,
-    title: prefix + "-" + i.toString(),
-    children: buildRows(i),
-  );
-
-  return tile;
-}
-
-List<Widget> buildRows(int section) {
-  List<Widget> data = [];
-
-  for (int row = 0; row < 100; row++) {
-    data.add(buildRow(section, row));
-  }
-
-  return data;
-}
-
-Widget buildRow(int section, int row) {
-  return new EventListItemWidget(key: Key("$section - $row"),);
+Widget _buildEventRow(BuildContext context, Event event) {
+  return new EventListItemWidget(key: Key(event.id.toString()), event: event,);
 }

@@ -13,9 +13,9 @@ import 'package:startup_namer/util/func.dart';
 
 class EventCollectionStore implements Store {
   final Map<EventCollectionKey, BehaviorSubject<EventCollection>> _collections = new HashMap();
-  final Func<List<int>, List<Event>> eventResolver;
+//  final Func<List<int>, List<Event>> _eventResolver;
 
-  EventCollectionStore(this.eventResolver);
+//  EventCollectionStore(this._eventResolver);
 
   Flowable<EventCollection> collection(EventCollectionKey key) {
 
@@ -27,6 +27,7 @@ class EventCollectionStore implements Store {
     }
     return new Flowable(subject);
   }
+
 
   @override
   void dispatch(ActionType type, action) {

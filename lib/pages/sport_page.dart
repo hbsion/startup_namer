@@ -103,6 +103,6 @@ class _SportPageState extends State<SportPage> {
   }
 
   String _buildTitle() {
-    return (widget.league ?? widget.sport);
+    return (widget.league != "all" ? widget.league : widget.sport);
   }
 }

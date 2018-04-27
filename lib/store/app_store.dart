@@ -11,10 +11,9 @@ class AppStore {
   EventCollectionStore _collectionStore;
 
   AppStore() {
-    _collectionStore = new EventCollectionStore(eventStore.snapshot);
+    _collectionStore = new EventCollectionStore();
     _stores..add(eventStore)..add(_collectionStore);
   }
-
 
   EventCollectionStore get collectionStore => _collectionStore;
 

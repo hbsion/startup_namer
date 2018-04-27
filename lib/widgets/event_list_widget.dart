@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:startup_namer/app_theme.dart';
+import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/models/main_model.dart';
 import 'package:startup_namer/models/odds_format.dart';
 import 'package:startup_namer/pages/event_page.dart';
 
 class EventListItemWidget extends StatelessWidget {
-
-  const EventListItemWidget({Key key}) : super(key: key);
+  final Event event;
+  const EventListItemWidget({Key key, this.event}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class EventListItemWidget extends StatelessWidget {
                   onTap: navigate(context),
                   child: new Row(children: <Widget>[
                     EventTimeWidget(),
-                    new Expanded(child: new EventInfoWidget()),
+                    new Expanded(child: new EventInfoWidget(event: event,)),
                     new FavoriteWidget(),
                   ])
               )),
@@ -44,9 +45,13 @@ class EventListItemWidget extends StatelessWidget {
 }
 
 class EventInfoWidget extends StatelessWidget {
+  final Event event;
+
+  const EventInfoWidget({Key key, this.event}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return new Column(children: <Widget>[new Text("Home"), new Text("Away"), new Text("path")]);
+    return new Column(children: <Widget>[new Text(event.homeName), new Text(event.awayName ?? ""), new Text("path")]);
   }
 }
 
