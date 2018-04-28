@@ -49,22 +49,32 @@ EventResponse parseEventResponse(Tuple2<String, EventCollectionKey> tuple) {
   List<BetOffer> betOffers = [];
   List<Outcome> outcomes = [];
 
-  var eventWithBettoffers = responseJson["events"];
-  for (var eventJson in eventWithBettoffers) {
-    var event = Event.fromJson(eventJson["event"]);
-    events.add(event);
+  try {
+    var eventWithBettoffers = responseJson["events"];
+    for (var eventJson in eventWithBettoffers) {
+        var event = Event.fromJson(eventJson["event"]);
+        events.add(event);
 
-    for (var boJson in eventJson["betOffers"]) {
-      var bo = BetOffer.fromJson(boJson);
-      if (bo.tags.contains(BetOfferTags.main)) {
-        event.mainBetOfferId = bo.id;
-      }
-      betOffers.add(bo);
+        var eventBo = <BetOffer>[];
+        for (var boJson in eventJson["betOffers"]) {
+          var bo = BetOffer.fromJson(boJson);
+          if (bo.tags.contains(BetOfferTags.main)) {
+            event.mainBetOfferId = bo.id;
+          }
+          eventBo.add(bo);
 
-      for (var outcomeJson in boJson["outcomes"]) {
-        outcomes.add(Outcome.fromJson(outcomeJson));
+          for (var outcomeJson in boJson["outcomes"]) {
+            outcomes.add(Outcome.fromJson(outcomeJson));
+          }
+        }
+        if (event.mainBetOfferId == null && eventBo.length > 0) {
+          event.mainBetOfferId = eventBo[0].id;
+        }
+
+        betOffers.addAll(eventBo);
       }
-    }
+  } catch (e) {
+    _log.severe("Failed to parse json", e);
   }
 
   return new EventResponse(

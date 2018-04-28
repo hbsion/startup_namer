@@ -9,9 +9,11 @@ import 'package:startup_namer/store/store_connector.dart';
 
 class OutcomeWidget extends StatelessWidget {
   final int outcomeId;
+  final bool columnLayout;
 
-  const OutcomeWidget({Key key, @required this.outcomeId})
+  const OutcomeWidget({Key key, @required this.outcomeId, this.columnLayout = false})
       : assert(outcomeId != null),
+        assert(columnLayout != null),
         super(key: key);
 
   @override
@@ -27,8 +29,8 @@ class OutcomeWidget extends StatelessWidget {
     return new ScopedModelDescendant<MainModel>(
         builder: (context, child, model) {
           return new Container(
-              height: 38.0,
-              padding: EdgeInsets.all(3.0),
+              height: columnLayout ? 48.0 : 38.0,
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
               decoration: new BoxDecoration(
                 borderRadius: BorderRadius.circular(3.0),
                 color: Color.fromRGBO(0x00, 0xad, 0xc9, 1.0),
@@ -37,17 +39,38 @@ class OutcomeWidget extends StatelessWidget {
                 color: Colors.transparent,
                 child: new InkWell(
                     onTap: () => print("outcome tap " + DateTime.now().toString()),
-                    child: new Row(
-                      children: <Widget>[
-                        new Expanded(
-                            child: new Text(outcome.label, style: new TextStyle(color: Colors.white, fontSize: 12.0))),
-                        new Text(
-                            _formatOdds(outcome.odds, model.oddsFormat),
-                            style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold))
-                      ],
-                    )),
+                    child: _buildContent(outcome, model)),
               ));
         });
+  }
+
+  Widget _buildContent(Outcome outcome, MainModel model) {
+    if (columnLayout) {
+      return new Column(
+        children: <Widget>[
+          new Expanded(child: new Center(child: _buildLabel(outcome))),
+          new Expanded(child: new Center(child: _buildOdds(outcome, model)))
+        ],
+      );
+    }
+
+    return new Row(
+      children: <Widget>[
+        new Expanded(child: _buildLabel(outcome)),
+        _buildOdds(outcome, model)
+      ],
+    );
+  }
+
+  Text _buildOdds(Outcome outcome, MainModel model) {
+    return new Text(
+        _formatOdds(outcome.odds, model.oddsFormat),
+        style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold));
+  }
+
+  Text _buildLabel(Outcome outcome) {
+    return new Text(
+        outcome.label ?? "?", style: new TextStyle(color: Colors.white, fontSize: 12.0));
   }
 
 

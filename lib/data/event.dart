@@ -38,7 +38,6 @@ class Event {
   final DateTime prematchEnd;
   final String meetingId;
   int mainBetOfferId;
-  List<int> betoffers = [];
 
   Event({this.id,
     this.name,
@@ -136,8 +135,7 @@ class Event {
               teamColors == other.teamColors &&
               sortOrder == other.sortOrder &&
               prematchEnd == other.prematchEnd &&
-              meetingId == other.meetingId &&
-              const ListEquality().equals(betoffers, other.betoffers);
+              meetingId == other.meetingId;
   }
 
   @override
