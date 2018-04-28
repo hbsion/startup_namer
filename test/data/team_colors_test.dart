@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/race_history_stat.dart';
-import 'package:startup_namer/data/shirt_colors.dart';
 import 'package:startup_namer/data/team_colors.dart';
 import 'package:test/test.dart';
 

@@ -55,15 +55,19 @@ class SportView extends StatelessWidget {
 
   List<_SportSection> _buildData(EventCollection model, AppStore store) {
     bool byLeague = league == "all";
-    var sections = _groupEvents(store.eventStore.snapshot(model.eventIds), byLeague ? _groupByLeague : _groupByDate);
+    var sections = _groupAndSortEvents(
+        store.eventStore.snapshot(model.eventIds),
+        byLeague ? _groupByLeague : _groupByDate,
+        byLeague ? _sortByLeague : _sortByDate
+    );
 
     return sections;
   }
 
-  List<_SportSection> _groupEvents(List<Event> events, GroupBy groupBy) {
+  List<_SportSection> _groupAndSortEvents(List<Event> events, GroupBy groupBy, SortBy sortBy) {
     List<_SportSection> sections = [];
-
     events.forEach((e) => groupBy(e, sections));
+    sections.sort(sortBy);
 
     return sections;
   }
@@ -122,17 +126,30 @@ class SportView extends StatelessWidget {
         ..live = inPlay
         ..date = dt
         ..league = ""
-        ..title = dt.toString();
+        ..title = prettyDate(dt);
       sections.add(selected);
     }
 
     selected.events.add(event);
   }
 
+  int _sortByDate(_SportSection a, _SportSection b) {
+    if (a.live) return -1;
+    if (b.live) return 1;
+
+    return a.date.compareTo(b.date);
+  }
+
+  int _sortByLeague(_SportSection a, _SportSection b) {
+    if (a.live) return -1;
+    if (b.live) return 1;
+
+    return a.league.compareTo(b.league);
+  }
 }
 
 typedef GroupBy = void Function(Event event, List<_SportSection> sections);
-typedef SortBy = int Function(ListSection a, ListSection b);
+typedef SortBy = int Function(_SportSection a, _SportSection b);
 
 class _SportSection extends ListSection {
   DateTime date;

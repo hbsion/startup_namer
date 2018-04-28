@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/each_way.dart';
 import 'package:startup_namer/data/group_path.dart';
 import 'package:test/test.dart';
 

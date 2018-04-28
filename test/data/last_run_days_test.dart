@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/form_figures.dart';
 import 'package:startup_namer/data/last_run_days.dart';
 import 'package:test/test.dart';
 

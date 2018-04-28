@@ -1,7 +1,7 @@
-import 'package:startup_namer/data/criterion.dart';
+import 'dart:convert';
+
 import 'package:startup_namer/data/outcome_criterion.dart';
 import 'package:test/test.dart';
-import 'dart:convert';
 
 
 main() {

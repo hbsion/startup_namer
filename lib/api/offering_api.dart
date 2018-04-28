@@ -1,3 +1,4 @@
+import 'dart:_http';
 import 'dart:async';
 import 'dart:convert';
 
@@ -11,6 +12,7 @@ import 'package:startup_namer/data/outcome.dart';
 import 'api_constants.dart';
 import 'event_response.dart';
 
+HttpClient _client = new HttpClient();
 
 Future<EventResponse> fetchListView({
   String sport = "all",
@@ -18,13 +20,21 @@ Future<EventResponse> fetchListView({
   String region = "all",
   String participant = "all",
   String filter = "matches"}) async {
-  var url = "${ApiConstants.host}/offering/v2018/${ApiConstants
+  var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
       .offering}/listView/$sport/$region/$league/$participant/$filter.json?lang=${ApiConstants
-      .lang}&market=${ApiConstants.market}&categoryGroup=COMBINED&displayDefault=true";
-  print(url);
-  var response = await http.get(url);
-  final responseJson = json.decode(response.body);
+      .lang}&market=${ApiConstants.market}&categoryGroup=COMBINED&displayDefault=true");
+  print(uri);
+  var request = await _client.getUrl(uri);
+  var response = await request.close();
+  var body = await response.transform(utf8.decoder).join();
 
+  return parseEventResponse(body, sport, region, league, participant, filter);
+}
+
+EventResponse parseEventResponse(String body, String sport, String region, String league,
+    String participant, String filter) {
+
+  final responseJson = json.decode(body);
   List<Event> events = [];
   List<BetOffer> betOffers = [];
   List<Outcome> outcomes = [];
