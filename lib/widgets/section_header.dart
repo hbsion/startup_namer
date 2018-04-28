@@ -3,10 +3,11 @@ import 'package:startup_namer/app_theme.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
+  final TextStyle titleStyle;
   final int count;
   final VoidCallback onTap;
 
-  const SectionHeader({Key key, this.title, this.count, this.onTap}) : super(key: key);
+  const SectionHeader({Key key, this.title, this.count, this.onTap, this.titleStyle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class SectionHeader extends StatelessWidget {
                         padding: EdgeInsets.all(16.0),
                         child: Row(
                           children: <Widget>[
-                            new Expanded(child: new Text(title, style: Theme.of(context).textTheme.subhead)),
+                            new Expanded(child: new Text(title, style: titleStyle != null ? Theme.of(context).textTheme.subhead.merge(titleStyle) : Theme.of(context).textTheme.subhead)),
                             new Text(count.toString())
                           ],
                         )

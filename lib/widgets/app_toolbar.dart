@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/api/offering_api.dart';
+import 'package:startup_namer/views/search_view.dart';
 
 class AppToolbar extends StatelessWidget {
   final String title;
@@ -39,12 +39,10 @@ class AppToolbar extends StatelessWidget {
 
   VoidCallback _search(BuildContext context) {
     return () async {
-//      Navigator.of(context).push(new MaterialPageRoute(
-//          builder: (context) => new SearchView()
-//      )
-//      );
-      var eventResponse = await fetchListView(sport: "football", region: "england", league: "premier_league");
-      print(eventResponse);
+      Navigator.of(context).push(new MaterialPageRoute(
+          builder: (context) => new SearchView()
+      )
+      );
     };
   }
 }

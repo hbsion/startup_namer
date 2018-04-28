@@ -81,6 +81,7 @@ class _SectionListViewState extends State<SectionListView> {
     return new _SectionListItem(key: new Key(section.title),
         child: new SectionHeader(
           title: section.title,
+          titleStyle: section.titleStyle,
           count: section.count,
           onTap: () {
             setState(() {
@@ -101,6 +102,7 @@ class _SectionListViewState extends State<SectionListView> {
 }
 
 abstract class ListSection {
+  TextStyle titleStyle;
   String get title;
   IndexedWidgetBuilder get builder;
   int get count;

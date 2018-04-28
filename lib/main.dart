@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:startup_namer/models/main_model.dart';
 import 'package:startup_namer/pages/home_page.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_provider.dart';
 
-void main() => runApp(new MainApp());
+void main() {
+  Logger.root.level = Level.ALL;
+
+  Logger.root.onRecord.listen((LogRecord rec) {
+    print('${rec.level.name}: ${rec.time}: ${rec.message}');
+  });
+
+  runApp(new MainApp());
+}
+
+
 
 class MainApp extends StatelessWidget {
   final appTitle = 'Play!';

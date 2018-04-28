@@ -10,7 +10,7 @@ import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
 import 'package:startup_namer/util/flowable.dart';
-import 'package:startup_namer/widgets/event_list_widget.dart';
+import 'package:startup_namer/widgets/event_list_item_widget.dart';
 import 'package:startup_namer/widgets/section_list_view.dart';
 
 class SportView extends StatelessWidget {
@@ -55,7 +55,7 @@ class SportView extends StatelessWidget {
         type: EventCollectionType.ListView,
         selector: [sport, region, league, participant, filter]
     );
-    return store.collectionStore.collection(key);
+    return store.collectionStore[key];
   }
 
   Widget _build(BuildContext context, _ViewModel model) {
@@ -63,7 +63,7 @@ class SportView extends StatelessWidget {
       return new SliverFillRemaining(
         child: new Container(
           child: new Center(
-            child: new CupertinoActivityIndicator(),
+            child: new CircularProgressIndicator(),
           ),
         ),
       );
@@ -90,6 +90,14 @@ class SportView extends StatelessWidget {
     List<_SportSection> sections = [];
     events.forEach((e) => groupBy(e, sections));
     sections.sort(sortBy);
+
+    // Initially exapnd at least 10 rows
+    int visibleItems = 0;
+    for (var section in sections) {
+      visibleItems += section.count;
+      section.initiallyExpanded = true;
+      if (visibleItems > 5) break;
+    }
 
     return sections;
   }
@@ -121,7 +129,7 @@ class SportView extends StatelessWidget {
         ..live = inPlay
         ..date = dt
         ..league = league
-        ..title = league;
+        ..title = inPlay ? "Live" : league;
       sections.add(selected);
     }
 
@@ -148,7 +156,8 @@ class SportView extends StatelessWidget {
         ..live = inPlay
         ..date = dt
         ..league = ""
-        ..title = prettyDate(dt);
+        ..title = inPlay ? "LIVE" : prettyDate(dt)
+        ..titleStyle = inPlay ? new TextStyle(color: Colors.red, fontWeight: FontWeight.w700) : null;
       sections.add(selected);
     }
 
@@ -209,5 +218,5 @@ class _SportSection extends ListSection {
 }
 
 Widget _buildEventRow(BuildContext context, Event event) {
-  return new EventListItemWidget(key: Key(event.id.toString()), event: event,);
+  return new EventListItemWidget(key: Key(event.id.toString()), eventId: event.id,);
 }

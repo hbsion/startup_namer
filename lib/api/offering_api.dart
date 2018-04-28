@@ -1,18 +1,21 @@
-import 'dart:_http';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 
-import 'package:http/http.dart' as http;
 import 'package:startup_namer/data/betoffer.dart';
 import 'package:startup_namer/data/betoffer_tags.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_collection_key.dart';
 import 'package:startup_namer/data/outcome.dart';
+import 'package:tuple/tuple.dart';
 
 import 'api_constants.dart';
 import 'event_response.dart';
 
-HttpClient _client = new HttpClient();
+final HttpClient _client = new HttpClient();
+final Logger _log = new Logger("OfferingAPI");
 
 Future<EventResponse> fetchListView({
   String sport = "all",
@@ -22,19 +25,26 @@ Future<EventResponse> fetchListView({
   String filter = "matches"}) async {
   var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
       .offering}/listView/$sport/$region/$league/$participant/$filter.json?lang=${ApiConstants
-      .lang}&market=${ApiConstants.market}&categoryGroup=COMBINED&displayDefault=true");
-  print(uri);
+      .lang}&market=${ApiConstants.market}");
+  _log.info(uri);
   var request = await _client.getUrl(uri);
   var response = await request.close();
-  var body = await response.transform(utf8.decoder).join();
 
-  return parseEventResponse(body, sport, region, league, participant, filter);
+  var key = EventCollectionKey(
+      type: EventCollectionType.ListView,
+      selector: [sport, region, league, participant, filter]
+  );
+  if (response.statusCode != 200) {
+    _log.warning("Failed to fetch status: ${response.statusCode} uri: $uri");
+    return new EventResponse(key: key);
+  }
+
+  var body = await response.transform(utf8.decoder).join();
+  return compute(parseEventResponse, Tuple2(body, key));
 }
 
-EventResponse parseEventResponse(String body, String sport, String region, String league,
-    String participant, String filter) {
-
-  final responseJson = json.decode(body);
+EventResponse parseEventResponse(Tuple2<String, EventCollectionKey> tuple) {
+  final responseJson = json.decode(tuple.item1);
   List<Event> events = [];
   List<BetOffer> betOffers = [];
   List<Outcome> outcomes = [];
@@ -58,8 +68,7 @@ EventResponse parseEventResponse(String body, String sport, String region, Strin
   }
 
   return new EventResponse(
-      key: new EventCollectionKey(
-          type: EventCollectionType.ListView, selector: [sport, region, league, participant, filter]),
+      key: tuple.item2,
       events: events,
       betoffers: betOffers,
       outcomes: outcomes
