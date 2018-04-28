@@ -11,11 +11,8 @@ import 'package:startup_namer/util/flowable.dart';
 
 class EventCollectionStore implements Store {
   final Map<EventCollectionKey, BehaviorSubject<EventCollection>> _collections = new HashMap();
-//  final Func<List<int>, List<Event>> _eventResolver;
 
-//  EventCollectionStore(this._eventResolver);
-
-  Flowable<EventCollection> collection(EventCollectionKey key) {
+  SnapshotObservable<EventCollection> collection(EventCollectionKey key) {
 
     print("collection query: " + key.toString() + " hash: " + key.hashCode.toString());
     var subject = _collections[key];
@@ -23,7 +20,7 @@ class EventCollectionStore implements Store {
       subject = new BehaviorSubject<EventCollection>();
       _collections[key] = subject;
     }
-    return new Flowable(subject);
+    return new SnapshotObservable(subject.value, subject.observable);
   }
 
 

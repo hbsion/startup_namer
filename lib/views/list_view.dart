@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_collection.dart';
 import 'package:startup_namer/data/event_collection_key.dart';
@@ -8,6 +9,7 @@ import 'package:startup_namer/store/actions.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
+import 'package:startup_namer/util/flowable.dart';
 import 'package:startup_namer/widgets/event_list_widget.dart';
 import 'package:startup_namer/widgets/section_list_view.dart';
 
@@ -22,22 +24,41 @@ class SportView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    EventCollectionKey key = new EventCollectionKey(
-        type: EventCollectionType.ListView,
-        selector: [sport, region, league, participant, filter]
-    );
-    return new StoreConnector<EventCollection>(
-        mapper: (store) => store.collectionStore.collection(key),
+    return new StoreConnector<_ViewModel>(
+        mapper: _mapStateToViewModel,
+        snapshot: _snapshot,
         action: listViewAction(sport: sport,
             region: region,
             league: league,
             participant: participant,
             filter: filter),
-        builder: _build
+        widgetBuilder: _build
     );
   }
 
-  Widget _build(BuildContext context, EventCollection model, AppStore store) {
+  Observable<_ViewModel> _mapStateToViewModel(AppStore store) {
+    return _collection(store).observable.map((collection) {
+      return new _ViewModel(store.eventStore.snapshot(collection.eventIds));
+    });
+  }
+
+  _ViewModel _snapshot(AppStore store) {
+    var snapshot = _collection(store);
+    if (snapshot.last != null) {
+      return new _ViewModel(store.eventStore.snapshot(snapshot.last.eventIds));
+    }
+    return null;
+  }
+
+  SnapshotObservable<EventCollection> _collection(AppStore store) {
+    EventCollectionKey key = new EventCollectionKey(
+        type: EventCollectionType.ListView,
+        selector: [sport, region, league, participant, filter]
+    );
+    return store.collectionStore.collection(key);
+  }
+
+  Widget _build(BuildContext context, _ViewModel model) {
     if (model == null) {
       return new SliverFillRemaining(
         child: new Container(
@@ -47,16 +68,17 @@ class SportView extends StatelessWidget {
         ),
       );
     }
+
     return new SectionListView(
         key: new PageStorageKey(filter),
-        sections: _buildData(model, store)
+        sections: _buildData(model)
     );
   }
 
-  List<_SportSection> _buildData(EventCollection model, AppStore store) {
+  List<_SportSection> _buildData(_ViewModel viewModel) {
     bool byLeague = league == "all";
     var sections = _groupAndSortEvents(
-        store.eventStore.snapshot(model.eventIds),
+        viewModel.events,
         byLeague ? _groupByLeague : _groupByDate,
         byLeague ? _sortByLeague : _sortByDate
     );
@@ -146,6 +168,12 @@ class SportView extends StatelessWidget {
 
     return a.league.compareTo(b.league);
   }
+}
+
+class _ViewModel {
+  final List<Event> events;
+
+  _ViewModel(this.events);
 }
 
 typedef GroupBy = void Function(Event event, List<_SportSection> sections);
