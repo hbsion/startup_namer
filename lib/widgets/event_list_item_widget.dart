@@ -13,9 +13,11 @@ import 'package:startup_namer/widgets/main_betoffer_widget.dart';
 
 class EventListItemWidget extends StatelessWidget {
   final int eventId;
+  final bool showDivider;
 
-  EventListItemWidget({Key key, @required this.eventId})
+  EventListItemWidget({Key key, @required this.eventId, this.showDivider = true})
       : assert(eventId != null),
+        assert(showDivider != null),
         super(key: key);
 
   @override
@@ -70,10 +72,7 @@ class EventListItemWidget extends StatelessWidget {
           ? new MainBetOfferWidget(betOfferId: model.mainBetOfferId, eventId: model.id)
           : new EmptyWidget(),
       new Padding(padding: EdgeInsets.all(4.0)),
-      new Divider(color: AppTheme
-          .of(context)
-          .list
-          .itemDivider, height: 1.0),
+      _buildDivider(context)
     ]);
   }
 
@@ -100,5 +99,11 @@ class EventListItemWidget extends StatelessWidget {
           .list
           .itemDivider, height: 1.0),
     ]);
+  }
+
+  Widget _buildDivider(BuildContext context) {
+    if (!showDivider) return EmptyWidget();
+    
+    return new Divider(color: AppTheme.of(context).list.itemDivider, height: 1.0);
   }
 }

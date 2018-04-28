@@ -197,7 +197,7 @@ class _SportSection extends ListSection {
   String _title = "";
 
   @override
-  IndexedWidgetBuilder get builder => (context, index) => _buildEventRow(context, events[index]);
+  IndexedWidgetBuilder get builder => (context, index) => _buildEventRow(context, events[index], index == events.length - 1);
 
   @override
   int get count => events.length;
@@ -217,6 +217,6 @@ class _SportSection extends ListSection {
   }
 }
 
-Widget _buildEventRow(BuildContext context, Event event) {
-  return new EventListItemWidget(key: Key(event.id.toString()), eventId: event.id,);
+Widget _buildEventRow(BuildContext context, Event event, bool isLast) {
+  return new EventListItemWidget(key: Key(event.id.toString()), eventId: event.id, showDivider: !isLast,);
 }
