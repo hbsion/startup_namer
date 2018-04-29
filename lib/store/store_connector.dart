@@ -50,10 +50,9 @@ class _StoreConnector<T> extends StatefulWidget {
 
   @override
   _State createState() => new _State<T>();
-
 }
 
-class _State<T> extends State<_StoreConnector<T>> {
+class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
   T _snapshot;
   StreamSubscription<T> _subscription;
   Timer _timer;
@@ -72,9 +71,30 @@ class _State<T> extends State<_StoreConnector<T>> {
     });
     if (widget.action != null) {
       widget.action(widget.appStore.dispatch);
-      _timer = new Timer.periodic(new Duration(seconds: 30), (_) => widget.action(widget.appStore.dispatch));
+      _startPoller();
     }
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("Lifecycle changed: " + state.toString());
+    if (state == AppLifecycleState.paused && _timer != null) {
+      _stopPoller();
+    } else if (state == AppLifecycleState.resumed && widget.action != null && _timer == null) {
+      _startPoller();
+    }
+
+  }
+
+  void _startPoller() {
+    _timer = new Timer.periodic(new Duration(seconds: 30), (_) => widget.action(widget.appStore.dispatch));
+  }
+
+  void _stopPoller() {
+     _timer.cancel();
+    _timer = null;
   }
 
   @override
@@ -96,8 +116,8 @@ class _State<T> extends State<_StoreConnector<T>> {
       _subscription = null;
     }
     if (_timer != null) {
-      _timer.cancel();
-      _timer = null;
+      WidgetsBinding.instance.removeObserver(this);
+      _stopPoller();
     }
   }
 

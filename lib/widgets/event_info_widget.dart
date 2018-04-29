@@ -10,14 +10,36 @@ class EventInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<Event>(
-           mapper: (store) => store.eventStore[eventId].observable,
-           snapshot: (store) => store.eventStore[eventId].last,
-           widgetBuilder: _buildWidget
-       );
+        mapper: (store) => store.eventStore[eventId].observable,
+        snapshot: (store) => store.eventStore[eventId].last,
+        widgetBuilder: _buildWidget
+    );
   }
 
   Widget _buildWidget(BuildContext context, Event event) {
-    return new Column(children: <Widget>[new Text(event.homeName), new Text(event.awayName ?? ""), new Text("path")]);
+    var textTheme = Theme
+        .of(context)
+        .textTheme;
+    return new Column(children: <Widget>[
+      new Row(children: <Widget>[ new Text(event.homeName, style: textTheme.subhead)]),
+      new Row(children: <Widget>[ new Text(event.awayName ?? "", style: textTheme.subhead)]),
+      new Padding(padding: EdgeInsets.all(2.0)),
+      _buildGroupPath(textTheme, event),
+    ]
+    );
+  }
 
+  Row _buildGroupPath(TextTheme textTheme, Event event) {
+    return new Row(children: _buildGroupPathElements(textTheme, event).toList());
+  }
+
+  Iterable<Widget> _buildGroupPathElements(TextTheme textTheme, Event event) sync* {
+    for (var i = 0; i < event.path.length; ++i) {
+      var group = event.path[i];
+      if (i > 0) {
+        yield new Padding(padding: EdgeInsets.only(left: 2.0, right: 2.0), child: new Text("/", style: textTheme.caption));
+      }
+      yield new Text(group.name, style: textTheme.caption);
+    }
   }
 }

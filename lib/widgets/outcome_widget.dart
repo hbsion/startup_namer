@@ -7,6 +7,7 @@ import 'package:startup_namer/data/betoffer_types.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/odds.dart';
 import 'package:startup_namer/data/outcome.dart';
+import 'package:startup_namer/data/outcome_status.dart';
 import 'package:startup_namer/data/outcome_type.dart';
 import 'package:startup_namer/models/main_model.dart';
 import 'package:startup_namer/models/odds_format.dart';
@@ -65,13 +66,21 @@ class OutcomeWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(3.0),
                 color: Color.fromRGBO(0x00, 0xad, 0xc9, 1.0),
               ),
-              child: new Material(
-                color: Colors.transparent,
-                child: new InkWell(
-                    onTap: () => print("outcome tap " + DateTime.now().toString()),
-                    child: _buildContent(viewModel, model)),
-              ));
+              child: _buildContentWrapper(viewModel, model));
         });
+  }
+
+  Widget _buildContentWrapper(_ViewModel viewModel, MainModel model) {
+    if (viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED) {
+      return _buildContent(viewModel, model);
+    }
+    
+    return new Material(
+      color: Colors.transparent,
+      child: new InkWell(
+          onTap: () => print("outcome tap " + DateTime.now().toString()),
+          child: _buildContent(viewModel, model)),
+    );
   }
 
   Widget _buildContent(_ViewModel viewModel, MainModel model) {
