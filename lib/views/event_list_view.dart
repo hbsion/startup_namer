@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,14 +14,14 @@ import 'package:startup_namer/util/flowable.dart';
 import 'package:startup_namer/widgets/event_list_item_widget.dart';
 import 'package:startup_namer/widgets/section_list_view.dart';
 
-class SportView extends StatelessWidget {
+class EventListView extends StatelessWidget {
   final String sport;
   final String league;
   final String region;
   final String participant;
   final String filter;
 
-  const SportView({Key key, this.sport, this.league, this.region, this.participant, this.filter}) : super(key: key);
+  const EventListView({Key key, this.sport, this.league, this.region, this.participant, this.filter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +65,15 @@ class SportView extends StatelessWidget {
         child: new Container(
           child: new Center(
             child: new CircularProgressIndicator(),
+          ),
+        ),
+      );
+    }
+    if (model.events.isEmpty) {
+      return new SliverFillRemaining(
+        child: new Container(
+          child: new Center(
+            child: new Text("No $filter found."),
           ),
         ),
       );
@@ -185,6 +195,16 @@ class _ViewModel {
   final List<Event> events;
 
   _ViewModel(this.events);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is _ViewModel &&
+              runtimeType == other.runtimeType &&
+              new DeepCollectionEquality().equals(events, other.events);
+
+  @override
+  int get hashCode => events.hashCode;
 }
 
 typedef GroupBy = void Function(Event event, List<_SportSection> sections);
@@ -199,7 +219,8 @@ class _SportSection extends ListSection {
   String _title = "";
 
   @override
-  IndexedWidgetBuilder get builder => (context, index) => _buildEventRow(context, events[index], index == events.length - 1);
+  IndexedWidgetBuilder get builder =>
+          (context, index) => _buildEventRow(context, events[index], index == events.length - 1);
 
   @override
   int get count => events.length;

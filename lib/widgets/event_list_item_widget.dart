@@ -4,11 +4,12 @@ import 'package:startup_namer/app_theme.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_tags.dart';
 import 'package:startup_namer/pages/event_page.dart';
-import 'package:startup_namer/store/empty_widget.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/event_info_widget.dart';
 import 'package:startup_namer/widgets/event_time_widget.dart';
-import 'package:startup_namer/widgets/favorit_widget.dart';
+import 'package:startup_namer/widgets/event_tracker_widget.dart';
+import 'package:startup_namer/widgets/favorite_widget.dart';
 import 'package:startup_namer/widgets/main_betoffer_widget.dart';
 
 class EventListItemWidget extends StatelessWidget {
@@ -63,9 +64,10 @@ class EventListItemWidget extends StatelessWidget {
           child: new InkWell(
               onTap: navigate(context),
               child: new Row(children: <Widget>[
-                new EventTimeWidget(eventId: eventId,),
+                new Container(width: 70.0, child: new EventTrackingWidget(eventId: eventId)),
                 new Expanded(child: new EventInfoWidget(eventId: eventId,)),
                 new FavoriteWidget(eventId: eventId,),
+                
               ])
           )),
       model.mainBetOfferId != null
@@ -83,7 +85,7 @@ class EventListItemWidget extends StatelessWidget {
           child: new InkWell(
               onTap: navigate(context),
               child: new Row(children: <Widget>[
-                new EventTimeWidget(eventId: eventId,),
+                new Container(width: 70.0, child: new EventTrackingWidget(eventId: eventId)),
                 new Expanded(child: new EventInfoWidget(eventId: eventId,)),
                 new FavoriteWidget(eventId: eventId,),
                 new Container(

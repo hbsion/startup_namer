@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/app_drawer.dart';
-import 'package:startup_namer/views/list_view.dart';
+import 'package:startup_namer/views/event_list_view.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
 
 
@@ -42,7 +42,7 @@ class _SportPageState extends State<SportPage> {
                       key: new PageStorageKey("matches"),
                       slivers: <Widget>[
                         new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
-                        new SportView(
+                        new EventListView(
                             sport: widget.sport,
                             league: widget.league,
                             region: widget.region,
@@ -57,7 +57,7 @@ class _SportPageState extends State<SportPage> {
                       key: new PageStorageKey("competitions"),
                       slivers: <Widget>[
                         new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
-                        new SportView(
+                        new EventListView(
                             sport: widget.sport,
                             league: widget.league,
                             region: widget.region,

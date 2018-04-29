@@ -17,6 +17,6 @@ Callable<Dispatcher> listViewAction({String sport = "all",
         league: league,
         participant: participant,
         filter: filter);
-    dispatcher(ActionType.EventResponse, resp);
+    dispatcher(ActionType.eventResponse, resp);
   };
 }

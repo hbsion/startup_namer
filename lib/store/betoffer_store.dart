@@ -29,7 +29,7 @@ class BetOfferStore implements Store {
   @override
   void dispatch(ActionType type, action) {
     switch (type) {
-      case ActionType.EventResponse:
+      case ActionType.eventResponse:
         EventResponse response = action;
         for (var betOffer in response.betoffers) {
           var subject = _betOffers[betOffer.id];

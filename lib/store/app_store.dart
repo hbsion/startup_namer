@@ -2,6 +2,7 @@ import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/betoffer_store.dart';
 import 'package:startup_namer/store/event_collection_store.dart';
 import 'package:startup_namer/store/event_store.dart';
+import 'package:startup_namer/store/favorites_store.dart';
 import 'package:startup_namer/store/outcome_store.dart';
 import 'package:startup_namer/store/store.dart';
 
@@ -12,18 +13,16 @@ class AppStore {
   final EventStore eventStore = new EventStore();
   final BetOfferStore betOfferStore = new BetOfferStore();
   final OutcomeStore outcomeStore = new OutcomeStore();
-
-  EventCollectionStore _collectionStore;
+  final FavoritesStore favoritesStore = new FavoritesStore();
+  final EventCollectionStore collectionStore = new EventCollectionStore();
 
   AppStore() {
-    _collectionStore = new EventCollectionStore();
     _stores..add(eventStore)
       ..add(betOfferStore)
       ..add(outcomeStore)
-      ..add(_collectionStore);
+      ..add(favoritesStore)
+      ..add(collectionStore);
   }
-
-  EventCollectionStore get collectionStore => _collectionStore;
 
   void dispatch(ActionType type, action) {
     _stores.forEach((store) => store.dispatch(type, action));

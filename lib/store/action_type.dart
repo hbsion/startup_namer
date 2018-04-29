@@ -1,3 +1,4 @@
 enum ActionType {
-  EventResponse
+  eventResponse,
+  toggleFavorite,
 }

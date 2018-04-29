@@ -25,7 +25,7 @@ class EventCollectionStore implements Store {
   @override
   void dispatch(ActionType type, action) {
     switch (type) {
-      case ActionType.EventResponse:
+      case ActionType.eventResponse:
         EventResponse response = action;
         EventCollection collection = new EventCollection(
             key: response.key,

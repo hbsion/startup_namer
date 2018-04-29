@@ -5,7 +5,7 @@ import 'package:startup_namer/data/betoffer.dart';
 import 'package:startup_namer/data/betoffer_types.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_tags.dart';
-import 'package:startup_namer/store/empty_widget.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/betoffer/winner_betoffer_widget.dart';
 import 'package:startup_namer/widgets/outcome_widget.dart';

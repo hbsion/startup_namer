@@ -57,7 +57,7 @@ class OutcomeStore implements Store {
   @override
   void dispatch(ActionType type, action) {
     switch (type) {
-      case ActionType.EventResponse:
+      case ActionType.eventResponse:
         EventResponse response = action;
         for (var outcome in response.outcomes) {
           var subject = _outcomes[outcome.id];

@@ -29,7 +29,7 @@ class EventStore implements Store {
   @override
   void dispatch(ActionType type, action) {
     switch (type) {
-      case ActionType.EventResponse:
+      case ActionType.eventResponse:
         EventResponse response = action;
         for (var event in response.events) {
           var subject = _events[event.id];
