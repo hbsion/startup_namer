@@ -1,7 +1,7 @@
 
 class ApiConstants {
-  static final host = "https://e4-api.kambi.com";
-  static final push = "wss://e1-push.aws.kambicdn.com";
+  static final host = "https://e2-api.aws.kambicdn.com";
+  static final push = "wss://e2-push.aws.kambicdn.com";
   static final offering = "ub";
   static final market = "SE";
   static final lang = "en_GB";

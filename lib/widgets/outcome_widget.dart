@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -14,7 +16,7 @@ import 'package:startup_namer/models/odds_format.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 
-class OutcomeWidget extends StatelessWidget {
+class OutcomeWidget extends StatefulWidget {
   final int outcomeId;
   final int betOfferId;
   final int eventId;
@@ -31,6 +33,15 @@ class OutcomeWidget extends StatelessWidget {
         super(key: key);
 
   @override
+  _State createState() => new _State();
+}
+
+class _State extends State<OutcomeWidget> {
+  int _odds;
+  int _oddsDiff = 0;
+  Timer _timer;
+
+  @override
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
         mapper: _mapStateToObservable,
@@ -39,28 +50,39 @@ class OutcomeWidget extends StatelessWidget {
     );
   }
 
+  @override
+  void dispose() {
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+    }
+    super.dispose();
+  }
+
   Observable<_ViewModel> _mapStateToObservable(AppStore store) {
     return Observable.combineLatest3(
-        store.outcomeStore[outcomeId].observable,
-        store.betOfferStore[betOfferId].observable,
-        store.eventStore[eventId].observable,
+        store.outcomeStore[widget.outcomeId].observable,
+        store.betOfferStore[widget.betOfferId].observable,
+        store.eventStore[widget.eventId].observable,
             (outcome, betOffer, event) => new _ViewModel(outcome: outcome, betOffer: betOffer, event: event)
     );
   }
 
   _ViewModel _mapStateToSnapshot(AppStore store) {
     return new _ViewModel(
-        outcome: store.outcomeStore[outcomeId].last,
-        betOffer: store.betOfferStore[betOfferId].last,
-        event: store.eventStore[eventId].last
+        outcome: store.outcomeStore[widget.outcomeId].last,
+        betOffer: store.betOfferStore[widget.betOfferId].last,
+        event: store.eventStore[widget.eventId].last
     );
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel viewModel) {
+    _handleOddsChange(viewModel);
+
     return new ScopedModelDescendant<MainModel>(
         builder: (context, child, model) {
           return new Container(
-              height: columnLayout ? 48.0 : 38.0,
+              height: widget.columnLayout ? 48.0 : 38.0,
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
               decoration: new BoxDecoration(
                 borderRadius: BorderRadius.circular(3.0),
@@ -70,11 +92,30 @@ class OutcomeWidget extends StatelessWidget {
         });
   }
 
+  void _handleOddsChange(_ViewModel viewModel) {
+    if (_odds != null) {
+      _oddsDiff = viewModel.outcome.odds.decimal - _odds;
+      if (_oddsDiff != 0) {
+        if (_timer != null) {
+          _timer.cancel();
+        }
+        _timer = new Timer(new Duration(seconds: 5), () {
+           if (mounted) {
+             setState(() {
+               _oddsDiff = 0;
+             });
+           }
+        });
+      }
+    }
+    _odds = viewModel.outcome.odds.decimal;
+  }
+
   Widget _buildContentWrapper(_ViewModel viewModel, MainModel model) {
     if (viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED) {
       return _buildContent(viewModel, model);
     }
-    
+
     return new Material(
       color: Colors.transparent,
       child: new InkWell(
@@ -85,7 +126,7 @@ class OutcomeWidget extends StatelessWidget {
 
   Widget _buildContent(_ViewModel viewModel, MainModel model) {
     var label = _formatLabel(viewModel);
-    if (columnLayout) {
+    if (widget.columnLayout) {
       if (label != null) {
         return new Column(
           children: <Widget>[
@@ -119,13 +160,16 @@ class OutcomeWidget extends StatelessWidget {
   }
 
   Text _buildOdds(_ViewModel viewModel, MainModel model) {
+    Color color = _oddsDiff > 0 ? Colors.green : _oddsDiff < 0 ? Colors.red : Colors.white;
     return new Text(
         _formatOdds(viewModel.outcome.odds, model.oddsFormat),
-        style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold));
+        style: new TextStyle(color: color, fontSize: 12.0, fontWeight: FontWeight.bold));
   }
 
   Text _buildLabel(String label) {
-    return new Text(label ?? "?", style: new TextStyle(color: Colors.white, fontSize: 12.0));
+    return new Text(label ?? "?", overflow: TextOverflow.fade,
+        softWrap: false,
+        style: new TextStyle(color: Colors.white, fontSize: 12.0));
   }
 
   String _formatLabel(_ViewModel viewModel) {
@@ -140,7 +184,7 @@ class OutcomeWidget extends StatelessWidget {
       return outcome.label + " " + (
           outcome.line / 1000).toString();
     }
-    if (!overrideShowLabel && (
+    if (!widget.overrideShowLabel && (
         betoffer.betOfferType.id == BetOfferTypes.headToHead ||
             betoffer.betOfferType.id == BetOfferTypes.winner ||
             betoffer.betOfferType.id == BetOfferTypes.position ||
@@ -193,4 +237,20 @@ class _ViewModel {
   final Event event;
 
   _ViewModel({@required this.outcome, @required this.betOffer, @required this.event});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is _ViewModel &&
+              runtimeType == other.runtimeType &&
+              outcome == other.outcome &&
+              betOffer == other.betOffer &&
+              event == other.event;
+
+  @override
+  int get hashCode =>
+      outcome.hashCode ^
+      betOffer.hashCode ^
+      event.hashCode;
+
 }
