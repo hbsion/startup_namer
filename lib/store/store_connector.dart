@@ -6,7 +6,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_provider.dart';
 import 'package:startup_namer/util/callable.dart';
-import 'package:startup_namer/util/flowable.dart';
 
 typedef Widget WidgetModelBuilder<T>(BuildContext context, T model);
 typedef Observable<T> Mapper<T>(AppStore appStore);
@@ -42,7 +41,8 @@ class _StoreConnector<T> extends StatefulWidget {
   final Snapshot<T> snapshot;
   final Callable<Dispatcher> action;
 
-  const _StoreConnector({Key key, @required this.builder, @required this.mapper, this.action, this.appStore, this.snapshot})
+  const _StoreConnector(
+      {Key key, @required this.builder, @required this.mapper, this.action, this.appStore, this.snapshot})
       :assert(builder != null),
         assert(mapper != null),
         assert(appStore != null),
@@ -56,6 +56,7 @@ class _StoreConnector<T> extends StatefulWidget {
 class _State<T> extends State<_StoreConnector<T>> {
   T _snapshot;
   StreamSubscription<T> _subscription;
+  Timer _timer;
 
   @override
   void initState() {
@@ -71,28 +72,34 @@ class _State<T> extends State<_StoreConnector<T>> {
     });
     if (widget.action != null) {
       widget.action(widget.appStore.dispatch);
+      _timer = new Timer.periodic(new Duration(seconds: 30), (_) => widget.action(widget.appStore.dispatch));
     }
     super.initState();
   }
 
   @override
   void dispose() {
-    if (_subscription != null) {
-      _subscription.cancel();
-    }
+    _dispose();
     super.dispose();
   }
 
 
   @override
   void deactivate() {
+    _dispose();
+    super.deactivate();
+  }
+
+  void _dispose() {
     if (_subscription != null) {
       _subscription.cancel();
       _subscription = null;
     }
-    super.deactivate();
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {

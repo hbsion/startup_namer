@@ -33,7 +33,7 @@ class EventListItemWidget extends StatelessWidget {
   VoidCallback navigate(BuildContext context) {
     return () =>
         Navigator.push(context, new MaterialPageRoute(
-            builder: (ctx) => new EventPage())
+            builder: (ctx) => new EventPage(eventId: eventId))
         );
   }
 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/data/betoffer.dart';
-import 'package:startup_namer/data/betoffer_type.dart';
 import 'package:startup_namer/data/betoffer_types.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_tags.dart';
@@ -39,27 +38,41 @@ class MainBetOfferWidget extends StatelessWidget {
     if (model == null || model.item1 == null || model.item2 == null) return new EmptyWidget();
 
     if (model.item2.tags.contains(EventTags.competition) || model.item1.betOfferType.id == BetOfferTypes.position) {
-      return new WinnerBetOfferWidget(betOfferId: model.item1.id);
+      return new WinnerBetOfferWidget(betOfferId: model.item1.id, eventId: model.item2.id, overrideShowLabel: true);
     }
 
     return new Row(children: _buildLayout(context, model.item1.outcomes));
   }
 
   List<Widget> _buildLayout(BuildContext context, List<int> outcomeIds) {
-    var orientation = MediaQuery.of(context).orientation;
+    var orientation = MediaQuery
+        .of(context)
+        .orientation;
     List<Widget> widgets = [];
     if (outcomeIds != null) {
       for (var i = 0; i < outcomeIds.length; ++i) {
         var outcomeId = outcomeIds[i];
-        if (i < (outcomeIds.length - 1)) {
-          widgets.add(
-              new Expanded(child: new Padding(
-                  padding: EdgeInsets.only(right: 4.0), child: new OutcomeWidget(outcomeId: outcomeId, columnLayout: orientation == Orientation.landscape))));
-        } else {
-          widgets.add(new Expanded(child: new OutcomeWidget(outcomeId: outcomeId, columnLayout: orientation == Orientation.landscape,)));
-        }
+        widgets.add(_buildOutcomeWidget(outcomeId, i == (outcomeIds.length - 1), orientation));
       }
     }
     return widgets;
+  }
+
+  Widget _buildOutcomeWidget(int outcomeId, bool isLast, Orientation orientation) {
+    OutcomeWidget widget = new OutcomeWidget(outcomeId: outcomeId,
+        betOfferId: betOfferId,
+        eventId: eventId,
+        columnLayout: orientation == Orientation.landscape);
+
+    if (!isLast) {
+      return
+        new Expanded(child: new Padding(
+            padding: EdgeInsets.only(right: 4.0),
+            child: widget
+        )
+        );
+    } else {
+      return new Expanded(child: widget);
+    }
   }
 }
