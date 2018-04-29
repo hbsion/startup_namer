@@ -129,7 +129,9 @@ class SportView extends StatelessWidget {
         ..live = inPlay
         ..date = dt
         ..league = league
-        ..title = inPlay ? "Live" : league;
+        ..title = inPlay ? "LIVE" : league
+        ..titleStyle = inPlay ? new TextStyle(color: Colors.red, fontWeight: FontWeight.w700) : null;
+
       sections.add(selected);
     }
 
