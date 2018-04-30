@@ -154,3 +154,20 @@ Future<EventGroup> fetchEventGroups() async {
 
   return EventGroup.fromJson(json.decode(body)["group"]);
 }
+
+Future<List<int>> fetchHighlights() async {
+  var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
+      .offering}/group/highlight.json?lang=${ApiConstants.lang}&market=${ApiConstants.market}");
+  _log.info(uri);
+  var request = await _client.getUrl(uri);
+  var response = await request.close();
+
+  if (response.statusCode != 200) {
+    _log.warning("Failed to fetch status: ${response.statusCode} uri: $uri");
+    return [];
+  } else {
+    var body = await response.transform(utf8.decoder).join();
+    var js = json.decode(body);
+    return ((js["groups"] ?? []) as List<dynamic>).map<int>((g) => g["id"]).toList();
+  }
+}

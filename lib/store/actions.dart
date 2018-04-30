@@ -33,3 +33,10 @@ Callable<Dispatcher> eventGroups() {
     dispatcher(ActionType.eventGroups, reponse);
   };
 }
+
+Callable<Dispatcher> highlights() {
+  return (dispatcher) async {
+    var reponse = await fetchHighlights();
+    dispatcher(ActionType.highlightGroups, reponse);
+  };
+}

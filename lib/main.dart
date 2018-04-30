@@ -57,5 +57,6 @@ class MainApp extends StatelessWidget {
 
   Future _initActions(Dispatcher dispatcher) async {
     eventGroups()(dispatcher);
+    highlights()(dispatcher);
   }
 }

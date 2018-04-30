@@ -1,93 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:startup_namer/data/event_group.dart';
 import 'package:startup_namer/pages/home_page.dart';
 import 'package:startup_namer/pages/live_right_now_page.dart';
 import 'package:startup_namer/pages/settings_page.dart';
 import 'package:startup_namer/pages/sport_page.dart';
 import 'package:startup_namer/pages/starting_soon_page.dart';
+import 'package:startup_namer/store/app_store.dart';
+import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/callable.dart';
-
-class MenuEntry {
-  final String title;
-  final String sport;
-  final String league;
-  final String region;
-  final int count;
-  final WidgetBuilder builder;
-
-  MenuEntry({
-    this.title,
-    this.sport = "all",
-    this.league= "all",
-    this.region= "all",
-    this.count = 0,
-    this.builder});
-
-}
-
-final List<MenuEntry> highlights = [
-  new MenuEntry(title: "Odds Lobby", builder: (context) => new HomePage()),
-  new MenuEntry(title: "Live Right Now", builder: (context) => new LiveRightNowPage()),
-  new MenuEntry(title: "Starting Soon", builder: (context) => new StartingSoonPage()),
-];
-
-final popular = [
-  new MenuEntry(sport: "Football", region: "Sweden", league: "Allsvenskan", count: 1569),
-  new MenuEntry(sport: "Football", region: "Sweden", league: "Superettan", count: 1005),
-  new MenuEntry(sport: "Football", region: "England", league: "Premier League", count: 3987),
-  new MenuEntry(sport: "Football", region: "Italy", league: "Serie A", count: 1178),
-  new MenuEntry(sport: "Football", region: "Spain", league: "LaLiga", count: 2236),
-  new MenuEntry(sport: "Ice Hockey", region: "Sweden", league: "SHL", count: 111),
-  new MenuEntry(sport: "Ice Hockey", league: "NHL", count: 1231),
-  new MenuEntry(sport: "Basketball", league: "NBA", count: 10),
-  new MenuEntry(sport: "Tennis", count: 182),
-];
-
-final sports = [
-  new MenuEntry(sport: "Football", count: 73020),
-  new MenuEntry(sport: "Ice Hockey", count: 2545),
-  new MenuEntry(sport: "Tennis", count: 182),
-  new MenuEntry(sport: "Trotting", count: 92),
-  new MenuEntry(sport: "Golf", count: 40),
-  new MenuEntry(sport: "Basketball", count: 2541),
-  new MenuEntry(sport: "Handball", count: 347),
-  new MenuEntry(sport: "UFC/MMA", count: 180),
-];
-
-final moreSports = [
-  new MenuEntry(sport: "American Fotball", count: 14),
-  new MenuEntry(sport: "Australian Rules", count: 1180),
-  new MenuEntry(sport: "Baseball", count: 427),
-  new MenuEntry(sport: "Boxing", count: 50),
-  new MenuEntry(sport: "Chess", count: 3),
-  new MenuEntry(sport: "Commonswealth Games", count: 236),
-  new MenuEntry(sport: "Cricket", count: 105),
-  new MenuEntry(sport: "Darts", count: 232),
-  new MenuEntry(sport: "Floorball", count: 28),
-  new MenuEntry(sport: "Futsal", count: 17),
-  new MenuEntry(sport: "Gaelic Sports", count: 21),
-  new MenuEntry(sport: "Greyhounds", count: 207),
-  new MenuEntry(sport: "Horse Racing", count: 209),
-  new MenuEntry(sport: "Motorsports", count: 58),
-  new MenuEntry(sport: "Netball", count: 1),
-  new MenuEntry(sport: "Olympic Games", count: 1),
-  new MenuEntry(sport: "Pesapallo", count: 1),
-  new MenuEntry(sport: "Politics", count: 51),
-  new MenuEntry(sport: "Rugby League", count: 1041),
-  new MenuEntry(sport: "Rugby Union", count: 483),
-  new MenuEntry(sport: "Snooker", count: 96),
-  new MenuEntry(sport: "Surfing", count: 22),
-  new MenuEntry(sport: "TV & Novelty", count: 22),
-  new MenuEntry(sport: "Volleyball", count: 22),
-  new MenuEntry(sport: "Winter Olympic Games", count: 1),
-  new MenuEntry(sport: "Winter Sports", count: 7),
-];
+import 'package:startup_namer/widgets/empty_widget.dart';
 
 class AppDrawer extends StatelessWidget {
   final String title;
   final Callable<Widget> onSelect;
 
-
-   AppDrawer({Key key, this.title, this.onSelect}) : super(key: key);
+  AppDrawer({Key key, this.title, this.onSelect}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +26,7 @@ class AppDrawer extends StatelessWidget {
 }
 
 class MenuEntryRow extends StatelessWidget {
-  final MenuEntry entry;
+  final _MenuEntry entry;
 
   MenuEntryRow(this.entry);
 
@@ -108,29 +36,34 @@ class MenuEntryRow extends StatelessWidget {
     List<Widget> row = [];
     if (entry.title != null) {
       row.add(new Text(entry.title));
-    } else if (entry.league != "all") {
-      row.add(new Text(entry.league));
+    } else if (entry._league != null) {
+      row.add(new Text(entry._league.name));
       row.add(new Padding(
-          padding: EdgeInsets.only(left: 4.0), child: new Text(entry.sport, style: theme.textTheme.caption)));
-      if (entry.region != "all") {
+          padding: EdgeInsets.only(left: 4.0), child: new Text(entry._sport.name, style: theme.textTheme.caption)));
+      if (entry._region != null) {
         row.add(new Padding(padding: EdgeInsets.only(left: 2.0), child: new Text("/", style: theme.textTheme.caption)));
         row.add(new Padding(
-            padding: EdgeInsets.only(left: 2.0), child: new Text(entry.region, style: theme.textTheme.caption)));
+            padding: EdgeInsets.only(left: 2.0), child: new Text(entry._region.name, style: theme.textTheme.caption)));
       }
+    } else if (entry._region != null) {
+      row.add(new Text(entry._region.name));
+      row.add(new Padding(
+          padding: EdgeInsets.only(left: 4.0), child: new Text(entry._sport.name, style: theme.textTheme.caption)));
     } else {
-      row.add(new Text(entry.sport));
+      row.add(new Text(entry._sport.name));
     }
 
     return new InkWell(
         child: new Padding(
-          padding: EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 8.0),
+          padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
           child: Row(
             children: <Widget>[
               new Expanded(child: new Row(children: row, crossAxisAlignment: CrossAxisAlignment.end)),
-              new Text(entry.count.toString(), style: Theme
+              entry.eventGroup != null ? new Text(entry.eventGroup.boCount.toString(), style: Theme
                   .of(context)
                   .textTheme
                   .caption)
+                  : new EmptyWidget()
             ],
           ),
         ),
@@ -138,45 +71,24 @@ class MenuEntryRow extends StatelessWidget {
     );
   }
 
-  _navigate(BuildContext context, MenuEntry entry) {
+  _navigate(BuildContext context, _MenuEntry entry) {
     return () {
       Navigator.pop(context);
       Navigator.of(context).push(new MaterialPageRoute(builder: entry.builder ?? (context) =>
       new SportPage(
-        sport: entry.sport.toLowerCase().replaceAll(" ", "_"),
-        league: entry.league.toLowerCase().replaceAll(" ", "_"),
-        region: entry.region.toLowerCase().replaceAll(" ", "_"),
+        sport: entry._sport != null ? entry._sport.termKey : "all",
+        league: entry._league != null ? entry._league.termKey : "all",
+        region: entry._region != null ? entry._region.termKey : "all",
       )));
     };
   }
 }
 
 class AppMenu extends StatelessWidget {
-  //static final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final double _appBarHeight = 150.0;
-
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> entries = [
-      new ExpansionTile(
-          title: new Text("Home"),
-          initiallyExpanded: true,
-          children: highlights.map((entry) => new MenuEntryRow(entry)).toList()),
-      new ExpansionTile(
-          title: new Text("Popular"),
-          initiallyExpanded: true,
-          children: popular.map((entry) => new MenuEntryRow(entry)).toList()),
-      new ExpansionTile(
-          title: new Text("Sports"),
-          initiallyExpanded: true,
-          children: sports.map((entry) => new MenuEntryRow(entry)).toList()),
-      new ExpansionTile(
-          title: new Text("More Sports"),
-          initiallyExpanded: true,
-          children: moreSports.map((entry) => new MenuEntryRow(entry)).toList()),
-    ];
-
     return new Theme(
       data: new ThemeData(
           brightness: Brightness.dark,
@@ -191,55 +103,129 @@ class AppMenu extends StatelessWidget {
         //key: _scaffoldKey,
         body: new CustomScrollView(
           slivers: <Widget>[
-            new SliverAppBar(
-                expandedHeight: _appBarHeight,
-                pinned: false,
-                floating: true,
-                snap: false,
-                flexibleSpace: new FlexibleSpaceBar(
-                  title: new Text("Svan Play!"),
-                  background: new Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      new Image.asset('assets/banner.jpg', fit: BoxFit.cover, height: _appBarHeight),
-                    ],
-                  ),
-                ),
-                actions: <Widget>[
-                  new IconButton(
-                    icon: const Icon(Icons.create),
-                    tooltip: 'Edit',
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (context) => new SettingsPage())
-                      );
-                    },
-                  ),
-                  new PopupMenuButton<Brightness>(
-                    onSelected: (Brightness value) {
-//                      setState(() {
-//                        _appBarBehavior = value;
-//                      });
-                    },
-                    itemBuilder: (BuildContext context) =>
-                    <PopupMenuItem<Brightness>>[
-                      const PopupMenuItem<Brightness>(
-                          value: Brightness.dark,
-                          child: const Text('Dark Theme')
-                      ),
-                      const PopupMenuItem<Brightness>(
-                          value: Brightness.light,
-                          child: const Text('Light Theme')
-                      ),
-                    ],
-                  ),
-                ]
-            ),
-            new SliverList(delegate: new SliverChildListDelegate(entries)),
+            _buildAppBar(context),
+            new StoreConnector<_ViewModel>(
+                mapper: _mapStateToViewModel,
+                widgetBuilder: _buildBody
+            )
           ],
         ),
       ),
     );
   }
+
+  Observable<_ViewModel> _mapStateToViewModel(AppStore store) {
+    return new Observable.just(new _ViewModel(
+        store.groupStore.sports,
+        store.groupStore.highlights
+    ));
+  }
+
+  SliverList _buildBody(BuildContext context, _ViewModel viewModel) {
+    List<ExpansionTile> tiles = [
+      new ExpansionTile(
+          title: new Text("Home"),
+          initiallyExpanded: true,
+          children: home.map((entry) => new MenuEntryRow(entry)).toList()),
+    ];
+
+    if (viewModel != null) {
+      List<EventGroup> sports = viewModel.sports.where((eg) => eg.sortOrder < 100).toList();
+      sports.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+      List<EventGroup> moreSports = viewModel.sports.where((eg) => eg.sortOrder >= 100).toList();
+      moreSports.sort((a, b) => a.name.compareTo(b.name));
+
+      tiles.addAll([
+        new ExpansionTile(
+            title: new Text("Popular"),
+            initiallyExpanded: true,
+            children: viewModel.highlights.map((eg) => new MenuEntryRow(new _MenuEntry(eventGroup: eg))).toList()),
+        new ExpansionTile(
+            title: new Text("Sports"),
+            initiallyExpanded: true,
+            children: sports.map((eg) => new MenuEntryRow(new _MenuEntry(eventGroup: eg))).toList()),
+        new ExpansionTile(
+            title: new Text("More Sports"),
+            initiallyExpanded: true,
+            children: moreSports.map((eg) => new MenuEntryRow(new _MenuEntry(eventGroup: eg))).toList()),
+
+      ]);
+    }
+
+    return new SliverList(
+        delegate: new SliverChildListDelegate(tiles)
+    );
+  }
+
+  SliverAppBar _buildAppBar(BuildContext context) {
+    return new SliverAppBar(
+        expandedHeight: _appBarHeight,
+        pinned: false,
+        floating: true,
+        snap: false,
+        flexibleSpace: new FlexibleSpaceBar(
+          title: new Text("Svan Play!"),
+          background: new Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              new Image.asset('assets/banner.jpg', fit: BoxFit.cover, height: _appBarHeight),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          new IconButton(
+            icon: const Icon(Icons.create),
+            tooltip: 'Edit',
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context) => new SettingsPage())
+              );
+            },
+          ),
+        ]
+    );
+  }
 }
+
+class _ViewModel {
+  final List<EventGroup> sports;
+  final List<EventGroup> highlights;
+
+  _ViewModel(this.sports, this.highlights);
+}
+
+class _MenuEntry {
+  final String title;
+  final EventGroup eventGroup;
+  final WidgetBuilder builder;
+  EventGroup _sport;
+  EventGroup _region;
+  EventGroup _league;
+
+  _MenuEntry({
+    this.title,
+    this.builder,
+    this.eventGroup
+  }) {
+    if (eventGroup != null) {
+      // fucking tree
+      if (eventGroup.parent.isRoot) {
+        _sport = eventGroup;
+      } else if (eventGroup.parent.parent.isRoot) {
+        _sport = eventGroup.parent;
+        _region = eventGroup;
+      } else {
+        _sport = eventGroup.parent.parent;
+        _region = eventGroup.parent;
+        _league = eventGroup;
+      }
+    }
+  }
+}
+
+final List<_MenuEntry> home = [
+  new _MenuEntry(title: "Start", builder: (context) => new HomePage()),
+  new _MenuEntry(title: "Live Right Now", builder: (context) => new LiveRightNowPage()),
+  new _MenuEntry(title: "Starting Soon", builder: (context) => new StartingSoonPage()),
+];

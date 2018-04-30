@@ -36,6 +36,8 @@ class EventGroup {
 
   EventGroup get parent => _parent;
 
+  bool get isRoot => id == 1;
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
