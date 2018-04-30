@@ -163,7 +163,7 @@ class _State extends State<OutcomeWidget> {
     var formatOdds = _formatOdds(viewModel.outcome.odds, model.oddsFormat);
 
     if (_oddsDiff != 0) {
-      Color color = _oddsDiff > 0 ? Colors.green : Colors.red;
+      Color color = _oddsDiff > 0 ? Colors.lightGreenAccent : Colors.red;
       Icon icon = new Icon(_oddsDiff > 0 ? Icons.arrow_upward : Icons.arrow_downward, color: color, size: 12.0);
       return new Row(children: <Widget>[
         icon,
