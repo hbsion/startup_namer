@@ -84,7 +84,7 @@ class _State extends State<OutcomeWidget> {
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
               decoration: new BoxDecoration(
                 borderRadius: BorderRadius.circular(3.0),
-                color: Color.fromRGBO(0x00, 0xad, 0xc9, 1.0),
+                color: _isSuspended(viewModel) ? Colors.grey : Color.fromRGBO(0x00, 0xad, 0xc9, 1.0),
               ),
               child: _buildContentWrapper(viewModel, model));
         });
@@ -105,7 +105,7 @@ class _State extends State<OutcomeWidget> {
   }
 
   Widget _buildContentWrapper(_ViewModel viewModel, MainModel model) {
-    if (viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED) {
+    if (_isSuspended(viewModel)) {
       return _buildContent(viewModel, model);
     }
 
@@ -116,6 +116,8 @@ class _State extends State<OutcomeWidget> {
           child: _buildContent(viewModel, model)),
     );
   }
+
+  bool _isSuspended(_ViewModel viewModel) => viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED;
 
   Widget _buildContent(_ViewModel viewModel, MainModel model) {
     var label = _formatLabel(viewModel);
