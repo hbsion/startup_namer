@@ -100,11 +100,11 @@ class _State extends State<OutcomeWidget> {
           _timer.cancel();
         }
         _timer = new Timer(new Duration(seconds: 5), () {
-           if (mounted) {
-             setState(() {
-               _oddsDiff = 0;
-             });
-           }
+          if (mounted) {
+            setState(() {
+              _oddsDiff = 0;
+            });
+          }
         });
       }
     }
@@ -159,11 +159,23 @@ class _State extends State<OutcomeWidget> {
     }
   }
 
-  Text _buildOdds(_ViewModel viewModel, MainModel model) {
-    Color color = _oddsDiff > 0 ? Colors.green : _oddsDiff < 0 ? Colors.red : Colors.white;
+  Widget _buildOdds(_ViewModel viewModel, MainModel model) {
+    var formatOdds = _formatOdds(viewModel.outcome.odds, model.oddsFormat);
+
+    if (_oddsDiff != 0) {
+      Color color = _oddsDiff > 0 ? Colors.green : Colors.red;
+      Icon icon = new Icon(_oddsDiff > 0 ? Icons.arrow_upward : Icons.arrow_downward, color: color, size: 12.0);
+      return new Row(children: <Widget>[
+        icon,
+        new Text(
+            formatOdds,
+            style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold))
+      ]);
+    }
+
     return new Text(
-        _formatOdds(viewModel.outcome.odds, model.oddsFormat),
-        style: new TextStyle(color: color, fontSize: 12.0, fontWeight: FontWeight.bold));
+        formatOdds,
+        style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold));
   }
 
   Text _buildLabel(String label) {
