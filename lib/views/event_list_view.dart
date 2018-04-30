@@ -27,7 +27,7 @@ class EventListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
         mapper: _mapStateToViewModel,
-        snapshot: _snapshot,
+        snapshot: _mapStateToSnapshot,
         action: listViewAction(sport: sport,
             region: region,
             league: league,
@@ -43,7 +43,7 @@ class EventListView extends StatelessWidget {
     });
   }
 
-  _ViewModel _snapshot(AppStore store) {
+  _ViewModel _mapStateToSnapshot(AppStore store) {
     var snapshot = _collection(store);
     if (snapshot.last != null) {
       return new _ViewModel(store.eventStore.snapshot(snapshot.last.eventIds));
@@ -81,11 +81,11 @@ class EventListView extends StatelessWidget {
 
     return new SectionListView(
         key: new PageStorageKey(filter),
-        sections: _buildData(model)
+        sections: _buildSections(model)
     );
   }
 
-  List<_SportSection> _buildData(_ViewModel viewModel) {
+  List<_EventSection> _buildSections(_ViewModel viewModel) {
     bool byLeague = league == "all";
     var sections = _groupAndSortEvents(
         viewModel.events,
@@ -96,8 +96,8 @@ class EventListView extends StatelessWidget {
     return sections;
   }
 
-  List<_SportSection> _groupAndSortEvents(List<Event> events, GroupBy groupBy, SortBy sortBy) {
-    List<_SportSection> sections = [];
+  List<_EventSection> _groupAndSortEvents(List<Event> events, GroupBy groupBy, SortBy sortBy) {
+    List<_EventSection> sections = [];
     events.forEach((e) => groupBy(e, sections));
     sections.sort(sortBy);
 
@@ -112,11 +112,11 @@ class EventListView extends StatelessWidget {
     return sections;
   }
 
-  void _groupByLeague(Event event, List<_SportSection> sections) {
+  void _groupByLeague(Event event, List<_EventSection> sections) {
     var inPlay = event.state == EventState.STARTED;
 
     var dt = date(event.start);
-    _SportSection selected;
+    _EventSection selected;
 
     String league;
 
@@ -135,7 +135,7 @@ class EventListView extends StatelessWidget {
       }
     }
     if (selected == null) {
-      selected = new _SportSection()
+      selected = new _EventSection()
         ..live = inPlay
         ..date = dt
         ..league = league
@@ -148,11 +148,11 @@ class EventListView extends StatelessWidget {
     selected.events.add(event);
   }
 
-  void _groupByDate(Event event, List<_SportSection> sections) {
+  void _groupByDate(Event event, List<_EventSection> sections) {
     var inPlay = event.state == EventState.STARTED;
 
     var dt = date(event.start);
-    _SportSection selected;
+    _EventSection selected;
     for (var section in sections) {
       if (inPlay && section.live) {
         selected = section;
@@ -164,7 +164,7 @@ class EventListView extends StatelessWidget {
     }
 
     if (selected == null) {
-      selected = new _SportSection()
+      selected = new _EventSection()
         ..live = inPlay
         ..date = dt
         ..league = ""
@@ -176,14 +176,14 @@ class EventListView extends StatelessWidget {
     selected.events.add(event);
   }
 
-  int _sortByDate(_SportSection a, _SportSection b) {
+  int _sortByDate(_EventSection a, _EventSection b) {
     if (a.live) return -1;
     if (b.live) return 1;
 
     return a.date.compareTo(b.date);
   }
 
-  int _sortByLeague(_SportSection a, _SportSection b) {
+  int _sortByLeague(_EventSection a, _EventSection b) {
     if (a.live) return -1;
     if (b.live) return 1;
 
@@ -207,10 +207,10 @@ class _ViewModel {
   int get hashCode => events.hashCode;
 }
 
-typedef GroupBy = void Function(Event event, List<_SportSection> sections);
-typedef SortBy = int Function(_SportSection a, _SportSection b);
+typedef GroupBy = void Function(Event event, List<_EventSection> sections);
+typedef SortBy = int Function(_EventSection a, _EventSection b);
 
-class _SportSection extends ListSection {
+class _EventSection extends ListSection {
   DateTime date;
   List<Event> events = [];
   bool live;

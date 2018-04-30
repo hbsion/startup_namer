@@ -19,7 +19,7 @@ class EventStore implements Store {
     return new SnapshotObservable(subject.value, subject.observable);
   }
 
-  List<Event> snapshot(List<int> ids) {
+  List<Event> snapshot(Iterable<int> ids) {
     return ids.map((id) => _events[id])
         .where((subject) => subject != null)
         .map((subject) => subject.value)

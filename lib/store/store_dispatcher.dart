@@ -61,6 +61,7 @@ class _State<T> extends State<_StoreDispatcher<T>> with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused && _timer != null) {
       _stopPoller();
     } else if (state == AppLifecycleState.resumed && _timer == null) {
+      widget.action(widget.appStore.dispatch);
       _startPoller();
     }
   }
