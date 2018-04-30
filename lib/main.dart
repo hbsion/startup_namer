@@ -7,6 +7,7 @@ import 'package:startup_namer/api/offering_api.dart';
 import 'package:startup_namer/models/main_model.dart';
 import 'package:startup_namer/pages/home_page.dart';
 import 'package:startup_namer/store/action_type.dart';
+import 'package:startup_namer/store/actions.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_dispatcher.dart';
 import 'package:startup_namer/store/store_provider.dart';
@@ -29,7 +30,8 @@ class MainApp extends StatelessWidget {
     return new StoreProvider(
         store: new AppStore(),
         child: new StoreDispatcher(
-            action: _defaultActions,
+            poll: liveOpen(),
+            oneshot: _initActions,
             child: new ScopedModel<MainModel>(
                 model: new MainModel(),
                 child: _buildMainApp()
@@ -53,9 +55,7 @@ class MainApp extends StatelessWidget {
     );
   }
 
-  Future _defaultActions(Dispatcher dispatcher) async {
-    // actions that run in background not tied to any particular view
-    var reponse = await fetchLiveOpen();
-    dispatcher(ActionType.eventResponse, reponse);
+  Future _initActions(Dispatcher dispatcher) async {
+    eventGroups()(dispatcher);
   }
 }

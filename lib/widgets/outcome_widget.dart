@@ -15,6 +15,7 @@ import 'package:startup_namer/models/main_model.dart';
 import 'package:startup_namer/models/odds_format.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 
 class OutcomeWidget extends StatefulWidget {
   final int outcomeId;
@@ -75,6 +76,9 @@ class _State extends State<OutcomeWidget> {
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel viewModel) {
+    if (viewModel == null || viewModel.outcome == null || viewModel.betOffer == null || viewModel.event == null) {
+      return _buildPlaceholder();
+    }
     _handleOddsChange(viewModel);
 
     return new ScopedModelDescendant<MainModel>(
@@ -90,6 +94,17 @@ class _State extends State<OutcomeWidget> {
         });
   }
 
+  Container _buildPlaceholder() {
+    return new Container(
+        height: widget.columnLayout ? 48.0 : 38.0,
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+        decoration: new BoxDecoration(
+            borderRadius: BorderRadius.circular(3.0),
+            color: Colors.grey
+        ),
+        child: new EmptyWidget());
+  }
+
   void _handleOddsChange(_ViewModel viewModel) {
     if (_oddsDiff(viewModel.outcome) != 0) {
       if (_timer != null) {
@@ -97,8 +112,7 @@ class _State extends State<OutcomeWidget> {
       }
       _timer = new Timer(new Duration(seconds: 6), () {
         if (mounted) {
-          setState(() {
-          });
+          setState(() {});
         }
       });
     }
@@ -117,7 +131,8 @@ class _State extends State<OutcomeWidget> {
     );
   }
 
-  bool _isSuspended(_ViewModel viewModel) => viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED;
+  bool _isSuspended(_ViewModel viewModel) =>
+      viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED;
 
   Widget _buildContent(_ViewModel viewModel, MainModel model) {
     var label = _formatLabel(viewModel);
@@ -175,14 +190,18 @@ class _State extends State<OutcomeWidget> {
   }
 
   int _oddsDiff(Outcome outcome) {
-      if (outcome != null && outcome.odds.decimal != null && outcome.lastOdds != null && outcome.lastOdds.decimal != null) {
-        int seconds = DateTime.now().difference(outcome.oddsChanged).inSeconds;
+    if (outcome != null && outcome.odds.decimal != null && outcome.lastOdds != null &&
+        outcome.lastOdds.decimal != null) {
+      int seconds = DateTime
+          .now()
+          .difference(outcome.oddsChanged)
+          .inSeconds;
 //        print("Changed: " + outcome.oddsChanged.toString() + " diff: " + seconds.toString());
-        if (seconds < 5 ) {
-          return outcome.odds.decimal - outcome.lastOdds.decimal;
-        }
+      if (seconds < 5) {
+        return outcome.odds.decimal - outcome.lastOdds.decimal;
       }
-      return 0;
+    }
+    return 0;
   }
 
   Text _buildLabel(String label) {

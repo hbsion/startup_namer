@@ -80,6 +80,7 @@ class _SectionListViewState extends State<SectionListView> {
   Widget _buildSectionHeader(ListSection section) {
     return new _SectionListItem(key: new Key(section.title),
         child: new SectionHeader(
+          leading: section.leading,
           title: section.title,
           titleStyle: section.titleStyle,
           count: section.count,
@@ -102,6 +103,7 @@ class _SectionListViewState extends State<SectionListView> {
 }
 
 abstract class ListSection {
+  Widget leading;
   TextStyle titleStyle;
   String get title;
   IndexedWidgetBuilder get builder;

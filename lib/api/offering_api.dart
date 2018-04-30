@@ -8,6 +8,7 @@ import 'package:startup_namer/data/betoffer.dart';
 import 'package:startup_namer/data/betoffer_tags.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_collection_key.dart';
+import 'package:startup_namer/data/event_group.dart';
 import 'package:startup_namer/data/outcome.dart';
 import 'package:tuple/tuple.dart';
 
@@ -135,4 +136,21 @@ EventResponse _parseListViewResponse(Tuple2<String, EventCollectionKey> tuple) {
       betoffers: betOffers,
       outcomes: outcomes
   );
+}
+
+Future<EventGroup> fetchEventGroups() async {
+  var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
+      .offering}/group.json?lang=${ApiConstants.lang}&market=${ApiConstants.market}");
+  _log.info(uri);
+  var request = await _client.getUrl(uri);
+  var response = await request.close();
+
+  if (response.statusCode != 200) {
+    _log.warning("Failed to fetch status: ${response.statusCode} uri: $uri");
+    return null;
+  }
+
+  var body = await response.transform(utf8.decoder).join();
+
+  return EventGroup.fromJson(json.decode(body)["group"]);
 }

@@ -3,6 +3,7 @@ import 'package:startup_namer/store/betoffer_store.dart';
 import 'package:startup_namer/store/event_collection_store.dart';
 import 'package:startup_namer/store/event_store.dart';
 import 'package:startup_namer/store/favorites_store.dart';
+import 'package:startup_namer/store/groups_store.dart';
 import 'package:startup_namer/store/outcome_store.dart';
 import 'package:startup_namer/store/store.dart';
 
@@ -13,6 +14,7 @@ class AppStore {
   final EventStore eventStore = new EventStore();
   final BetOfferStore betOfferStore = new BetOfferStore();
   final OutcomeStore outcomeStore = new OutcomeStore();
+  final GroupStore groupStore = new GroupStore();
   final FavoritesStore favoritesStore = new FavoritesStore();
   final EventCollectionStore collectionStore = new EventCollectionStore();
 
@@ -21,6 +23,7 @@ class AppStore {
       ..add(betOfferStore)
       ..add(outcomeStore)
       ..add(favoritesStore)
+      ..add(groupStore)
       ..add(collectionStore);
   }
 

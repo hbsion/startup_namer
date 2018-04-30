@@ -13,11 +13,12 @@ typedef T Snapshot<T>(AppStore appStore);
 
 class StoreDispatcher<T> extends StatelessWidget {
   final Widget child;
-  final Callable<Dispatcher> action;
+  final Callable<Dispatcher> poll;
+  final Callable<Dispatcher> oneshot;
 
-  const StoreDispatcher({Key key, @required this.child, @required this.action})
+  const StoreDispatcher({Key key, @required this.child, @required this.poll, this.oneshot})
       :assert(child != null),
-        assert(action != null),
+        assert(poll != null),
         super(key: key);
 
   @override
@@ -25,7 +26,8 @@ class StoreDispatcher<T> extends StatelessWidget {
     return new _StoreDispatcher(
       appStore: StoreProvider.of(context),
       child: child,
-      action: action,
+      poll: poll,
+      oneshot: oneshot,
     );
   }
 }
@@ -33,11 +35,12 @@ class StoreDispatcher<T> extends StatelessWidget {
 class _StoreDispatcher<T> extends StatefulWidget {
   final AppStore appStore;
   final Widget child;
-  final Callable<Dispatcher> action;
+  final Callable<Dispatcher> poll;
+  final Callable<Dispatcher> oneshot;
 
-  const _StoreDispatcher({Key key, @required this.child, @required this.action, @required this.appStore})
+  const _StoreDispatcher({Key key, @required this.child, @required this.poll, @required this.appStore, this.oneshot})
       :assert(child != null),
-        assert(action != null),
+        assert(poll != null),
         assert(appStore != null),
         super(key: key);
 
@@ -50,7 +53,10 @@ class _State<T> extends State<_StoreDispatcher<T>> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    widget.action(widget.appStore.dispatch);
+    widget.poll(widget.appStore.dispatch);
+    if (widget.oneshot != null) {
+      widget.oneshot(widget.appStore.dispatch);
+    }
     _startPoller();
     WidgetsBinding.instance.addObserver(this);
     super.initState();
@@ -61,13 +67,16 @@ class _State<T> extends State<_StoreDispatcher<T>> with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused && _timer != null) {
       _stopPoller();
     } else if (state == AppLifecycleState.resumed && _timer == null) {
-      widget.action(widget.appStore.dispatch);
+      widget.poll(widget.appStore.dispatch);
+      if (widget.oneshot != null) {
+        widget.oneshot(widget.appStore.dispatch);
+      }
       _startPoller();
     }
   }
 
   void _startPoller() {
-    _timer = new Timer.periodic(new Duration(seconds: 30), (_) => widget.action(widget.appStore.dispatch));
+    _timer = new Timer.periodic(new Duration(seconds: 30), (_) => widget.poll(widget.appStore.dispatch));
   }
 
   void _stopPoller() {

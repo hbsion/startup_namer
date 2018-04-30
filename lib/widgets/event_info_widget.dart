@@ -34,7 +34,7 @@ class EventInfoWidget extends StatelessWidget {
 
   Widget _buildGroupPath(TextTheme textTheme, Event event) {
     return new Container(
-      color: Colors.yellow,
+//        color: Colors.yellow,
         child: new Row(
             children: _buildGroupPathElements(textTheme, event).toList()
         )

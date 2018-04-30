@@ -3,6 +3,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/app_drawer.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_collection_key.dart';
+import 'package:startup_namer/data/event_group.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
@@ -39,10 +40,15 @@ class LiveRightNowPage extends StatelessWidget {
 
     return Observable.combineLatest2(
         store.collectionStore[key].observable,
-        store.favoritesStore.favorites().observable,
-        (collection, favorites) => new _ViewModel(
+        store.favoritesStore
+            .favorites()
+            .observable,
+            (collection, favorites) =>
+        new _ViewModel(
             store.eventStore.snapshot(collection.eventIds),
-            store.eventStore.snapshot(favorites)));
+            store.eventStore.snapshot(favorites),
+            store.groupStore.groupById
+        ));
   }
 
   Widget _buildListView(BuildContext context, _ViewModel model) {
@@ -67,49 +73,77 @@ class LiveRightNowPage extends StatelessWidget {
 
     return new SectionListView(
         key: new PageStorageKey("lrn"),
-        sections: _buildSections(model)
+        sections: _buildSections(context, model)
     );
   }
 
-  List<_EventSection> _buildSections(_ViewModel model) {
+  List<_EventSection> _buildSections(BuildContext context, _ViewModel model) {
     List<_EventSection> sections = [];
 
     for (var event in model.events) {
-      var section = _findSection(event.sport, sections);
+      var section = _findSection(context, model, event, sections);
       section.events.add(event);
     }
-    // TODO: sort by groups
+
+    sections.sort((a, b) {
+       var sortOrder = a.sortOrder.compareTo(b.sortOrder);
+       if (sortOrder == 0) {
+         sortOrder = a.title.compareTo(b.title);
+       }
+       return sortOrder;
+    });
 
     var favorites = new _EventSection()
+      ..leading = new Container(
+          padding: EdgeInsets.only(right: 4.0), child: new Icon(Icons.star, color: Colors.orangeAccent))
       ..events = model.favorites
       ..sport = "no-sport"
       ..title = "Favorites";
 
     sections.insert(0, favorites);
 
+    int expanded = 0;
+    for (var section in sections) {
+      section.initiallyExpanded = true;
+      expanded += section.count;
+      if (expanded > 5)
+        break;
+    }
+
     return sections;
   }
 
-  _EventSection _findSection(String sport, List<_EventSection> sections) {
+  _EventSection _findSection(BuildContext context, _ViewModel model, Event event, List<_EventSection> sections) {
     for (var section in sections) {
-      if (section.sport == sport) {
+      if (section.sport == event.sport) {
         return section;
       }
     }
 
+    var eventGroup = EventGroup.resolveRoot(model.eventGroupResolver(event.groupId));
     var section = new _EventSection()
-      ..sport = sport
-      ..title = sport;
+      ..leading = new Container(padding: EdgeInsets.only(right: 4.0), child: new Text("Live", style: Theme
+          .of(context)
+          .textTheme
+          .subhead
+          .merge(new TextStyle(color: Colors.red, fontStyle: FontStyle.italic))))
+      ..sport = event.sport
+      ..title = eventGroup.name ?? event.sport
+      ..sortOrder = eventGroup.sortOrder
+    ;
     sections.add(section);
     return section;
   }
 }
 
+typedef EventGroup EventGroupResolver(int id);
+
 class _ViewModel {
   final List<Event> events;
   final List<Event> favorites;
+  final EventGroupResolver eventGroupResolver;
 
-  _ViewModel(this.events, this.favorites);
+  _ViewModel(this.events, this.favorites, this.eventGroupResolver);
 
   @override
   bool operator ==(Object other) =>
@@ -132,6 +166,7 @@ class _EventSection extends ListSection {
   String sport;
   bool _initiallyExpanded = false;
   String _title = "";
+  int sortOrder = 0;
 
   @override
   IndexedWidgetBuilder get builder =>
