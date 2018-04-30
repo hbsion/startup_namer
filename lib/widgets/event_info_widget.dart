@@ -32,8 +32,13 @@ class EventInfoWidget extends StatelessWidget {
     );
   }
 
-  Row _buildGroupPath(TextTheme textTheme, Event event) {
-    return new Row(children: _buildGroupPathElements(textTheme, event).toList());
+  Widget _buildGroupPath(TextTheme textTheme, Event event) {
+    return new Container(
+      color: Colors.yellow,
+        child: new Row(
+            children: _buildGroupPathElements(textTheme, event).toList()
+        )
+    );
   }
 
   Iterable<Widget> _buildGroupPathElements(TextTheme textTheme, Event event) sync* {
@@ -51,7 +56,8 @@ class EventInfoWidget extends StatelessWidget {
         yield new Padding(
             padding: EdgeInsets.only(left: 2.0, right: 2.0), child: new Text("/", style: textTheme.caption));
       }
-      yield new Text(group.name, style: textTheme.caption);
+      yield new Flexible(child: new Container(
+          child: new Text(group.name, softWrap: false, style: textTheme.caption, overflow: TextOverflow.fade,)));
     }
   }
 }

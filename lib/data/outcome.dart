@@ -25,6 +25,8 @@ class Outcome {
   final int participantId;
   final OutcomeStatus status;
   final CashoutStatus cashoutStatus;
+  Odds lastOdds;
+  DateTime oddsChanged;
 
   Outcome({
     @required this.id,

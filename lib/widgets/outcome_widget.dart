@@ -37,8 +37,6 @@ class OutcomeWidget extends StatefulWidget {
 }
 
 class _State extends State<OutcomeWidget> {
-  int _odds;
-  int _oddsDiff = 0;
   Timer _timer;
 
   @override
@@ -93,22 +91,17 @@ class _State extends State<OutcomeWidget> {
   }
 
   void _handleOddsChange(_ViewModel viewModel) {
-    if (_odds != null) {
-      _oddsDiff = viewModel.outcome.odds.decimal - _odds;
-      if (_oddsDiff != 0) {
-        if (_timer != null) {
-          _timer.cancel();
-        }
-        _timer = new Timer(new Duration(seconds: 5), () {
-          if (mounted) {
-            setState(() {
-              _oddsDiff = 0;
-            });
-          }
-        });
+    if (_oddsDiff(viewModel.outcome) != 0) {
+      if (_timer != null) {
+        _timer.cancel();
       }
+      _timer = new Timer(new Duration(seconds: 6), () {
+        if (mounted) {
+          setState(() {
+          });
+        }
+      });
     }
-    _odds = viewModel.outcome.odds.decimal;
   }
 
   Widget _buildContentWrapper(_ViewModel viewModel, MainModel model) {
@@ -162,9 +155,10 @@ class _State extends State<OutcomeWidget> {
   Widget _buildOdds(_ViewModel viewModel, MainModel model) {
     var formatOdds = _formatOdds(viewModel.outcome.odds, model.oddsFormat);
 
-    if (_oddsDiff != 0) {
-      Color color = _oddsDiff > 0 ? Colors.lightGreenAccent : Colors.red;
-      Icon icon = new Icon(_oddsDiff > 0 ? Icons.arrow_upward : Icons.arrow_downward, color: color, size: 12.0);
+    int oddsDiff = _oddsDiff(viewModel.outcome);
+    if (oddsDiff != 0) {
+      Color color = oddsDiff > 0 ? Colors.lightGreenAccent : Colors.red;
+      Icon icon = new Icon(oddsDiff > 0 ? Icons.arrow_upward : Icons.arrow_downward, color: color, size: 12.0);
       return new Row(children: <Widget>[
         icon,
         new Text(
@@ -176,6 +170,17 @@ class _State extends State<OutcomeWidget> {
     return new Text(
         formatOdds,
         style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold));
+  }
+
+  int _oddsDiff(Outcome outcome) {
+      if (outcome != null && outcome.odds.decimal != null && outcome.lastOdds != null && outcome.lastOdds.decimal != null) {
+        int seconds = DateTime.now().difference(outcome.oddsChanged).inSeconds;
+//        print("Changed: " + outcome.oddsChanged.toString() + " diff: " + seconds.toString());
+        if (seconds < 5 ) {
+          return outcome.odds.decimal - outcome.lastOdds.decimal;
+        }
+      }
+      return 0;
   }
 
   Text _buildLabel(String label) {

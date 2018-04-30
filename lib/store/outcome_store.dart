@@ -63,6 +63,10 @@ class OutcomeStore implements Store {
           var subject = _outcomes[outcome.id];
           if (subject != null) {
             if (subject.value != outcome) {
+              if (subject.value != null) {
+                outcome.lastOdds = subject.value.odds;
+                outcome.oddsChanged = DateTime.now();
+              }
               subject.add(outcome);
             }
           } else {
