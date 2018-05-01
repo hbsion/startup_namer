@@ -4,8 +4,11 @@ DateTime date(DateTime dt) {
   return new DateTime(dt.year, dt.month, dt.day);
 }
 
-String prettyDate(DateTime dt) {
+DateTime withHours(DateTime dt) {
+  return new DateTime(dt.year, dt.month, dt.day, dt.hour);
+}
 
+String prettyDate(DateTime dt) {
    if (isToday(dt)) {
      return "Today";
    } else if(isTomorrow(dt)) {
@@ -13,8 +16,11 @@ String prettyDate(DateTime dt) {
    } else {
      return formatDate(dt, [DD, " ", d, " ", MM, " ", yyyy]);
    }
+}
 
-
+String hourRange(DateTime dt) {
+     return formatDate(dt, [HH, ":", nn]) + " - " +
+         formatDate(dt,  [HH, ":59"]);
 }
 
 bool isToday(DateTime dt) {

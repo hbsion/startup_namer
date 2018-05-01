@@ -86,20 +86,42 @@ class EventListView extends StatelessWidget {
   }
 
   List<_EventSection> _buildSections(_ViewModel viewModel) {
-    bool byLeague = league == "all";
+    _GroupBy groupBy;
+    _SortSectionsBy sortSectionsBy;
+    _SortEventsBy sortEventsBy = _sortEventsByDate;
+
+    if (filter == "starting-soon") {
+      groupBy = _groupByHour;
+      sortSectionsBy = _sortByDate;
+    } else if (league == "all") {
+      groupBy = _groupByLeague;
+      sortSectionsBy = _sortByLeague;
+    } else {
+      groupBy = _groupByDate;
+      sortSectionsBy = _sortByDate;
+    }
+
     var sections = _groupAndSortEvents(
         viewModel.events,
-        byLeague ? _groupByLeague : _groupByDate,
-        byLeague ? _sortByLeague : _sortByDate
+        groupBy,
+        sortSectionsBy,
+        sortEventsBy
     );
 
+    if (filter == "starting-soon" && sections.length > 0) {
+      sections[0].title = "Next Off";
+    }
     return sections;
   }
 
-  List<_EventSection> _groupAndSortEvents(List<Event> events, GroupBy groupBy, SortBy sortBy) {
+  List<_EventSection> _groupAndSortEvents(List<Event> events,
+      _GroupBy groupBy,
+      _SortSectionsBy sortBy,
+      _SortEventsBy sortEventsBy) {
     List<_EventSection> sections = [];
     events.forEach((e) => groupBy(e, sections));
     sections.sort(sortBy);
+    sections.forEach((section) => section.events.sort(sortEventsBy));
 
     // Initially exapnd at least 10 rows
     int visibleItems = 0;
@@ -176,6 +198,28 @@ class EventListView extends StatelessWidget {
     selected.events.add(event);
   }
 
+  void _groupByHour(Event event, List<_EventSection> sections) {
+    var timeOfDay = withHours(event.start);
+
+    _EventSection selected;
+    for (var section in sections) {
+      if (section.date == timeOfDay) {
+        selected = section;
+        break;
+      }
+    }
+
+    if (selected == null) {
+      selected = new _EventSection()
+        ..live = false
+        ..date = timeOfDay
+        ..title = hourRange(timeOfDay.toLocal());
+      sections.add(selected);
+    }
+
+    selected.events.add(event);
+  }
+
   int _sortByDate(_EventSection a, _EventSection b) {
     if (a.live) return -1;
     if (b.live) return 1;
@@ -189,6 +233,8 @@ class EventListView extends StatelessWidget {
 
     return a.league.compareTo(b.league);
   }
+
+  int _sortEventsByDate(Event a, Event b) => a.start.compareTo(b.start);
 }
 
 class _ViewModel {
@@ -207,8 +253,9 @@ class _ViewModel {
   int get hashCode => events.hashCode;
 }
 
-typedef GroupBy = void Function(Event event, List<_EventSection> sections);
-typedef SortBy = int Function(_EventSection a, _EventSection b);
+typedef _GroupBy = void Function(Event event, List<_EventSection> sections);
+typedef _SortSectionsBy = int Function(_EventSection a, _EventSection b);
+typedef _SortEventsBy = int Function(Event a, Event b);
 
 class _EventSection extends ListSection {
   DateTime date;

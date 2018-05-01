@@ -4,10 +4,9 @@ import 'package:startup_namer/app_theme.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_tags.dart';
 import 'package:startup_namer/pages/event_page.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/store/store_connector.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/event_info_widget.dart';
-import 'package:startup_namer/widgets/event_time_widget.dart';
 import 'package:startup_namer/widgets/event_tracker_widget.dart';
 import 'package:startup_namer/widgets/favorite_widget.dart';
 import 'package:startup_namer/widgets/main_betoffer_widget.dart';
@@ -29,7 +28,6 @@ class EventListItemWidget extends StatelessWidget {
         widgetBuilder: _buildWidget
     );
   }
-
 
   VoidCallback navigate(BuildContext context) {
     return () =>
@@ -67,9 +65,10 @@ class EventListItemWidget extends StatelessWidget {
                 new Container(width: 70.0, child: new EventTrackingWidget(eventId: eventId)),
                 new Expanded(child: new EventInfoWidget(eventId: eventId,)),
                 new FavoriteWidget(eventId: eventId,),
-                
+
               ])
-          )),
+          )
+      ),
       model.mainBetOfferId != null
           ? new MainBetOfferWidget(betOfferId: model.mainBetOfferId, eventId: model.id)
           : new EmptyWidget(),
@@ -105,7 +104,10 @@ class EventListItemWidget extends StatelessWidget {
 
   Widget _buildDivider(BuildContext context) {
     if (!showDivider) return EmptyWidget();
-    
-    return new Divider(color: AppTheme.of(context).list.itemDivider, height: 1.0);
+
+    return new Divider(color: AppTheme
+        .of(context)
+        .list
+        .itemDivider, height: 1.0);
   }
 }

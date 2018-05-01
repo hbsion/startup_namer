@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:startup_namer/api/offering_api.dart';
 import 'package:startup_namer/models/main_model.dart';
 import 'package:startup_namer/pages/home_page.dart';
-import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/actions.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_dispatcher.dart';
@@ -30,8 +28,8 @@ class MainApp extends StatelessWidget {
     return new StoreProvider(
         store: new AppStore(),
         child: new StoreDispatcher(
-            poll: liveOpen(),
-            oneshot: _initActions,
+            poll: _initActions,
+            //oneshot: _initActions,
             child: new ScopedModel<MainModel>(
                 model: new MainModel(),
                 child: _buildMainApp()
@@ -43,6 +41,7 @@ class MainApp extends StatelessWidget {
     return new ScopedModelDescendant<MainModel>(
         builder: (context, child, model) {
           return MaterialApp(
+            showPerformanceOverlay: false,
               title: appTitle,
               theme: new ThemeData(
                   brightness: model.brightness,
@@ -58,5 +57,6 @@ class MainApp extends StatelessWidget {
   Future _initActions(Dispatcher dispatcher) async {
     eventGroups()(dispatcher);
     highlights()(dispatcher);
+    liveOpen()(dispatcher);
   }
 }

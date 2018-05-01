@@ -76,6 +76,7 @@ class _State extends State<OutcomeWidget> {
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel viewModel) {
+//    print("render outcome ${widget.outcomeId}");
     if (viewModel == null || viewModel.outcome == null || viewModel.betOffer == null || viewModel.event == null) {
       return _buildPlaceholder();
     }

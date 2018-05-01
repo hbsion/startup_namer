@@ -18,6 +18,7 @@ class EventInfoWidget extends StatelessWidget {
   }
 
   Widget _buildWidget(BuildContext context, Event event) {
+//    print("Render list view item: $eventId");
     var textTheme = Theme
         .of(context)
         .textTheme;
@@ -57,7 +58,7 @@ class EventInfoWidget extends StatelessWidget {
             padding: EdgeInsets.only(left: 2.0, right: 2.0), child: new Text("/", style: textTheme.caption));
       }
       yield new Flexible(child: new Container(
-          child: new Text(group.name, softWrap: false, style: textTheme.caption, overflow: TextOverflow.fade,)));
+          child: new Text(group.name, softWrap: false, style: textTheme.caption, overflow: TextOverflow.fade)));
     }
   }
 }

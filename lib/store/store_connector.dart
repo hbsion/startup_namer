@@ -103,14 +103,7 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
     _dispose();
     super.dispose();
   }
-
-
-  @override
-  void deactivate() {
-    _dispose();
-    super.deactivate();
-  }
-
+  
   void _dispose() {
     if (_subscription != null) {
       _subscription.cancel();

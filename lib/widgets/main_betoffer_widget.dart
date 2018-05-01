@@ -37,6 +37,7 @@ class MainBetOfferWidget extends StatelessWidget {
   Widget _buildWidget(BuildContext context, Tuple2<BetOffer, Event> model) {
     if (model == null || model.item1 == null || model.item2 == null) return new EmptyWidget();
 
+//    print("Rendering betoffer $betOfferId");
     if (model.item2.tags.contains(EventTags.competition) || model.item1.betOfferType.id == BetOfferTypes.position) {
       return new WinnerBetOfferWidget(betOfferId: model.item1.id, eventId: model.item2.id, overrideShowLabel: true);
     }
