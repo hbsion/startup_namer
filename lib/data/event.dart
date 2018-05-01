@@ -75,7 +75,7 @@ class Event {
       name: json["name"],
       homeName: json["homeName"],
       awayName: json["awayName"],
-      start: json["start"] != null ? DateTime.parse(json["start"]) : null,
+      start: json["start"] != null ? DateTime.parse(json["start"]).toLocal() : null,
       originalStartTime: json["originalStartTime"],
       group: json["group"],
       groupId: json["groupId"],
@@ -98,7 +98,7 @@ class Event {
       groupSortOrder: json["groupSortOrder"],
       teamColors: TeamColors.fromJson(json["teamColors"]),
       sortOrder: json["sortOrder"],
-      prematchEnd: json["prematchEnd"] != null ? DateTime.parse(json["prematchEnd"]) : null,
+      prematchEnd: json["prematchEnd"] != null ? DateTime.parse(json["prematchEnd"]).toLocal() : null,
       meetingId: json["meetingId"]
   );
 

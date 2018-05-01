@@ -54,7 +54,7 @@ class Outcome {
       betOfferId: json["betOfferId"],
       label: json["label"],
       type: toOutcomeType(json["type"]),
-      changedDate: json["changedDate"] != null ? DateTime.parse(json["changedDate"]) : null,
+      changedDate: json["changedDate"] != null ? DateTime.parse(json["changedDate"]).toLocal() : null,
       status: toOutcomeStatus(json["status"]),
       cashoutStatus: toCashoutStatue(json["cashOutStatus"]),
       odds: Odds.fromJson(json),

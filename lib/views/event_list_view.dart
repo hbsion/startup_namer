@@ -213,7 +213,7 @@ class EventListView extends StatelessWidget {
       selected = new _EventSection()
         ..live = false
         ..date = timeOfDay
-        ..title = hourRange(timeOfDay.toLocal());
+        ..title = hourRange(timeOfDay);
       sections.add(selected);
     }
 

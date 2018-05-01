@@ -5,6 +5,7 @@ import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_state.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
+import 'package:startup_namer/widgets/count_down.dart';
 
 class EventTrackingWidget extends StatelessWidget {
   final int eventId;
@@ -26,8 +27,9 @@ class EventTrackingWidget extends StatelessWidget {
     Widget w;
     if (model.state == EventState.STARTED) {
       w = new _MatchClockWidget(eventId: eventId);
-    } else if (DateTime.now().subtract(new Duration(minutes: 15)).isAfter(model.start)) {
-      w = new _CountDownWidget();
+    } else if (model.start.isAfter(DateTime.now()) &&
+        model.start.subtract(new Duration(minutes: 15)).isBefore(DateTime.now())) {
+      w = new CountDownWidget(time: model.start);
     } else {
       w = new _DateTimeWidget(event: model);
     }
@@ -44,13 +46,6 @@ class _MatchClockWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Text("Score");
-  }
-}
-
-class _CountDownWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return new Text("CountDown");
   }
 }
 

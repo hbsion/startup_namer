@@ -54,7 +54,7 @@ class BetOffer {
   BetOffer.fromJson(Map<String, dynamic> json) : this (
     id: json["id"],
     suspended: json["suspended"] ?? false,
-    closed: json["closed"] != null ? DateTime.parse(json["closed"]) : null,
+    closed: json["closed"] != null ? DateTime.parse(json["closed"]).toLocal() : null,
     criterion: Criterion.fromJson(json["criterion"]),
     extra: json["extra"],
     betOfferType: BetOfferType.fromJson(json["betOfferType"]),
