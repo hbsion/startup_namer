@@ -8,6 +8,7 @@ import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
 import 'package:startup_namer/widgets/event_list_item_widget.dart';
+import 'package:startup_namer/widgets/platform_circular_progress_indicator.dart';
 import 'package:startup_namer/widgets/section_list_view.dart';
 
 class LiveRightNowPage extends StatelessWidget {
@@ -56,7 +57,7 @@ class LiveRightNowPage extends StatelessWidget {
       return new SliverFillRemaining(
         child: new Container(
           child: new Center(
-            child: new CircularProgressIndicator(),
+            child: new PlatformCircularProgressIndicator(),
           ),
         ),
       );
