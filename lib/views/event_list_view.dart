@@ -12,6 +12,7 @@ import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
 import 'package:startup_namer/util/flowable.dart';
 import 'package:startup_namer/widgets/event_list_item_widget.dart';
+import 'package:startup_namer/widgets/platform_circular_progress_indicator.dart';
 import 'package:startup_namer/widgets/section_list_view.dart';
 
 class EventListView extends StatelessWidget {
@@ -64,7 +65,7 @@ class EventListView extends StatelessWidget {
       return new SliverFillRemaining(
         child: new Container(
           child: new Center(
-            child: new CircularProgressIndicator(),
+            child: new PlatformCircularProgressIndicator(),
           ),
         ),
       );
