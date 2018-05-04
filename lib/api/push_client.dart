@@ -1,18 +1,24 @@
 import 'dart:async';
+import 'dart:collection';
 
+import 'package:startup_namer/util/callable.dart';
 import 'package:web_socket_channel/io.dart';
 
 class PushClient {
-  final String wsUrl;
+  final String url;
   IOWebSocketChannel _channel;
   Timer _heartbeat;
+  final Callable<PushClient> onConnected;
+  final Set<String> topics = new HashSet();
+  Timer _reconnectTimer;
+  bool _closingDown = false;
 
-  PushClient(this.wsUrl);
+  PushClient({this.url, this.onConnected});
 
   void connect() {
     _channel = new IOWebSocketChannel.connect(
-//        'ws://localhost:15017/socket.io/?EIO=3&transport=websocket');
-        'wss://e4-push.kambi.com/socket.io/?EIO=3&transport=websocket');
+        'ws://localhost:15017/socket.io/?EIO=3&transport=websocket');
+//        'wss://e4-push.kambi.com/socket.io/?EIO=3&transport=websocket');
     _channel.stream.listen(_onData, onDone: _onDone, onError: _onError);
     _heartbeat = new Timer.periodic(
         new Duration(seconds: 5), (_) => _channel.sink.add("2"));
@@ -27,7 +33,10 @@ class PushClient {
   }
 
   void _onDone() {
-    print("onDone");
+    print("onDone, closingDown: " + _closingDown.toString());
+    if (!_closingDown) {
+      _reconnect();
+    }
   }
 
   _onError(error) {
@@ -44,7 +53,9 @@ class PushClient {
         break;
       case 40:
         print("Message/Connect with payload: $payload");
-        subscribe("ub.ev");
+        if (onConnected != null) {
+          onConnected(this);
+        }
         break;
       case 42:
         print("Message/Event with payload: $payload");
@@ -63,7 +74,19 @@ class PushClient {
   }
 
   void close() {
+    _closingDown = true;
+    _reconnectTimer?.cancel();
     _channel.sink.close();
     _heartbeat.cancel();
+  }
+
+  void _reconnect() {
+    new Timer(new Duration(seconds: 5), () {
+      try {
+        connect();
+      } catch (e) {
+        print(e);
+      }
+    });
   }
 }
