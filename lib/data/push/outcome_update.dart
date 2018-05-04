@@ -10,7 +10,7 @@ class OutcomeUpdate {
   OutcomeUpdate.fromJson(Map<String, dynamic> json) : this(
     id: json["id"],
     betOfferId: json["betOfferId"],
-    odds: Odds.fromJson(json),
+    odds: new Odds.fromJson(json),
   );
 
   @override

@@ -8,6 +8,12 @@ class OddsUpdate {
 
   OddsUpdate.fromJson(Map<String, dynamic> json) : this(
     eventId: json["eventId"],
-    outcomes: ((json["outcomes"] ?? []) as List<dynamic>).map<OutcomeUpdate>((j) => OutcomeUpdate.fromJson(j)).toList());
+    outcomes: ((json["outcomes"] ?? []) as List<dynamic>).map<OutcomeUpdate>((j) => new OutcomeUpdate.fromJson(j)).toList());
+
+  @override
+  String toString() {
+    return 'OddsUpdate{eventId: $eventId, outcomes: $outcomes}';
+  }
+
 }
 

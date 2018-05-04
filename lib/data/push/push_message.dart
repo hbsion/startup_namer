@@ -11,10 +11,16 @@ class PushMessage {
     PushMessageType type = toPushMessageType(json["mt"]);
     switch (type) {
       case PushMessageType.oddsUpdate:
-        return new PushMessage(type, OddsUpdate.fromJson(json["boou"]));
+        return new PushMessage(type, new OddsUpdate.fromJson(json["boou"]));
       case PushMessageType.unknown:
       default:
         return null;
     }
   }
+
+  @override
+  String toString() {
+    return 'PushMessage{type: $type, oddsUpdate: $oddsUpdate}';
+  }
+
 }
