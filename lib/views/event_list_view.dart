@@ -124,7 +124,7 @@ class EventListView extends StatelessWidget {
     sections.sort(sortBy);
     sections.forEach((section) => section.events.sort(sortEventsBy));
 
-    // Initially exapnd at least 10 rows
+    // Initially expand at least 5 rows
     int visibleItems = 0;
     for (var section in sections) {
       visibleItems += section.count;
