@@ -5,7 +5,7 @@ import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_state.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
-import 'package:startup_namer/widgets/count_down.dart';
+import 'package:startup_namer/widgets/count_down_widget.dart';
 
 class EventTrackingWidget extends StatelessWidget {
   final int eventId;

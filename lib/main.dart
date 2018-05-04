@@ -1,18 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:logging/logging.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:startup_namer/models/main_model.dart';
-import 'package:startup_namer/pages/home_page.dart';
+import 'package:startup_namer/pages/mock_page.dart';
 import 'package:startup_namer/store/actions.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_dispatcher.dart';
 import 'package:startup_namer/store/store_provider.dart';
 
 void main() {
+//  PerformanceOverlayLayer;
+//  PerformanceOverlayLayer.checkerboardOffscreenLayers
   Logger.root.level = Level.ALL;
-
   Logger.root.onRecord.listen((LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
@@ -48,7 +50,7 @@ class MainApp extends StatelessWidget {
                   primaryColor: Colors.black,
                   accentColor: Color.fromARGB(0xff, 0x00, 0xad, 0xc9)
               ),
-              home: HomePage()
+              home: MockPage()
           );
         }
     );

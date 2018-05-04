@@ -39,7 +39,7 @@ class MainBetOfferWidget extends StatelessWidget {
 
 //    print("Rendering betoffer $betOfferId");
     if (model.item2.tags.contains(EventTags.competition) || model.item1.betOfferType.id == BetOfferTypes.position) {
-      return new WinnerBetOfferWidget(betOfferId: model.item1.id, eventId: model.item2.id, overrideShowLabel: true);
+      return new WinnerBetOfferWidget(key: new Key(model.item1.toString()), betOfferId: model.item1.id, eventId: model.item2.id, overrideShowLabel: true);
     }
 
     return new Row(children: _buildLayout(context, model.item1.outcomes));
@@ -60,7 +60,9 @@ class MainBetOfferWidget extends StatelessWidget {
   }
 
   Widget _buildOutcomeWidget(int outcomeId, bool isLast, Orientation orientation) {
-    OutcomeWidget widget = new OutcomeWidget(outcomeId: outcomeId,
+    OutcomeWidget widget = new OutcomeWidget(
+        key: new Key(outcomeId.toString()),
+        outcomeId: outcomeId,
         betOfferId: betOfferId,
         eventId: eventId,
         columnLayout: orientation == Orientation.landscape);

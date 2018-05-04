@@ -63,14 +63,14 @@ class EventListItemWidget extends StatelessWidget {
               onTap: navigate(context),
               child: new Row(children: <Widget>[
                 new Container(width: 70.0, child: new EventTrackingWidget(eventId: eventId)),
-                new Expanded(child: new EventInfoWidget(eventId: eventId,)),
+                new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
                 new FavoriteWidget(eventId: eventId,),
 
               ])
           )
       ),
       model.mainBetOfferId != null
-          ? new MainBetOfferWidget(betOfferId: model.mainBetOfferId, eventId: model.id)
+          ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model.mainBetOfferId, eventId: model.id)
           : new EmptyWidget(),
       new Padding(padding: EdgeInsets.all(4.0)),
       _buildDivider(context)
@@ -85,12 +85,12 @@ class EventListItemWidget extends StatelessWidget {
               onTap: navigate(context),
               child: new Row(children: <Widget>[
                 new Container(width: 70.0, child: new EventTrackingWidget(eventId: eventId)),
-                new Expanded(child: new EventInfoWidget(eventId: eventId,)),
+                new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
                 new FavoriteWidget(eventId: eventId,),
                 new Container(
                     width: 300.0,
                     child: model.mainBetOfferId != null
-                        ? new MainBetOfferWidget(betOfferId: model.mainBetOfferId, eventId: model.id,)
+                        ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model.mainBetOfferId, eventId: model.id,)
                         : new EmptyWidget()),
               ])
           )),

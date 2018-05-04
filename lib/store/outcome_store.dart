@@ -88,11 +88,20 @@ class OutcomeStore implements Store {
           }
         }
 
-
+        logOutcomes();
         break;
       default:
         break;
     }
+  }
+
+  void logOutcomes() {
+    int count = 0;
+    for (var subject in _outcomes.values.where((s) => s.hasListener)) {
+      print("Outcome id ${subject.value.id} has listeners ${subject.hasListener}");
+      count++;
+    }
+    print("total $count");
   }
 
 }

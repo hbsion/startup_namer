@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/data/event_group.dart';
-import 'package:startup_namer/pages/home_page.dart';
 import 'package:startup_namer/pages/live_right_now_page.dart';
+import 'package:startup_namer/pages/mock_page.dart';
 import 'package:startup_namer/pages/settings_page.dart';
 import 'package:startup_namer/pages/sport_page.dart';
 import 'package:startup_namer/pages/starting_soon_page.dart';
@@ -225,7 +225,7 @@ class _MenuEntry {
 }
 
 final List<_MenuEntry> home = [
-  new _MenuEntry(title: "Start", builder: (context) => new HomePage()),
+  new _MenuEntry(title: "Start", builder: (context) => new MockPage()),
   new _MenuEntry(title: "Live Right Now", builder: (context) => new LiveRightNowPage()),
   new _MenuEntry(title: "Starting Soon", builder: (context) => new StartingSoonPage()),
 ];

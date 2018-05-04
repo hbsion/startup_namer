@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/src/observable.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/data/outcome.dart';
 import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/store_connector.dart';
