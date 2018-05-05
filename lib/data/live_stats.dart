@@ -10,12 +10,18 @@ class LiveStats {
 
   LiveStats({this.eventId, this.matchClock, this.score, this.statistics});
 
-  LiveStats.fromJson(Map<String, dynamic> json) : this (
-    eventId: json["eventId"],
-    matchClock: new MatchClock.fromJson(json["matchClock"]),
-    score: new Score.fromJson(json["score"]),
-    statistics: new EventStats.fromJson(json["statistics"])
-  );
+  factory LiveStats.fromJson(Map<String, dynamic> json) {
+    if (json != null) {
+      return new LiveStats(
+          eventId: json["eventId"],
+          matchClock: new MatchClock.fromJson(json["matchClock"]),
+          score: new Score.fromJson(json["score"]),
+          statistics: new EventStats.fromJson(json["statistics"])
+      );
+    }
+    return null;
+  }
+
 
   @override
   bool operator ==(Object other) =>

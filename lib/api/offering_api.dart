@@ -9,11 +9,12 @@ import 'package:startup_namer/data/betoffer_tags.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_collection_key.dart';
 import 'package:startup_namer/data/event_group.dart';
+import 'package:startup_namer/data/event_response.dart';
+import 'package:startup_namer/data/live_stats.dart';
 import 'package:startup_namer/data/outcome.dart';
 import 'package:tuple/tuple.dart';
 
 import 'api_constants.dart';
-import 'package:startup_namer/data/event_response.dart';
 
 final HttpClient _client = new HttpClient();
 final Logger _log = new Logger("OfferingAPI");
@@ -68,12 +69,17 @@ EventResponse _parseLiveOpenResponse(Tuple2<String, EventCollectionKey> tuple) {
   List<Event> events = [];
   List<BetOffer> betOffers = [];
   List<Outcome> outcomes = [];
+  List<LiveStats> liveStats = [];
 
   try {
     var eventWithBettoffers = responseJson["liveEvents"];
     for (var eventJson in eventWithBettoffers) {
       var event = Event.fromJson(eventJson["event"]);
       events.add(event);
+      var liveData = LiveStats.fromJson(eventJson["liveData"]);
+      if (liveData != null) {
+        liveStats.add(liveData);
+      }
 
       if (eventJson["mainBetOffer"] != null) {
         var bo = BetOffer.fromJson(eventJson["mainBetOffer"]);
@@ -92,7 +98,8 @@ EventResponse _parseLiveOpenResponse(Tuple2<String, EventCollectionKey> tuple) {
       key: tuple.item2,
       events: events,
       betoffers: betOffers,
-      outcomes: outcomes
+      outcomes: outcomes,
+      liveStats: liveStats
   );
 }
 
@@ -101,12 +108,17 @@ EventResponse _parseListViewResponse(Tuple2<String, EventCollectionKey> tuple) {
   List<Event> events = [];
   List<BetOffer> betOffers = [];
   List<Outcome> outcomes = [];
+  List<LiveStats> liveStats = [];
 
   try {
     var eventWithBettoffers = responseJson["events"];
     for (var eventJson in eventWithBettoffers) {
       var event = Event.fromJson(eventJson["event"]);
       events.add(event);
+      var liveData = LiveStats.fromJson(eventJson["liveData"]);
+      if (liveData != null) {
+        liveStats.add(liveData);
+      }
 
       var eventBo = <BetOffer>[];
       for (var boJson in eventJson["betOffers"]) {
@@ -134,7 +146,8 @@ EventResponse _parseListViewResponse(Tuple2<String, EventCollectionKey> tuple) {
       key: tuple.item2,
       events: events,
       betoffers: betOffers,
-      outcomes: outcomes
+      outcomes: outcomes,
+      liveStats: liveStats
   );
 }
 
