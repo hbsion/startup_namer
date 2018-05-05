@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/api/event_response.dart';
+import 'package:startup_namer/data/event_response.dart';
 import 'package:startup_namer/data/betoffer.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/store.dart';

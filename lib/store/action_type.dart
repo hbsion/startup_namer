@@ -2,5 +2,6 @@ enum ActionType {
   eventResponse,
   toggleFavorite,
   eventGroups,
-  highlightGroups
+  highlightGroups,
+  oddsUpdate
 }

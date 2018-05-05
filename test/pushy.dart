@@ -1,4 +1,4 @@
-import 'package:startup_namer/api/push_client.dart';
+import 'package:startup_namer/push/push_client.dart';
 
 
 void main() {

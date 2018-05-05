@@ -8,20 +8,31 @@ import 'package:web_socket_channel/io.dart';
 class PushClient {
   final RegExp _packetExp = new RegExp("^(\\d+)(.*)\$");
   final String url;
-  final PublishSubject<PushMessage> _subject = new PublishSubject<PushMessage>();
+  final PublishSubject<PushMessage> _messagePublisher = new PublishSubject<PushMessage>();
+  final PublishSubject<void> _connectPublisher = new PublishSubject<void>();
 
   IOWebSocketChannel _channel;
   Timer _heartbeat;
 
   PushClient(this.url);
 
-  Observable<PushMessage> get observable => _subject.observable;
+  Observable<PushMessage> get messageStream => _messagePublisher.observable;
+
+  Observable<void> get connectStream => _connectPublisher.observable;
 
   void connect() {
     _channel = new IOWebSocketChannel.connect(url);
     _channel.stream.listen(_onData, onDone: _onDone, onError: _onError);
     _heartbeat = new Timer.periodic(
         new Duration(seconds: 5), (_) => _channel.sink.add("2"));
+  }
+
+  void pause() {
+    _disconnect();
+  }
+
+  void resume() {
+    connect();
   }
 
   void subscribe(String topic) {
@@ -33,9 +44,13 @@ class PushClient {
   }
 
   void close() {
+    _disconnect();
+    _messagePublisher.close();
+  }
+
+  void _disconnect() {
     _channel.sink.close();
     _heartbeat.cancel();
-    _subject.close();
   }
 
   void _onData(event) {
@@ -63,10 +78,9 @@ class PushClient {
         break;
       case 40:
         print("Message/Connect with payload: $payload");
-        subscribe("ub.ev");
+        _connectPublisher.add(null);
         break;
       case 42:
-        //print("Message/Event with payload: $payload");
         _handleMessage(payload);
         break;
       default:
@@ -75,11 +89,13 @@ class PushClient {
   }
 
   void _handleMessage(String payload) {
-    List<String> data = json.decode(payload);
+    List<dynamic> data = json.decode(payload);
 
     if (data[0] == "message") {
-      List<Map<String, dynamic>> batch = json.decode(data[1]);
-      batch.map((x) => new PushMessage.fromJson(x)).forEach((pm) => _subject.add(pm));
+      List<dynamic> batch = json.decode(data[1]);
+      batch.map((x) => new PushMessage.fromJson(x))
+          .where((x) => x != null)
+          .forEach((pm) => _messagePublisher.add(pm));
     }
   }
 }

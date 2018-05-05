@@ -13,7 +13,7 @@ import 'package:startup_namer/data/outcome.dart';
 import 'package:tuple/tuple.dart';
 
 import 'api_constants.dart';
-import 'event_response.dart';
+import 'package:startup_namer/data/event_response.dart';
 
 final HttpClient _client = new HttpClient();
 final Logger _log = new Logger("OfferingAPI");

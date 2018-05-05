@@ -1,4 +1,4 @@
-import 'package:startup_namer/api/event_response.dart';
+import 'package:startup_namer/data/event_response.dart';
 import 'package:startup_namer/api/offering_api.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/app_store.dart';
