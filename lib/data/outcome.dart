@@ -72,7 +72,7 @@ class Outcome {
               json["prevOdds"] ?? []) as List<dynamic>).map<int>((i) => i).toList()
   );
 
-  Outcome withNewOdds(Odds odds) {
+  Outcome withNewOdds(Odds newOdds) {
     Outcome outcome = new Outcome(
         id: id,
         betOfferId: betOfferId,
@@ -81,7 +81,7 @@ class Outcome {
         changedDate: changedDate,
         status: status,
         cashoutStatus: cashoutStatus,
-        odds: odds,
+        odds: newOdds,
         participant: participant,
         participantId: participantId,
         line: line,
