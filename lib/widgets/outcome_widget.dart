@@ -38,6 +38,7 @@ class OutcomeWidget extends StatefulWidget {
 }
 
 class _State extends State<OutcomeWidget> {
+  static final Color background = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
   Timer _timer;
 
   @override
@@ -89,7 +90,7 @@ class _State extends State<OutcomeWidget> {
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
               decoration: new BoxDecoration(
                 borderRadius: BorderRadius.circular(3.0),
-                color: _isSuspended(viewModel) ? Colors.grey : Color.fromRGBO(0x00, 0xad, 0xc9, 1.0),
+                color: _isSuspended(viewModel) ? Colors.grey : background,
               ),
               child: _buildContentWrapper(viewModel, model));
         });
@@ -206,7 +207,8 @@ class _State extends State<OutcomeWidget> {
   }
 
   Text _buildLabel(String label) {
-    return new Text(label ?? "?", overflow: TextOverflow.fade,
+    return new Text(label ?? "?",
+        overflow: TextOverflow.ellipsis,
         softWrap: false,
         style: new TextStyle(color: Colors.white, fontSize: 12.0));
   }

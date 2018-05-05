@@ -10,18 +10,20 @@ class CountDownWidget extends StatefulWidget {
   final int minutes;
 
   const CountDownWidget({Key key, @required this.time, this.minutes = 15})
-       : assert(time != null),
-         super(key: key);
+      : assert(time != null),
+        super(key: key);
 
   _CountDownState createState() => new _CountDownState();
 }
 
 class _CountDownState extends State<CountDownWidget> {
+  static final Color _color1 = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
+  static final Color _color2 = Colors.grey[200];
   Timer _timer;
 
   @override
   void initState() {
-    _timer = new Timer.periodic(new Duration(seconds: 1),  _tick);
+    _timer = new Timer.periodic(new Duration(seconds: 1), _tick);
     super.initState();
   }
 
@@ -33,7 +35,7 @@ class _CountDownState extends State<CountDownWidget> {
 
   void _tick(Timer _) {
     if (widget.time.isAfter(DateTime.now())) {
-      setState((){});
+      setState(() {});
     } else {
       _timer.cancel();
     }
@@ -42,7 +44,7 @@ class _CountDownState extends State<CountDownWidget> {
   @override
   Widget build(BuildContext context) {
     var timeToStart = widget.time.difference(DateTime.now());
-    double pc = (timeToStart.inMinutes / widget.minutes) * 100;
+    double pc = (timeToStart.inSeconds / (widget.minutes*60)) * 100;
 
     return new Column(
         children: <Widget>[
@@ -51,8 +53,8 @@ class _CountDownState extends State<CountDownWidget> {
             initialChartData: <CircularStackEntry>[
               new CircularStackEntry(
                   <CircularSegmentEntry>[
-                    new CircularSegmentEntry(100 - pc, Color.fromRGBO(0x00, 0xad, 0xc9, 1.0)),
-                    new CircularSegmentEntry(pc, Colors.grey[200]),
+                    new CircularSegmentEntry(100 - pc, _color1),
+                    new CircularSegmentEntry(pc, _color2),
                   ]
               )
             ],

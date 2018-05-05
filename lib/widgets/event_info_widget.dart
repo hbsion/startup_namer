@@ -25,8 +25,8 @@ class EventInfoWidget extends StatelessWidget {
     return new Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          new Text(event.homeName, overflow: TextOverflow.ellipsis, style: textTheme.subhead),
-          new Text(event.awayName ?? "", style: textTheme.subhead),
+          new Text(event.homeName, softWrap: false, overflow: TextOverflow.ellipsis, style: textTheme.subhead),
+          new Text(event.awayName ?? "", softWrap: false, overflow: TextOverflow.ellipsis, style: textTheme.subhead),
           new Padding(padding: EdgeInsets.all(2.0)),
           _buildGroupPath(textTheme, event),
         ]
@@ -58,7 +58,7 @@ class EventInfoWidget extends StatelessWidget {
             padding: EdgeInsets.only(left: 2.0, right: 2.0), child: new Text("/", style: textTheme.caption));
       }
       yield new Flexible(child: new Container(
-          child: new Text(group.name, softWrap: false, style: textTheme.caption, overflow: TextOverflow.fade)));
+          child: new Text(group.name, softWrap: false, style: textTheme.caption, overflow: TextOverflow.ellipsis)));
     }
   }
 }

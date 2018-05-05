@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:logging/logging.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:startup_namer/models/main_model.dart';
-import 'package:startup_namer/pages/mock_page.dart';
+import 'package:startup_namer/pages/home_page.dart';
 import 'package:startup_namer/push/push_client.dart';
 import 'package:startup_namer/push/push_hub.dart';
 import 'package:startup_namer/store/actions.dart';
@@ -51,14 +51,16 @@ class MainApp extends StatelessWidget {
     return new ScopedModelDescendant<MainModel>(
         builder: (context, child, model) {
           return MaterialApp(
-            showPerformanceOverlay: false,
+//              showPerformanceOverlay: true,
+//              checkerboardOffscreenLayers: true,
+//              checkerboardRasterCacheImages: true,
               title: appTitle,
               theme: new ThemeData(
                   brightness: model.brightness,
                   primaryColor: Colors.black,
                   accentColor: Color.fromARGB(0xff, 0x00, 0xad, 0xc9)
               ),
-              home: MockPage()
+              home: new HomePage()
           );
         }
     );
