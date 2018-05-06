@@ -10,6 +10,7 @@ import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/empty_widget.dart';
 
 class ScoreWidget extends StatelessWidget {
+  static final Color scoreColor = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
   final int eventId;
   final String sport;
 
@@ -67,28 +68,35 @@ class ScoreWidget extends StatelessWidget {
         .of(context)
         .textTheme;
     var status = calculateGameSummary(model.stats, sport == "TENNIS");
-
+    var scoreTextStyle = textTheme.subhead.merge(new TextStyle(color: scoreColor));
     return new Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        new Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            new Text(status.homeSets.toString(), style: textTheme.subhead),
-            new Text(status.awaySets.toString(), style: textTheme.subhead),
-          ],
+        new Container(
+            margin: EdgeInsets.only(right: 4.0),
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                new Text(status.homeSets.toString(), style: textTheme.subhead),
+                new Text(status.awaySets.toString(), style: textTheme.subhead),
+              ],
+            )
+        ),
+        new Container(
+            margin: EdgeInsets.only(right: 4.0),
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                new Text(status.homeGames.toString(), style: textTheme.subhead),
+                new Text(status.awayGames.toString(), style: textTheme.subhead),
+              ],
+            )
         ),
         new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            new Text(status.homeGames.toString(), style: textTheme.subhead),
-            new Text(status.awayGames.toString(), style: textTheme.subhead),
-          ],
-        ),
-        new Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            new Text(model.score.home, style: textTheme.subhead),
-            new Text(model.score.away, style: textTheme.subhead),
+            new Text(model.score.home, style: scoreTextStyle),
+            new Text(model.score.away, style: scoreTextStyle),
           ],
         )
       ],
