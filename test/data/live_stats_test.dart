@@ -1,10 +1,7 @@
-import 'package:startup_namer/data/each_way.dart';
-import 'package:startup_namer/data/event_stats.dart';
-import 'package:startup_namer/data/football_stats.dart';
-import 'package:startup_namer/data/live_stats.dart';
-import 'package:startup_namer/data/score.dart';
-import 'package:test/test.dart';
 import 'dart:convert';
+
+import 'package:startup_namer/data/live_stats.dart';
+import 'package:test/test.dart';
 
 
 main() {
@@ -41,7 +38,7 @@ main() {
 
     expect(c.eventId, 1004058691);
     expect(c.score.away, "1");
-    expect(c.statistics.football.home.corners, 3);
+    expect(c.eventStats.football.home.corners, 3);
   });
 
 }

@@ -5,8 +5,6 @@ import 'package:startup_namer/data/odds.dart';
 import 'package:startup_namer/models/main_model.dart';
 import 'package:startup_namer/models/odds_format.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
-import 'package:startup_namer/widgets/count_down_widget.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/section_list_view.dart';
 
 class MockPage extends StatelessWidget {
@@ -217,16 +215,16 @@ class _OutcomeWidget extends StatelessWidget {
         });
   }
 
-  Container _buildPlaceholder() {
-    return new Container(
-        height: 38.0,
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-        decoration: new BoxDecoration(
-            borderRadius: BorderRadius.circular(3.0),
-            color: Colors.grey
-        ),
-        child: new EmptyWidget());
-  }
+//  Container _buildPlaceholder() {
+//    return new Container(
+//        height: 38.0,
+//        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+//        decoration: new BoxDecoration(
+//            borderRadius: BorderRadius.circular(3.0),
+//            color: Colors.grey
+//        ),
+//        child: new EmptyWidget());
+//  }
 
 //  void _handleOddsChange(_ViewModel viewModel) {
 //    if (_oddsDiff(viewModel.outcome) != 0) {

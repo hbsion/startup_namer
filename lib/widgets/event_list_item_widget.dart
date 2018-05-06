@@ -10,6 +10,7 @@ import 'package:startup_namer/widgets/event_info_widget.dart';
 import 'package:startup_namer/widgets/event_tracker_widget.dart';
 import 'package:startup_namer/widgets/favorite_widget.dart';
 import 'package:startup_namer/widgets/main_betoffer_widget.dart';
+import 'package:startup_namer/widgets/match_clock_widget.dart';
 
 class EventListItemWidget extends StatelessWidget {
   final int eventId;
@@ -61,16 +62,19 @@ class EventListItemWidget extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 8.0),
           child: new InkWell(
               onTap: navigate(context),
-              child: new Row(children: <Widget>[
-                new Container(width: 70.0, child: new EventTrackingWidget(eventId: eventId)),
-                new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
-                new FavoriteWidget(eventId: eventId,),
+              child: new Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildScoreAndMatchClock(context),
+                    new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
+                    new FavoriteWidget(eventId: eventId,),
 
-              ])
+                  ])
           )
       ),
       model.mainBetOfferId != null
-          ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model.mainBetOfferId, eventId: model.id)
+          ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model
+          .mainBetOfferId, eventId: model.id)
           : new EmptyWidget(),
       new Padding(padding: EdgeInsets.all(4.0)),
       _buildDivider(context)
@@ -84,13 +88,14 @@ class EventListItemWidget extends StatelessWidget {
           child: new InkWell(
               onTap: navigate(context),
               child: new Row(children: <Widget>[
-                new Container(width: 70.0, child: new EventTrackingWidget(eventId: eventId)),
+                _buildScoreAndMatchClock(context),
                 new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
                 new FavoriteWidget(eventId: eventId,),
                 new Container(
                     width: 300.0,
                     child: model.mainBetOfferId != null
-                        ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model.mainBetOfferId, eventId: model.id,)
+                        ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model
+                        .mainBetOfferId, eventId: model.id,)
                         : new EmptyWidget()),
               ])
           )),
@@ -100,6 +105,20 @@ class EventListItemWidget extends StatelessWidget {
           .list
           .itemDivider, height: 1.0),
     ]);
+  }
+
+  Widget _buildScoreAndMatchClock(BuildContext context) {
+    return new Container
+      (
+        width: 70.0,
+        child: new Column(
+            children: <Widget>[
+              new EventTrackingWidget(eventId: eventId),
+              new Padding(padding: EdgeInsets.all(2.0)),
+              new MatchClockWidget(eventId: eventId)
+            ]
+        )
+    );
   }
 
   Widget _buildDivider(BuildContext context) {

@@ -129,10 +129,11 @@ class LiveRightNowPage extends StatelessWidget {
           .subhead
           .merge(new TextStyle(color: Colors.red, fontStyle: FontStyle.italic))))
       ..sport = event.sport
-      ..title = eventGroup.name ?? event.sport
-      ..sortOrder = eventGroup.sortOrder
+      ..title = eventGroup?.name ?? "Unknown group ${event.groupId}"
+      ..sortOrder = eventGroup?.sortOrder ?? 1000
     ;
     sections.add(section);
+
     return section;
   }
 }

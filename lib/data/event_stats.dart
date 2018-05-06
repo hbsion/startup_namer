@@ -1,6 +1,5 @@
 import 'package:startup_namer/data/football_stats.dart';
 import 'package:startup_namer/data/set_stats.dart';
-import 'package:startup_namer/data/team_stats.dart';
 
 class EventStats {
   final SetStats sets;

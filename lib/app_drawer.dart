@@ -3,7 +3,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/data/event_group.dart';
 import 'package:startup_namer/pages/home_page.dart';
 import 'package:startup_namer/pages/live_right_now_page.dart';
-import 'package:startup_namer/pages/mock_page.dart';
 import 'package:startup_namer/pages/settings_page.dart';
 import 'package:startup_namer/pages/sport_page.dart';
 import 'package:startup_namer/pages/starting_soon_page.dart';

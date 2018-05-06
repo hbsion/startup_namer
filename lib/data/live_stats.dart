@@ -6,9 +6,9 @@ class LiveStats {
   final int eventId;
   final MatchClock matchClock;
   final Score score;
-  final EventStats statistics;
+  final EventStats eventStats;
 
-  LiveStats({this.eventId, this.matchClock, this.score, this.statistics});
+  LiveStats({this.eventId, this.matchClock, this.score, this.eventStats});
 
   factory LiveStats.fromJson(Map<String, dynamic> json) {
     if (json != null) {
@@ -16,7 +16,7 @@ class LiveStats {
           eventId: json["eventId"],
           matchClock: new MatchClock.fromJson(json["matchClock"]),
           score: new Score.fromJson(json["score"]),
-          statistics: new EventStats.fromJson(json["statistics"])
+          eventStats: new EventStats.fromJson(json["statistics"])
       );
     }
     return null;
@@ -31,18 +31,18 @@ class LiveStats {
               eventId == other.eventId &&
               matchClock == other.matchClock &&
               score == other.score &&
-              statistics == other.statistics;
+              eventStats == other.eventStats;
 
   @override
   int get hashCode =>
       eventId.hashCode ^
       matchClock.hashCode ^
       score.hashCode ^
-      statistics.hashCode;
+      eventStats.hashCode;
 
   @override
   String toString() {
-    return 'LiveStats{eventId: $eventId, matchClock: $matchClock, score: $score, statistics: $statistics}';
+    return 'LiveStats{eventId: $eventId, matchClock: $matchClock, score: $score, statistics: $eventStats}';
   }
 
 }

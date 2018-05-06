@@ -1,8 +1,7 @@
-import 'package:startup_namer/data/each_way.dart';
-import 'package:startup_namer/data/score.dart';
+import 'dart:convert';
+
 import 'package:startup_namer/data/team_stats.dart';
 import 'package:test/test.dart';
-import 'dart:convert';
 
 
 main() {

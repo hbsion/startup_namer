@@ -74,10 +74,10 @@ class PushClient {
         print("Open with payload: $payload");
         break;
       case 3:
-        print("pong");
+//        print("pong");
         break;
       case 40:
-        print("Message/Connect with payload: $payload");
+//        print("Message/Connect with payload: $payload");
         _connectPublisher.add(null);
         break;
       case 42:

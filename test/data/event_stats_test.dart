@@ -1,9 +1,7 @@
-import 'package:startup_namer/data/each_way.dart';
-import 'package:startup_namer/data/event_stats.dart';
-import 'package:startup_namer/data/football_stats.dart';
-import 'package:startup_namer/data/score.dart';
-import 'package:test/test.dart';
 import 'dart:convert';
+
+import 'package:startup_namer/data/event_stats.dart';
+import 'package:test/test.dart';
 
 
 main() {

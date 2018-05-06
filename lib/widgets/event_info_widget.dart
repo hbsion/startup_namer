@@ -18,7 +18,6 @@ class EventInfoWidget extends StatelessWidget {
   }
 
   Widget _buildWidget(BuildContext context, Event event) {
-//    print("Render list view item: $eventId");
     var textTheme = Theme
         .of(context)
         .textTheme;
@@ -51,14 +50,21 @@ class EventInfoWidget extends StatelessWidget {
           )
       );
     }
-    for (var i = 0; i < event.path.length; ++i) {
-      var group = event.path[i];
-      if (i > 0) {
-        yield new Padding(
-            padding: EdgeInsets.only(left: 2.0, right: 2.0), child: new Text("/", style: textTheme.caption));
-      }
-      yield new Flexible(child: new Container(
-          child: new Text(group.name, softWrap: false, style: textTheme.caption, overflow: TextOverflow.ellipsis)));
-    }
+//    for (var i = 0; i < event.path.length; ++i) {
+//      var group = event.path[i];
+//      if (i > 0) {
+//        yield new Padding(
+//            padding: EdgeInsets.only(left: 2.0, right: 2.0), child: new Text("/", style: textTheme.caption));
+//      }
+//      yield new Flexible(child: new Container(
+//          child: new Text(group.name, softWrap: false, style: textTheme.caption, overflow: TextOverflow.ellipsis)));
+//    }
+
+    yield new Flexible(
+        flex: 1,
+        child: new Text("askjaskajskksjaksajs / asjaskasjk / kwqwkqjwqkwjqkwjq",
+            style: textTheme.caption,
+            overflow: TextOverflow.ellipsis)
+    );
   }
 }
