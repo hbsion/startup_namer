@@ -6,5 +6,6 @@ enum ActionType {
   oddsUpdate,
   matchClockUpdate,
   scoreUpdate,
-  eventStatsUpdate
+  eventStatsUpdate,
+  betOfferStatusUpdate
 }

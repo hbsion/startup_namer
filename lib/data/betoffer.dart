@@ -29,7 +29,6 @@ class BetOffer {
   //     oddsStats: OddsStats;
   // combinableOutcomes
 
-
   BetOffer({
     this.id,
     this.eventId,
@@ -75,26 +74,26 @@ class BetOffer {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-          other is BetOffer &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              suspended == other.suspended &&
-              closed == other.closed &&
-              criterion == other.criterion &&
-              extra == other.extra &&
-              betOfferType == other.betOfferType &&
-              placeLimit == other.placeLimit &&
-              eventId == other.eventId &&
-              const ListEquality().equals(outcomes, other.outcomes)  &&
-              place == other.place &&
-              eachWay == other.eachWay &&
-              scorerType == other.scorerType &&
-              const ListEquality().equals(tags, other.tags)  &&
-              cashOutStatus == other.cashOutStatus &&
-              sortOrder == other.sortOrder &&
-              from == other.from &&
-              to == other.to &&
-              description == other.description;
+        other is BetOffer &&
+            runtimeType == other.runtimeType &&
+            id == other.id &&
+            suspended == other.suspended &&
+            closed == other.closed &&
+            criterion == other.criterion &&
+            extra == other.extra &&
+            betOfferType == other.betOfferType &&
+            placeLimit == other.placeLimit &&
+            eventId == other.eventId &&
+            const ListEquality().equals(outcomes, other.outcomes) &&
+            place == other.place &&
+            eachWay == other.eachWay &&
+            scorerType == other.scorerType &&
+            const ListEquality().equals(tags, other.tags) &&
+            cashOutStatus == other.cashOutStatus &&
+            sortOrder == other.sortOrder &&
+            from == other.from &&
+            to == other.to &&
+            description == other.description;
   }
 
   @override
@@ -123,5 +122,26 @@ class BetOffer {
     return 'BetOffer{id: $id, suspended: $suspended, closed: $closed, criterion: $criterion, extra: $extra, betOfferType: $betOfferType, placeLimit: $placeLimit, eventId: $eventId, outcomes: $outcomes, place: $place, eachWay: $eachWay, scorerType: $scorerType, tags: $tags, cashOutStatus: $cashOutStatus, sortOrder: $sortOrder, from: $from, to: $to, description: $description}';
   }
 
-
+  BetOffer withSuspended(bool newSuspended) {
+    return new BetOffer(
+      id: id,
+      suspended: newSuspended,
+      closed: closed,
+      criterion: criterion,
+      extra: extra,
+      betOfferType: betOfferType,
+      placeLimit: placeLimit,
+      eventId: eventId,
+      outcomes: outcomes,
+      tags: tags,
+      place: place,
+      eachWay: eachWay,
+      scorerType: scorerType,
+      cashOutStatus: cashOutStatus,
+      sortOrder: sortOrder,
+      from: from,
+      to: to,
+      description: description,
+    );
+  }
 }

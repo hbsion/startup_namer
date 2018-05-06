@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:startup_namer/data/push/betOffer_status_update.dart';
 import 'package:startup_namer/data/push/event_stats_update.dart';
 import 'package:startup_namer/data/push/match_clock_update.dart';
 import 'package:startup_namer/data/push/odds_update.dart';
@@ -11,18 +12,22 @@ class PushMessage {
   final MatchClockUpdate matchClockUpdate;
   final ScoreUpdate scoreUpdate;
   final EventStatsUpdate eventStatsUpdate;
+  final BetOfferStatusUpdate betOfferStatusUpdate;
 
   PushMessage({
     @required this.type,
     this.oddsUpdate,
     this.matchClockUpdate,
     this.scoreUpdate,
-    this.eventStatsUpdate
+    this.eventStatsUpdate,
+    this.betOfferStatusUpdate
   });
 
   factory PushMessage.fromJson(Map<String, dynamic> json) {
     PushMessageType type = toPushMessageType(json["mt"]);
     switch (type) {
+      case PushMessageType.betOfferStatusUpdate:
+        return new PushMessage(type: type, betOfferStatusUpdate: new BetOfferStatusUpdate.fromJson(json["bosu"]));
       case PushMessageType.oddsUpdate:
         return new PushMessage(type: type, oddsUpdate: new OddsUpdate.fromJson(json["boou"]));
       case PushMessageType.matchClockUpdate:

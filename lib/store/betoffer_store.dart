@@ -1,8 +1,9 @@
 import 'dart:collection';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/event_response.dart';
 import 'package:startup_namer/data/betoffer.dart';
+import 'package:startup_namer/data/event_response.dart';
+import 'package:startup_namer/data/push/betOffer_status_update.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/store.dart';
 import 'package:startup_namer/util/flowable.dart';
@@ -12,11 +13,11 @@ class BetOfferStore implements Store {
 
   SnapshotObservable<BetOffer> operator [](id) {
     var subject = _betOffers[id];
-       if (subject == null) {
-         subject = new BehaviorSubject<BetOffer>();
-         _betOffers[id] = subject;
-       }
-       return new SnapshotObservable(subject.value, subject.observable);
+    if (subject == null) {
+      subject = new BehaviorSubject<BetOffer>();
+      _betOffers[id] = subject;
+    }
+    return new SnapshotObservable(subject.value, subject.observable);
   }
 
   List<BetOffer> snapshot(List<int> ids) {
@@ -42,7 +43,13 @@ class BetOfferStore implements Store {
           }
         }
         break;
-
+      case ActionType.betOfferStatusUpdate:
+        BetOfferStatusUpdate update = action;
+        var subject = _betOffers[update.betOfferId];
+        if (subject != null && subject.value != null) {
+          subject.add(subject.value.withSuspended(update.suspended));
+        }
+        break;
       default:
         break;
     }

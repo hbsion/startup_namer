@@ -70,6 +70,7 @@ class ScoreWidget extends StatelessWidget {
         .textTheme;
     var status = calculateGameSummary(model.stats, sport == "TENNIS");
     var scoreTextStyle = textTheme.subhead.merge(new TextStyle(color: scoreColor));
+
     return new Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[

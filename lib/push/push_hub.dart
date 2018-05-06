@@ -44,6 +44,9 @@ class PushHub extends WidgetsBindingObserver {
   void _handlePushMessage(PushMessage msg) {
     //print(msg.toString());
     switch (msg.type) {
+      case PushMessageType.betOfferStatusUpdate:
+        dispatcher(ActionType.betOfferStatusUpdate, msg.betOfferStatusUpdate);
+        break;
       case PushMessageType.oddsUpdate:
         dispatcher(ActionType.oddsUpdate, msg.oddsUpdate);
         break;
