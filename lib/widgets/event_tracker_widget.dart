@@ -32,7 +32,7 @@ class EventTrackingWidget extends StatelessWidget {
         model.start.subtract(new Duration(minutes: 15)).isBefore(DateTime.now())) {
       w = new CountDownWidget(time: model.start);
     } else {
-      w = new _DateTimeWidget(event: model);
+      w =  new _DateTimeWidget(event: model);
     }
 
     return Center(child: w);

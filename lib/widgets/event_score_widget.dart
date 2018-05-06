@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -61,7 +63,36 @@ class ScoreWidget extends StatelessWidget {
   }
 
   Widget _buildSetBased(BuildContext context, _ViewModel model) {
-    return new EmptyWidget();
+    var textTheme = Theme
+        .of(context)
+        .textTheme;
+    var status = calculateGameSummary(model.stats, sport == "TENNIS");
+
+    return new Row(
+      children: <Widget>[
+        new Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            new Text(status.homeSets.toString(), style: textTheme.subhead),
+            new Text(status.awaySets.toString(), style: textTheme.subhead),
+          ],
+        ),
+        new Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            new Text(status.homeGames.toString(), style: textTheme.subhead),
+            new Text(status.awayGames.toString(), style: textTheme.subhead),
+          ],
+        ),
+        new Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            new Text(model.score.home, style: textTheme.subhead),
+            new Text(model.score.away, style: textTheme.subhead),
+          ],
+        )
+      ],
+    );
   }
 }
 
@@ -88,5 +119,54 @@ class _ViewModel {
   String toString() {
     return '_ViewModel{score: $score, stats: $stats}';
   }
+}
 
+class _GameStatus {
+  int homeSets = 0;
+  int homeGames = 0;
+  int awaySets = 0;
+  int awayGames = 0;
+}
+
+_GameStatus calculateGameSummary(EventStats stats, bool hasGames) {
+  var status = new _GameStatus();
+
+  if (stats != null && stats.sets != null) {
+    var sets = stats.sets;
+    var numberOfSets = sets.home.length;
+    var firstUnplayedSetIndex = sets.home.indexOf(-1);
+    var currentSet = (firstUnplayedSetIndex == -1) ? numberOfSets - 1 : firstUnplayedSetIndex;
+
+    // in tennis, the current set is the last one with a score, not the first one without
+    if (hasGames && sets.home[currentSet] == -1 && sets.away[currentSet] == -1) {
+      currentSet -= 1;
+    }
+
+    // if the score in the previous set is level, that set has not yet ended. it is likely a tie-break
+    if (currentSet > 0 && sets.home[currentSet - 1] == sets.away[currentSet - 1]) {
+      currentSet -= 1;
+    } else if (hasGames &&
+        currentSet > 0 &&
+        (sets.home[currentSet] + sets.away[currentSet] == 0) &&
+        (sets.home[currentSet - 1] - sets.away[currentSet - 1]).abs() == 1 &&
+        max(sets.home[currentSet - 1], sets.away[currentSet - 1]) == 6) {
+      // DUE to NLS BUG
+      currentSet -= 1;
+    }
+
+    for (var i = currentSet; i >= 0; i--) {
+      var home = sets.home[i];
+      var away = sets.away[i];
+
+      if (hasGames && i == currentSet) {
+        status.homeGames = home;
+        status.awayGames = away;
+      } else {
+        if (home > away) status.homeSets++;
+        if (home < away) status.awaySets++;
+      }
+    }
+  }
+
+  return status;
 }

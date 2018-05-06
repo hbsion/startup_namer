@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:startup_namer/app_theme.dart';
 import 'package:startup_namer/data/event.dart';
+import 'package:startup_namer/data/event_state.dart';
 import 'package:startup_namer/data/event_tags.dart';
 import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/store_connector.dart';
@@ -10,7 +11,6 @@ import 'package:startup_namer/widgets/event_info_widget.dart';
 import 'package:startup_namer/widgets/event_tracker_widget.dart';
 import 'package:startup_namer/widgets/favorite_widget.dart';
 import 'package:startup_namer/widgets/main_betoffer_widget.dart';
-import 'package:startup_namer/widgets/match_clock_widget.dart';
 
 class EventListItemWidget extends StatelessWidget {
   final int eventId;
@@ -63,7 +63,7 @@ class EventListItemWidget extends StatelessWidget {
           child: new InkWell(
               onTap: navigate(context),
               child: new Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: model.state == EventState.STARTED ? CrossAxisAlignment.start : CrossAxisAlignment.center,
                   children: <Widget>[
                     _buildScoreAndMatchClock(context),
                     new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
@@ -111,13 +111,7 @@ class EventListItemWidget extends StatelessWidget {
     return new Container
       (
         width: 70.0,
-        child: new Column(
-            children: <Widget>[
-              new EventTrackingWidget(eventId: eventId),
-              new Padding(padding: EdgeInsets.all(2.0)),
-              new MatchClockWidget(eventId: eventId)
-            ]
-        )
+        child: new EventTrackingWidget(eventId: eventId)
     );
   }
 
