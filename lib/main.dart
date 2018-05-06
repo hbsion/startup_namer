@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:logging/logging.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:startup_namer/api/api_constants.dart';
 import 'package:startup_namer/models/main_model.dart';
 import 'package:startup_namer/pages/home_page.dart';
 import 'package:startup_namer/push/push_client.dart';
@@ -22,7 +23,7 @@ void main() {
   AppStore store = new AppStore();
   PushClient pushClient = new PushClient('wss://e4-push.kambi.com/socket.io/?EIO=3&transport=websocket');
   PushHub pushHub = new PushHub(pushClient, store.dispatch);
-  pushHub.connect(["v2018.ub.ev"]);
+  pushHub.connect(["v2018.${ApiConstants.offering}.ev","v2018.${ApiConstants.offering}.${ApiConstants.pushLang}.ev"]);
 
   runApp(new MainApp(store: store));
 }

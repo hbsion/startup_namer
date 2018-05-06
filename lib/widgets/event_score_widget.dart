@@ -10,6 +10,7 @@ import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/empty_widget.dart';
 
 class ScoreWidget extends StatelessWidget {
+  static final Color serverColor = Color.fromRGBO(0xf7, 0xce, 0x00, 1.0);
   static final Color scoreColor = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
   final int eventId;
   final String sport;
@@ -82,7 +83,8 @@ class ScoreWidget extends StatelessWidget {
               ],
             )
         ),
-        new Container(
+        sport == "TENNIS"
+            ? new Container(
             margin: EdgeInsets.only(right: 4.0),
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,15 +93,41 @@ class ScoreWidget extends StatelessWidget {
                 new Text(status.awayGames.toString(), style: textTheme.subhead),
               ],
             )
+        ) : new EmptyWidget(),
+        new Container(
+            margin: EdgeInsets.only(right: 4.0),
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                new Text(model.score.home, style: scoreTextStyle),
+                new Text(model.score.away, style: scoreTextStyle),
+              ],
+            )
         ),
         new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            new Text(model.score.home, style: scoreTextStyle),
-            new Text(model.score.away, style: scoreTextStyle),
+            _buildServeIf(model.stats.sets.homeServe),
+            _buildServeIf(!model.stats.sets.homeServe),
           ],
         )
+        ,
       ],
+    );
+  }
+
+  Widget _buildServeIf(bool serving) {
+    return new Container(
+        height: 18.0,
+        child: new Center(
+            child: new Container(
+              width: 8.0,
+              height: 8.0,
+              decoration: new BoxDecoration(
+                  color: serving ? serverColor : Colors.transparent,
+                  shape: BoxShape.circle
+              ),)
+        )
     );
   }
 }

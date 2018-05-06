@@ -265,9 +265,8 @@ class _State extends State<OutcomeWidget> {
         return odds.american ?? "";
       case OddsFormat.Decimal:
       default:
-        return (
-            (
-                odds.decimal ?? 1000) / 1000).toString();
+        double decimal = ((odds.decimal ?? 1000) / 1000);
+        return decimal.toStringAsFixed(2);
     }
   }
 }

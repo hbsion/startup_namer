@@ -4,6 +4,9 @@ import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/data/event_response.dart';
 import 'package:startup_namer/data/event_stats.dart';
 import 'package:startup_namer/data/match_clock.dart';
+import 'package:startup_namer/data/push/event_stats_update.dart';
+import 'package:startup_namer/data/push/match_clock_update.dart';
+import 'package:startup_namer/data/push/score_update.dart';
 import 'package:startup_namer/data/score.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/store.dart';
@@ -52,34 +55,52 @@ class StatisticsStore implements Store {
           _mergeEventStats(liveStats.eventId, liveStats.eventStats);
         }
         break;
+      case ActionType.matchClockUpdate:
+        MatchClockUpdate update = action;
+        _mergeMatchClock(update.eventId, update.matchClock, ignoreIfNotFound: true);
+        break;
+      case ActionType.scoreUpdate:
+        ScoreUpdate update = action;
+        _mergeScore(update.eventId, update.score);
+        break;
+      case ActionType.eventStatsUpdate:
+        EventStatsUpdate update = action;
+        _mergeEventStats(update.eventId, update.eventStats);
+        break;
       default:
         break;
     }
   }
 
-  void _mergeScore(int eventId, Score score) {
+  void _mergeScore(int eventId, Score score, {bool ignoreIfNotFound = false}) {
     var subject = _scores[eventId];
-    if (subject != null && subject.value != score && score != null) {
+    if (subject != null) {
+      if (subject.value != score && score != null) {
         subject.add(score);
+      }
     } else if (score != null) {
       _scores[eventId] = new BehaviorSubject<Score>(seedValue: score);
     }
   }
 
-  void _mergeMatchClock(int eventId, MatchClock clock) {
+  void _mergeMatchClock(int eventId, MatchClock clock, {bool ignoreIfNotFound = false}) {
     var subject = _matchClocks[eventId];
-    if (subject != null && subject.value != clock && clock != null) {
+    if (subject != null) {
+      if (subject.value != clock && clock != null) {
         subject.add(clock);
-    } else if (clock != null) {
+      }
+    } else if (clock != null && !ignoreIfNotFound) {
       _matchClocks[eventId] = new BehaviorSubject<MatchClock>(seedValue: clock);
     }
   }
 
-  void _mergeEventStats(int eventId, EventStats eventStats) {
+  void _mergeEventStats(int eventId, EventStats eventStats, {bool ignoreIfNotFound = false}) {
     var subject = _eventStats[eventId];
-    if (subject != null && subject.value != eventStats && eventStats != null) {
+    if (subject != null) {
+      if (subject.value != eventStats && eventStats != null) {
         subject.add(eventStats);
-    } else if (eventStats != null) {
+      }
+    } else if (eventStats != null && !ignoreIfNotFound) {
       _eventStats[eventId] = new BehaviorSubject<EventStats>(seedValue: eventStats);
     }
   }

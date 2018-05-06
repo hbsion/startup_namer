@@ -7,7 +7,6 @@ import 'package:startup_namer/push/push_client.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/app_store.dart';
 
-
 class PushHub extends WidgetsBindingObserver {
   final PushClient pushClient;
   final Dispatcher dispatcher;
@@ -43,10 +42,19 @@ class PushHub extends WidgetsBindingObserver {
   }
 
   void _handlePushMessage(PushMessage msg) {
-//    print(msg.toString());
-    switch(msg.type) {
+    //print(msg.toString());
+    switch (msg.type) {
       case PushMessageType.oddsUpdate:
         dispatcher(ActionType.oddsUpdate, msg.oddsUpdate);
+        break;
+      case PushMessageType.matchClockUpdate:
+        dispatcher(ActionType.matchClockUpdate, msg.matchClockUpdate);
+        break;
+      case PushMessageType.scoreUpdate:
+        dispatcher(ActionType.scoreUpdate, msg.scoreUpdate);
+        break;
+      case PushMessageType.eventStatsUpdate:
+        dispatcher(ActionType.eventStatsUpdate, msg.eventStatsUpdate);
         break;
       default:
         break;
