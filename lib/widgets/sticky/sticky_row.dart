@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'sticky_header_list.dart';
 
 /// Represents row for StickyList.
@@ -12,7 +13,10 @@ abstract class StickyListRow {
   StickyListRow(Widget child, double height) {
     if (height == null) {
       this._key = new GlobalKey();
-      this.child = new WrapStickyWidget(key: _key, child: child,);
+      this.child = new WrapStickyWidget(
+        key: _key,
+        child: child,
+      );
     } else {
       this._height = height;
       this.child = child;
@@ -42,16 +46,10 @@ abstract class StickyListRow {
 
 /// Header row for list that sticks to top when scrolled
 class HeaderRow extends StickyListRow {
-
-  HeaderRow({Widget child, double height}) :
-        super(child, height);
+  HeaderRow({Widget child, double height}) : super(child, height);
 }
 
 /// Regular row for list
 class RegularRow extends StickyListRow {
-
-  RegularRow({Widget child, double height}) :
-        super(child, height);
+  RegularRow({Widget child, double height}) : super(child, height);
 }
-
-
