@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:startup_namer/app_theme.dart';
 import 'package:startup_namer/data/event.dart';
+import 'package:startup_namer/data/event_state.dart';
 import 'package:startup_namer/data/event_tags.dart';
 import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/store_connector.dart';
@@ -61,18 +62,22 @@ class EventListItemWidget extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 8.0),
           child: new InkWell(
               onTap: navigate(context),
-              child: new Row(children: <Widget>[
-                new Container(width: 70.0, child: new EventTrackingWidget(eventId: eventId)),
-                new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
-                new FavoriteWidget(eventId: eventId,),
+              child: new Row(
+                  crossAxisAlignment: model.state == EventState.STARTED ? CrossAxisAlignment.start : CrossAxisAlignment
+                      .center,
+                  children: <Widget>[
+                    _buildScoreAndMatchClock(context),
+                    new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
+                    new FavoriteWidget(eventId: eventId,),
 
-              ])
+                  ])
           )
       ),
       model.mainBetOfferId != null
-          ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model.mainBetOfferId, eventId: model.id)
+          ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model
+          .mainBetOfferId, eventId: model.id)
           : new EmptyWidget(),
-      new Padding(padding: EdgeInsets.all(4.0)),
+      new Padding(padding: EdgeInsets.all(model.mainBetOfferId != null ? 4.0 : 0.0)),
       _buildDivider(context)
     ]);
   }
@@ -84,22 +89,31 @@ class EventListItemWidget extends StatelessWidget {
           child: new InkWell(
               onTap: navigate(context),
               child: new Row(children: <Widget>[
-                new Container(width: 70.0, child: new EventTrackingWidget(eventId: eventId)),
+                _buildScoreAndMatchClock(context),
                 new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
                 new FavoriteWidget(eventId: eventId,),
                 new Container(
                     width: 300.0,
                     child: model.mainBetOfferId != null
-                        ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model.mainBetOfferId, eventId: model.id,)
+                        ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model
+                        .mainBetOfferId, eventId: model.id,)
                         : new EmptyWidget()),
               ])
           )),
-      new Padding(padding: EdgeInsets.all(4.0)),
+      new Padding(padding: EdgeInsets.all(model.mainBetOfferId != null ? 4.0 : 0.0)),
       new Divider(color: AppTheme
           .of(context)
           .list
           .itemDivider, height: 1.0),
     ]);
+  }
+
+  Widget _buildScoreAndMatchClock(BuildContext context) {
+    return new Container
+      (
+        width: 70.0,
+        child: new EventTrackingWidget(eventId: eventId)
+    );
   }
 
   Widget _buildDivider(BuildContext context) {

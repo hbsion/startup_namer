@@ -2,5 +2,10 @@ enum ActionType {
   eventResponse,
   toggleFavorite,
   eventGroups,
-  highlightGroups
+  highlightGroups,
+  oddsUpdate,
+  matchClockUpdate,
+  scoreUpdate,
+  eventStatsUpdate,
+  betOfferStatusUpdate
 }

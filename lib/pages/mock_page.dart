@@ -5,8 +5,6 @@ import 'package:startup_namer/data/odds.dart';
 import 'package:startup_namer/models/main_model.dart';
 import 'package:startup_namer/models/odds_format.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
-import 'package:startup_namer/widgets/count_down_widget.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/section_list_view.dart';
 
 class MockPage extends StatelessWidget {
@@ -159,7 +157,7 @@ class _EventInfoWidget extends StatelessWidget {
             padding: EdgeInsets.only(left: 2.0, right: 2.0), child: new Text("/", style: textTheme.caption));
       }
       yield new Flexible(child: new Container(
-          child: new Text("path-$i", softWrap: false, style: textTheme.caption, overflow: TextOverflow.fade)));
+          child: new Text("path-$i", softWrap: false, style: textTheme.caption)));
     }
   }
 }
@@ -167,7 +165,8 @@ class _EventInfoWidget extends StatelessWidget {
 class _EventTimeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new CountDownWidget(time: DateTime.now().add(new Duration(minutes: 10)),);
+    return new Text("C");
+//    return new CountDownWidget(time: DateTime.now().add(new Duration(minutes: 10)),);
   }
 }
 
@@ -193,6 +192,7 @@ class _BetOfferWidget extends StatelessWidget {
 }
 
 class _OutcomeWidget extends StatelessWidget {
+  static final Color blue = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
   @override
   Widget build(BuildContext context) {
     return _buildWidget(context);
@@ -209,22 +209,22 @@ class _OutcomeWidget extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
               decoration: new BoxDecoration(
                 borderRadius: BorderRadius.circular(3.0),
-                color: _isSuspended() ? Colors.grey : Color.fromRGBO(0x00, 0xad, 0xc9, 1.0),
+                color: _isSuspended() ? Colors.grey : blue,
               ),
               child: _buildContentWrapper(model));
         });
   }
 
-  Container _buildPlaceholder() {
-    return new Container(
-        height: 38.0,
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-        decoration: new BoxDecoration(
-            borderRadius: BorderRadius.circular(3.0),
-            color: Colors.grey
-        ),
-        child: new EmptyWidget());
-  }
+//  Container _buildPlaceholder() {
+//    return new Container(
+//        height: 38.0,
+//        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+//        decoration: new BoxDecoration(
+//            borderRadius: BorderRadius.circular(3.0),
+//            color: Colors.grey
+//        ),
+//        child: new EmptyWidget());
+//  }
 
 //  void _handleOddsChange(_ViewModel viewModel) {
 //    if (_oddsDiff(viewModel.outcome) != 0) {
@@ -283,7 +283,8 @@ class _OutcomeWidget extends StatelessWidget {
   }
 
   Text _buildLabel(String label) {
-    return new Text(label ?? "?", overflow: TextOverflow.fade,
+    return new Text(label ?? "?",
+//        overflow: TextOverflow.fade,
         softWrap: false,
         style: new TextStyle(color: Colors.white, fontSize: 12.0));
   }

@@ -2,8 +2,9 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/api/event_response.dart';
+import 'package:startup_namer/data/event_response.dart';
 import 'package:startup_namer/data/outcome.dart';
+import 'package:startup_namer/data/push/odds_update.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/store.dart';
 import 'package:startup_namer/util/flowable.dart';
@@ -59,40 +60,47 @@ class OutcomeStore implements Store {
     switch (type) {
       case ActionType.eventResponse:
         EventResponse response = action;
-        for (var outcome in response.outcomes) {
-          var subject = _outcomes[outcome.id];
-          if (subject != null) {
-            if (subject.value != outcome) {
-              if (subject.value != null) {
-                outcome.lastOdds = subject.value.odds;
-                outcome.oddsChanged = DateTime.now();
-              }
-              subject.add(outcome);
-            }
-          } else {
-            _outcomes[outcome.id] = new BehaviorSubject<Outcome>(seedValue: outcome);
-          }
-        }
-
-        for (var betOffer in response.betoffers) {
-          var subject = _outcomesByBetOffer[betOffer.id];
-
-          if (subject != null && subject.hasListener) {
-            var outcomes = betOffer.outcomes.map((id) => _outcomes[id])
-                .map((subject) => subject.value)
-                .where((outcome) => outcome != null)
-                .toList();
-            if (!new DeepCollectionEquality().equals(subject.value, outcomes)) {
-              subject.add(outcomes);
-            }
-          }
-        }
-
-        logOutcomes();
+        _handleEventResponse(response);
+        break;
+      case ActionType.oddsUpdate:
+        OddsUpdate oddsUpdate = action;
+        _handleOddsUpdate(oddsUpdate);
         break;
       default:
         break;
     }
+  }
+
+  void _handleEventResponse(EventResponse response) {
+     for (var outcome in response.outcomes) {
+      var subject = _outcomes[outcome.id];
+      if (subject != null) {
+        if (subject.value != outcome) {
+          if (subject.value != null) {
+            outcome.lastOdds = subject.value.odds;
+            outcome.oddsChanged = DateTime.now();
+          }
+          subject.add(outcome);
+        }
+      } else {
+        _outcomes[outcome.id] = new BehaviorSubject<Outcome>(seedValue: outcome);
+      }
+    }
+
+    for (var betOffer in response.betoffers) {
+      var subject = _outcomesByBetOffer[betOffer.id];
+
+      if (subject != null && subject.hasListener) {
+        var outcomes = betOffer.outcomes.map((id) => _outcomes[id])
+            .map((subject) => subject.value)
+            .where((outcome) => outcome != null)
+            .toList();
+        if (!new DeepCollectionEquality().equals(subject.value, outcomes)) {
+          subject.add(outcomes);
+        }
+      }
+    }
+//    logOutcomes();
   }
 
   void logOutcomes() {
@@ -104,4 +112,13 @@ class OutcomeStore implements Store {
     print("total $count");
   }
 
+  void _handleOddsUpdate(OddsUpdate oddsUpdate) {
+    for (var update in oddsUpdate.outcomes) {
+      var subject = _outcomes[update.id];
+      if (subject != null && subject.value != null) {
+        var withNewOdds = subject.value.withNewOdds(update.odds);
+        subject.add(withNewOdds);
+      }
+    }
+  }
 }

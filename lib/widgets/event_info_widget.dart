@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_tags.dart';
 import 'package:startup_namer/store/store_connector.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 
 class EventInfoWidget extends StatelessWidget {
   final int eventId;
@@ -18,15 +19,15 @@ class EventInfoWidget extends StatelessWidget {
   }
 
   Widget _buildWidget(BuildContext context, Event event) {
-//    print("Render list view item: $eventId");
     var textTheme = Theme
         .of(context)
         .textTheme;
     return new Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          new Text(event.homeName, overflow: TextOverflow.ellipsis, style: textTheme.subhead),
-          new Text(event.awayName ?? "", style: textTheme.subhead),
+          new Text(event.homeName, softWrap: false, overflow: TextOverflow.ellipsis, style: textTheme.subhead),
+          event.awayName != null ? new Text(event.awayName, softWrap: false, overflow: TextOverflow
+              .ellipsis, style: textTheme.subhead) : new EmptyWidget(),
           new Padding(padding: EdgeInsets.all(2.0)),
           _buildGroupPath(textTheme, event),
         ]
@@ -35,7 +36,6 @@ class EventInfoWidget extends StatelessWidget {
 
   Widget _buildGroupPath(TextTheme textTheme, Event event) {
     return new Container(
-//        color: Colors.yellow,
         child: new Row(
             children: _buildGroupPathElements(textTheme, event).toList()
         )
@@ -57,8 +57,8 @@ class EventInfoWidget extends StatelessWidget {
         yield new Padding(
             padding: EdgeInsets.only(left: 2.0, right: 2.0), child: new Text("/", style: textTheme.caption));
       }
-      yield new Flexible(child: new Container(
-          child: new Text(group.name, softWrap: false, style: textTheme.caption, overflow: TextOverflow.fade)));
+      yield new Flexible(
+          child: new Text(group.name, softWrap: false, style: textTheme.caption));
     }
   }
 }

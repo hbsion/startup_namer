@@ -56,7 +56,7 @@ class EventGroup {
   int get hashCode => id.hashCode;
 
   static EventGroup resolveRoot(EventGroup group) {
-    if (group.parent == null || group.parent.id == 1)
+    if (group == null || group.parent == null || group.parent.id == 1)
       return group;
 
     return resolveRoot(group.parent);

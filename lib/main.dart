@@ -4,31 +4,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:logging/logging.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:startup_namer/api/api_constants.dart';
 import 'package:startup_namer/models/main_model.dart';
-import 'package:startup_namer/pages/mock_page.dart';
+import 'package:startup_namer/pages/home_page.dart';
+import 'package:startup_namer/push/push_client.dart';
+import 'package:startup_namer/push/push_hub.dart';
 import 'package:startup_namer/store/actions.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_dispatcher.dart';
 import 'package:startup_namer/store/store_provider.dart';
 
 void main() {
-//  PerformanceOverlayLayer;
-//  PerformanceOverlayLayer.checkerboardOffscreenLayers
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord rec) {
     print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 
-  runApp(new MainApp());
+  AppStore store = new AppStore();
+  PushClient pushClient = new PushClient('wss://e4-push.kambi.com/socket.io/?EIO=3&transport=websocket');
+  PushHub pushHub = new PushHub(pushClient, store.dispatch);
+  pushHub.connect(["v2018.${ApiConstants.offering}.ev","v2018.${ApiConstants.offering}.${ApiConstants.pushLang}.ev"]);
+
+  runApp(new MainApp(store: store));
 }
 
 class MainApp extends StatelessWidget {
   final appTitle = 'Play!';
+  final AppStore store;
+
+  const MainApp({Key key, this.store}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return new StoreProvider(
-        store: new AppStore(),
+        store: store,
         child: new StoreDispatcher(
             poll: _initActions,
             //oneshot: _initActions,
@@ -43,14 +52,16 @@ class MainApp extends StatelessWidget {
     return new ScopedModelDescendant<MainModel>(
         builder: (context, child, model) {
           return MaterialApp(
-            showPerformanceOverlay: false,
+//              showPerformanceOverlay: true,
+//              checkerboardOffscreenLayers: true,
+//              checkerboardRasterCacheImages: true,
               title: appTitle,
               theme: new ThemeData(
                   brightness: model.brightness,
                   primaryColor: Colors.black,
                   accentColor: Color.fromARGB(0xff, 0x00, 0xad, 0xc9)
               ),
-              home: MockPage()
+              home: new HomePage()
           );
         }
     );

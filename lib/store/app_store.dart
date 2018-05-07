@@ -5,6 +5,7 @@ import 'package:startup_namer/store/event_store.dart';
 import 'package:startup_namer/store/favorites_store.dart';
 import 'package:startup_namer/store/groups_store.dart';
 import 'package:startup_namer/store/outcome_store.dart';
+import 'package:startup_namer/store/statistics_store.dart';
 import 'package:startup_namer/store/store.dart';
 
 typedef Dispatcher = void Function(ActionType type, dynamic action);
@@ -16,6 +17,7 @@ class AppStore {
   final OutcomeStore outcomeStore = new OutcomeStore();
   final GroupStore groupStore = new GroupStore();
   final FavoritesStore favoritesStore = new FavoritesStore();
+  final StatisticsStore statisticsStore = new StatisticsStore();
   final EventCollectionStore collectionStore = new EventCollectionStore();
 
   AppStore() {
@@ -24,6 +26,7 @@ class AppStore {
       ..add(outcomeStore)
       ..add(favoritesStore)
       ..add(groupStore)
+      ..add(statisticsStore)
       ..add(collectionStore);
   }
 

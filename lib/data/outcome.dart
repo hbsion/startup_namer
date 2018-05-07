@@ -67,8 +67,37 @@ class Outcome {
       scratched: json["scratched"] ?? false,
       startNr: json["startNr"],
       popular: json["popular"],
-      prevOdds: ((json["prevOdds"] ?? []) as List<dynamic>).map<int>((i) => i).toList()
+      prevOdds: (
+          (
+              json["prevOdds"] ?? []) as List<dynamic>).map<int>((i) => i).toList()
   );
+
+  Outcome withNewOdds(Odds newOdds) {
+    Outcome outcome = new Outcome(
+        id: id,
+        betOfferId: betOfferId,
+        label: label,
+        type: type,
+        changedDate: changedDate,
+        status: status,
+        cashoutStatus: cashoutStatus,
+        odds: newOdds,
+        participant: participant,
+        participantId: participantId,
+        line: line,
+        homeTeamMember: homeTeamMember,
+        criterion: criterion,
+        distance: distance,
+        scratched: scratched,
+        startNr: startNr,
+        popular: popular,
+        prevOdds: prevOdds
+    );
+    outcome.lastOdds = odds;
+    outcome.oddsChanged = DateTime.now();
+
+    return outcome;
+  }
 
   @override
   bool operator ==(Object other) =>
@@ -119,6 +148,5 @@ class Outcome {
   String toString() {
     return 'Outcome{id: $id, label: $label, odds: $odds, line: $line, distance: $distance, scratched: $scratched, startNr: $startNr, prevOdds: $prevOdds, criterion: $criterion, participant: $participant, popular: $popular, type: $type, homeTeamMember: $homeTeamMember, betOfferId: $betOfferId, changedDate: $changedDate, participantId: $participantId, status: $status, cashoutStatus: $cashoutStatus}';
   }
-
 
 }

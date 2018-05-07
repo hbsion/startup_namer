@@ -6,6 +6,8 @@ import 'package:startup_namer/data/event_state.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
 import 'package:startup_namer/widgets/count_down_widget.dart';
+import 'package:startup_namer/widgets/event_score_widget.dart';
+import 'package:startup_namer/widgets/match_clock_widget.dart';
 
 class EventTrackingWidget extends StatelessWidget {
   final int eventId;
@@ -26,7 +28,13 @@ class EventTrackingWidget extends StatelessWidget {
   Widget _buildWidget(BuildContext context, Event model) {
     Widget w;
     if (model.state == EventState.STARTED) {
-      w = new _MatchClockWidget(eventId: eventId);
+      w = new Column(
+          children: <Widget>[
+            new ScoreWidget(eventId: eventId, sport: model.sport),
+            new Padding(padding: EdgeInsets.all(2.0)),
+            new MatchClockWidget(eventId: eventId)
+          ]
+      );
     } else if (model.start.isAfter(DateTime.now()) &&
         model.start.subtract(new Duration(minutes: 15)).isBefore(DateTime.now())) {
       w = new CountDownWidget(time: model.start);
@@ -36,17 +44,7 @@ class EventTrackingWidget extends StatelessWidget {
 
     return Center(child: w);
   }
-}
 
-class _MatchClockWidget extends StatelessWidget {
-  final int eventId;
-
-  const _MatchClockWidget({Key key, @required this.eventId}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return new Text("Score");
-  }
 }
 
 class _DateTimeWidget extends StatelessWidget {
