@@ -63,7 +63,8 @@ class EventListItemWidget extends StatelessWidget {
           child: new InkWell(
               onTap: navigate(context),
               child: new Row(
-                  crossAxisAlignment: model.state == EventState.STARTED ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+                  crossAxisAlignment: model.state == EventState.STARTED ? CrossAxisAlignment.start : CrossAxisAlignment
+                      .center,
                   children: <Widget>[
                     _buildScoreAndMatchClock(context),
                     new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
@@ -76,7 +77,7 @@ class EventListItemWidget extends StatelessWidget {
           ? new MainBetOfferWidget(key: new Key(model.mainBetOfferId.toString()), betOfferId: model
           .mainBetOfferId, eventId: model.id)
           : new EmptyWidget(),
-      new Padding(padding: EdgeInsets.all(4.0)),
+      new Padding(padding: EdgeInsets.all(model.mainBetOfferId != null ? 4.0 : 0.0)),
       _buildDivider(context)
     ]);
   }
@@ -99,7 +100,7 @@ class EventListItemWidget extends StatelessWidget {
                         : new EmptyWidget()),
               ])
           )),
-      new Padding(padding: EdgeInsets.all(4.0)),
+      new Padding(padding: EdgeInsets.all(model.mainBetOfferId != null ? 4.0 : 0.0)),
       new Divider(color: AppTheme
           .of(context)
           .list

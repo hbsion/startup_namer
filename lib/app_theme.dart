@@ -16,7 +16,8 @@ class ListThemeData {
 
 class AppThemeData {
   final ListThemeData list;
-
+//  static final Color serverColor = Color.fromRGBO(0xf7, 0xce, 0x00, 1.0);
+//    static final Color scoreColor = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
   AppThemeData({@required this.list});
 }
 

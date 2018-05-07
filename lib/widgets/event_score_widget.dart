@@ -7,6 +7,7 @@ import 'package:startup_namer/data/event_stats.dart';
 import 'package:startup_namer/data/score.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
+import 'package:startup_namer/util/observable_ex.dart';
 import 'package:startup_namer/widgets/empty_widget.dart';
 
 class ScoreWidget extends StatelessWidget {
@@ -29,7 +30,7 @@ class ScoreWidget extends StatelessWidget {
   }
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore store) {
-    return Observable.combineLatest2(
+    return ObservableEx.combineLatestEager2(
         store.statisticsStore
             .score(eventId)
             .observable,
