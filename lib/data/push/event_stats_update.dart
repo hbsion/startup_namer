@@ -1,7 +1,4 @@
 import 'package:startup_namer/data/event_stats.dart';
-import 'package:startup_namer/data/match_clock.dart';
-import 'package:startup_namer/data/push/outcome_update.dart';
-import 'package:startup_namer/data/score.dart';
 
 class EventStatsUpdate {
   final int eventId;

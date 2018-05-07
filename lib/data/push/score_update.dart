@@ -1,5 +1,3 @@
-import 'package:startup_namer/data/match_clock.dart';
-import 'package:startup_namer/data/push/outcome_update.dart';
 import 'package:startup_namer/data/score.dart';
 
 class ScoreUpdate {

@@ -8,9 +8,12 @@ import 'package:web_socket_channel/io.dart';
 class PushClient {
   final RegExp _packetExp = new RegExp("^(\\d+)(.*)\$");
   final String url;
-  final PublishSubject<PushMessage> _messagePublisher = new PublishSubject<PushMessage>();
+  final PublishSubject<PushMessage> _messagePublisher =
+      new PublishSubject<PushMessage>();
   final PublishSubject<void> _connectPublisher = new PublishSubject<void>();
 
+  Timer _reconnectTimer;
+  bool _closingDown = false;
   IOWebSocketChannel _channel;
   Timer _heartbeat;
 
@@ -49,8 +52,20 @@ class PushClient {
   }
 
   void _disconnect() {
+    _closingDown = true;
+    _reconnectTimer?.cancel();
     _channel.sink.close();
     _heartbeat.cancel();
+  }
+
+  void _reconnect() {
+    new Timer(new Duration(seconds: 5), () {
+      try {
+        connect();
+      } catch (e) {
+        print(e);
+      }
+    });
   }
 
   void _onData(event) {
@@ -61,7 +76,10 @@ class PushClient {
   }
 
   void _onDone() {
-    print("onDone");
+    print("onDone, closingDown: " + _closingDown.toString());
+    if (!_closingDown) {
+      _reconnect();
+    }
   }
 
   void _onError(error) {
@@ -74,10 +92,8 @@ class PushClient {
         print("Open with payload: $payload");
         break;
       case 3:
-//        print("pong");
         break;
       case 40:
-//        print("Message/Connect with payload: $payload");
         _connectPublisher.add(null);
         break;
       case 42:
@@ -93,7 +109,8 @@ class PushClient {
 
     if (data[0] == "message") {
       List<dynamic> batch = json.decode(data[1]);
-      batch.map((x) => new PushMessage.fromJson(x))
+      batch
+          .map((x) => new PushMessage.fromJson(x))
           .where((x) => x != null)
           .forEach((pm) => _messagePublisher.add(pm));
     }
