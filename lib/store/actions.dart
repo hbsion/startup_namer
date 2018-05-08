@@ -45,7 +45,7 @@ Callable<Dispatcher> highlights() {
 Callable<Dispatcher> landingPage() {
   return (dispatcher) async {
     var response = await fetchLandingPage();
-    print(response.toString());
+//    print(response.toString());
     //dispatcher(ActionType.highlightGroups, response);
   };
 }

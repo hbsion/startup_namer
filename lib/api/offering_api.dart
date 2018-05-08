@@ -126,7 +126,7 @@ List<EventResponse> _parseLandingResponse(String body) {
   return _parseLandingResult(result).toList();
 }
 
-Iterable<EventResponse> _parseLandingResult(List<Map<String, dynamic>>  result) sync * {
+Iterable<EventResponse> _parseLandingResult(List<dynamic>  result) sync * {
   for (var js in result) {
     var key = _convertLandingSectionNameToKey(js["name"]);
     yield _parseEventsWithBetOffers(js, EventCollectionKey(type: key));
