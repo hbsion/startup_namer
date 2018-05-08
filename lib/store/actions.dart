@@ -1,3 +1,4 @@
+import 'package:startup_namer/data/event_collection_key.dart';
 import 'package:startup_namer/data/event_response.dart';
 import 'package:startup_namer/api/offering_api.dart';
 import 'package:startup_namer/store/action_type.dart';
@@ -45,7 +46,8 @@ Callable<Dispatcher> highlights() {
 Callable<Dispatcher> landingPage() {
   return (dispatcher) async {
     var response = await fetchLandingPage();
-//    print(response.toString());
-    //dispatcher(ActionType.highlightGroups, response);
+    for (var events in response.where((e) => e.key.type != EventCollectionType.unknown)) {
+      dispatcher(ActionType.eventResponse, events);
+    }
   };
 }

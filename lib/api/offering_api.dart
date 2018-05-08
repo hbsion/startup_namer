@@ -140,7 +140,7 @@ EventCollectionType _convertLandingSectionNameToKey(String name) {
     case "nextoff": return EventCollectionType.landingNextOff;
     case "popular": return EventCollectionType.landingPopular;
     case "highlights": return EventCollectionType.landingHighlights;
-    case "statingsoon": return EventCollectionType.landingStatingSoon;
+    case "startingsoon": return EventCollectionType.landingStatingSoon;
     default:
       return EventCollectionType.unknown;
   }

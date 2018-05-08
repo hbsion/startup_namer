@@ -71,6 +71,6 @@ class MainApp extends StatelessWidget {
     eventGroups()(dispatcher);
     highlights()(dispatcher);
     liveOpen()(dispatcher);
-//    landingPage()(dispatcher);
+    landingPage()(dispatcher);
   }
 }
