@@ -18,7 +18,7 @@ class Flowable<T> extends Stream<T> {
   @override
   StreamSubscription<T> listen(void Function(T event) onData,
       {Function onError, void Function() onDone, bool cancelOnError}) {
-    return _subject.observable.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+    return _subject.stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
 
   T get value => _subject.value;

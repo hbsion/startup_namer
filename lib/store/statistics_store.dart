@@ -23,7 +23,7 @@ class StatisticsStore implements Store {
       subject = new BehaviorSubject<Score>();
       _scores[eventId] = subject;
     }
-    return new SnapshotObservable(subject.value, subject.observable);
+    return new SnapshotObservable(subject.value, subject.stream);
   }
 
   SnapshotObservable<MatchClock> matchClock(int eventId) {
@@ -32,7 +32,7 @@ class StatisticsStore implements Store {
       subject = new BehaviorSubject<MatchClock>();
       _matchClocks[eventId] = subject;
     }
-    return new SnapshotObservable(subject.value, subject.observable);
+    return new SnapshotObservable(subject.value, subject.stream);
   }
 
   SnapshotObservable<EventStats> eventStats(int eventId) {
@@ -41,7 +41,7 @@ class StatisticsStore implements Store {
       subject = new BehaviorSubject<EventStats>();
       _eventStats[eventId] = subject;
     }
-    return new SnapshotObservable(subject.value, subject.observable);
+    return new SnapshotObservable(subject.value, subject.stream);
   }
 
   @override

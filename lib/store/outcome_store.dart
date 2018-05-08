@@ -19,7 +19,7 @@ class OutcomeStore implements Store {
       subject = new BehaviorSubject<Outcome>();
       _outcomes[id] = subject;
     }
-    return new SnapshotObservable(subject.value, subject.observable);
+    return new SnapshotObservable(subject.value, subject.stream);
   }
 
   SnapshotObservable<List<Outcome>> byBetOfferId(int id) {
@@ -38,7 +38,7 @@ class OutcomeStore implements Store {
       };
       _outcomesByBetOffer[id] = subject;
     }
-    return new SnapshotObservable(subject.value, subject.observable);
+    return new SnapshotObservable(subject.value, subject.stream);
   }
 
   List<Outcome> snapshot(List<int> ids) {

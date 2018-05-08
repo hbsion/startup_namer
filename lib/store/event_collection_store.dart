@@ -18,7 +18,7 @@ class EventCollectionStore implements Store {
       subject = new BehaviorSubject<EventCollection>();
       _collections[key] = subject;
     }
-    return new SnapshotObservable(subject.value, subject.observable);
+    return new SnapshotObservable(subject.value, subject.stream);
   }
 
 

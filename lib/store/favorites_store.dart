@@ -9,7 +9,7 @@ class FavoritesStore implements Store {
   final BehaviorSubject<Set<int>> _favorites = new BehaviorSubject<Set<int>>(seedValue: new HashSet());
 
   SnapshotObservable<Set<int>> favorites() {
-    return new SnapshotObservable(_favorites.value, _favorites.observable);
+    return new SnapshotObservable(_favorites.value, _favorites.stream);
   }
 
   Set<int> snapshot() {

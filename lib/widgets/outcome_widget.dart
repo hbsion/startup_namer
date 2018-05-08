@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:startup_namer/app_theme.dart';
 import 'package:startup_namer/data/betoffer.dart';
 import 'package:startup_namer/data/betoffer_types.dart';
 import 'package:startup_namer/data/event.dart';
@@ -38,7 +39,6 @@ class OutcomeWidget extends StatefulWidget {
 }
 
 class _State extends State<OutcomeWidget> {
-  static final Color background = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
   Timer _timer;
 
   @override
@@ -79,7 +79,7 @@ class _State extends State<OutcomeWidget> {
   Widget _buildWidget(BuildContext context, _ViewModel viewModel) {
 //    print("render outcome ${widget.outcomeId}");
     if (viewModel == null || viewModel.outcome == null || viewModel.betOffer == null || viewModel.event == null) {
-      return _buildPlaceholder();
+      return _buildPlaceholder(context);
     }
     _handleOddsChange(viewModel);
 
@@ -90,19 +90,25 @@ class _State extends State<OutcomeWidget> {
               padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
               decoration: new BoxDecoration(
                 borderRadius: BorderRadius.circular(3.0),
-                color: _isSuspended(viewModel) ? Colors.grey : background,
+                color: AppTheme
+                    .of(context)
+                    .outcome
+                    .background(disabled: _isSuspended(viewModel)),
               ),
-              child: _buildContentWrapper(viewModel, model));
+              child: _buildContentWrapper(context, viewModel, model));
         });
   }
 
-  Container _buildPlaceholder() {
+  Container _buildPlaceholder(BuildContext context) {
     return new Container(
         height: widget.columnLayout ? 48.0 : 38.0,
         padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
         decoration: new BoxDecoration(
             borderRadius: BorderRadius.circular(3.0),
-            color: Colors.grey
+            color: AppTheme
+                .of(context)
+                .outcome
+                .background(disabled: true)
         ),
         child: new EmptyWidget());
   }
@@ -120,36 +126,36 @@ class _State extends State<OutcomeWidget> {
     }
   }
 
-  Widget _buildContentWrapper(_ViewModel viewModel, MainModel model) {
+  Widget _buildContentWrapper(BuildContext context, _ViewModel viewModel, MainModel model) {
     if (_isSuspended(viewModel)) {
-      return _buildContent(viewModel, model);
+      return _buildContent(context, viewModel, model);
     }
 
     return new Material(
       color: Colors.transparent,
       child: new InkWell(
           onTap: () => print("outcome tap " + DateTime.now().toString()),
-          child: _buildContent(viewModel, model)),
+          child: _buildContent(context, viewModel, model)),
     );
   }
 
   bool _isSuspended(_ViewModel viewModel) =>
       viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED;
 
-  Widget _buildContent(_ViewModel viewModel, MainModel model) {
+  Widget _buildContent(BuildContext context, _ViewModel viewModel, MainModel model) {
     var label = _formatLabel(viewModel);
     if (widget.columnLayout) {
       if (label != null) {
         return new Column(
           children: <Widget>[
-            new Expanded(child: new Center(child: _buildLabel(label))),
-            new Expanded(child: new Center(child: _buildOdds(viewModel, model)))
+            new Expanded(child: new Center(child: _buildLabel(context, label))),
+            new Expanded(child: new Center(child: _buildOdds(context, viewModel, model)))
           ],
         );
       } else {
         return new Column(
           children: <Widget>[
-            new Expanded(child: new Center(child: _buildOdds(viewModel, model)))
+            new Expanded(child: new Center(child: _buildOdds(context, viewModel, model)))
           ],
         );
       }
@@ -158,37 +164,40 @@ class _State extends State<OutcomeWidget> {
     if (label != null) {
       return new Row(
         children: <Widget>[
-          new Expanded(child: _buildLabel(label)),
-          _buildOdds(viewModel, model)
+          new Expanded(child: _buildLabel(context, label)),
+          _buildOdds(context, viewModel, model)
         ],
       );
     } else {
       return new Row(
         children: <Widget>[
-          new Expanded(child: _buildOdds(viewModel, model)),
+          new Expanded(child: _buildOdds(context, viewModel, model)),
         ],
       );
     }
   }
 
-  Widget _buildOdds(_ViewModel viewModel, MainModel model) {
+  Widget _buildOdds(BuildContext context, _ViewModel viewModel, MainModel model) {
     var formatOdds = _formatOdds(viewModel.outcome.odds, model.oddsFormat);
+    OutcomeThemeData theme = AppTheme
+        .of(context)
+        .outcome;
 
     int oddsDiff = _oddsDiff(viewModel.outcome);
     if (oddsDiff != 0) {
-      Color color = oddsDiff > 0 ? Colors.lightGreenAccent : Colors.red;
+      Color color = oddsDiff > 0 ? theme.oddsUp : theme.oddsDown;
       Icon icon = new Icon(oddsDiff > 0 ? Icons.arrow_upward : Icons.arrow_downward, color: color, size: 12.0);
       return new Row(children: <Widget>[
         icon,
         new Text(
             formatOdds,
-            style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold))
+            style: new TextStyle(color: theme.text(), fontSize: 12.0, fontWeight: FontWeight.bold))
       ]);
     }
 
     return new Text(
         formatOdds,
-        style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold));
+        style: new TextStyle(color: theme.text(), fontSize: 12.0, fontWeight: FontWeight.bold));
   }
 
   int _oddsDiff(Outcome outcome) {
@@ -198,7 +207,6 @@ class _State extends State<OutcomeWidget> {
           .now()
           .difference(outcome.oddsChanged)
           .inSeconds;
-//        print("Changed: " + outcome.oddsChanged.toString() + " diff: " + seconds.toString());
       if (seconds < 5) {
         return outcome.odds.decimal - outcome.lastOdds.decimal;
       }
@@ -206,11 +214,14 @@ class _State extends State<OutcomeWidget> {
     return 0;
   }
 
-  Text _buildLabel(String label) {
+  Text _buildLabel(BuildContext context, String label) {
     return new Text(label ?? "?",
         overflow: TextOverflow.ellipsis,
         softWrap: false,
-        style: new TextStyle(color: Colors.white, fontSize: 12.0));
+        style: new TextStyle(color: AppTheme
+            .of(context)
+            .outcome
+            .text(), fontSize: 12.0));
   }
 
   String _formatLabel(_ViewModel viewModel) {

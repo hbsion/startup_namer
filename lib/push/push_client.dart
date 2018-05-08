@@ -19,9 +19,9 @@ class PushClient {
 
   PushClient(this.url);
 
-  Observable<PushMessage> get messageStream => _messagePublisher.observable;
+  Observable<PushMessage> get messageStream => _messagePublisher.stream;
 
-  Observable<void> get connectStream => _connectPublisher.observable;
+  Observable<void> get connectStream => _connectPublisher.stream;
 
   void connect() {
     _channel = new IOWebSocketChannel.connect(url);

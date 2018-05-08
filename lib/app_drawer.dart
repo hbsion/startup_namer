@@ -79,6 +79,7 @@ class MenuEntryRow extends StatelessWidget {
         sport: entry._sport != null ? entry._sport.termKey : "all",
         league: entry._league != null ? entry._league.termKey : "all",
         region: entry._region != null ? entry._region.termKey : "all",
+        eventGroup: entry.eventGroup,
       )));
     };
   }

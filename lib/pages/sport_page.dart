@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/app_drawer.dart';
+import 'package:startup_namer/data/event_group.dart';
 import 'package:startup_namer/views/event_list_view.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
-
 
 class SportPage extends StatefulWidget {
   final String sport;
   final String league;
   final String region;
   final String participant;
+  final EventGroup eventGroup;
 
-  SportPage({Key key, this.sport, this.region, this.league, this.participant = "all"})
-      : assert(sport !=null), assert(region !=null), assert(league !=null), assert(participant !=null), super(key: key);
+  SportPage({Key key, this.sport, this.region, this.league, this.participant = "all", this.eventGroup})
+      : assert(sport != null),
+        assert(region != null),
+        assert(league != null),
+        assert(participant != null),
+        assert(eventGroup != null),
+        super(key: key);
 
   @override
   _SportPageState createState() {
@@ -69,14 +75,15 @@ class _SportPageState extends State<SportPage> {
               ]
           );
         }),
-        bottomNavigationBar: new BottomNavigationBar(
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.shifting,
           currentIndex: _index,
           onTap: _handleTabTap,
           items: <BottomNavigationBarItem>[
-            new BottomNavigationBarItem(
+            BottomNavigationBarItem(
                 icon: new Icon(Icons.all_inclusive),
                 title: new Text("Matches")),
-            new BottomNavigationBarItem(
+            BottomNavigationBarItem(
                 icon: new Icon(Icons.home),
                 title: new Text("Outrights")),
           ],
@@ -103,6 +110,6 @@ class _SportPageState extends State<SportPage> {
   }
 
   String _buildTitle() {
-    return (widget.league != "all" ? widget.league : widget.sport);
+    return widget.eventGroup.name;
   }
 }

@@ -16,7 +16,7 @@ class EventStore implements Store {
       subject = new BehaviorSubject<Event>();
       _events[id] = subject;
     }
-    return new SnapshotObservable(subject.value, subject.observable);
+    return new SnapshotObservable(subject.value, subject.stream);
   }
 
   List<Event> snapshot(Iterable<int> ids) {

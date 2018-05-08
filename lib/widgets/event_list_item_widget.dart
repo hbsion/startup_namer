@@ -111,7 +111,7 @@ class EventListItemWidget extends StatelessWidget {
   Widget _buildScoreAndMatchClock(BuildContext context) {
     return new Container
       (
-        width: 70.0,
+        width: 80.0,
         child: new EventTrackingWidget(eventId: eventId)
     );
   }

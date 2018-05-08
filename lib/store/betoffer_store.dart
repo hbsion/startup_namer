@@ -17,7 +17,7 @@ class BetOfferStore implements Store {
       subject = new BehaviorSubject<BetOffer>();
       _betOffers[id] = subject;
     }
-    return new SnapshotObservable(subject.value, subject.observable);
+    return new SnapshotObservable(subject.value, subject.stream);
   }
 
   List<BetOffer> snapshot(List<int> ids) {
