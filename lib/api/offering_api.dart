@@ -126,7 +126,7 @@ List<EventResponse> _parseLandingResponse(String body) {
   return _parseLandingResult(result).toList();
 }
 
-Iterable<EventResponse> _parseLandingResult(List<dynamic>  result) sync * {
+Iterable<EventResponse> _parseLandingResult(List<dynamic> result) sync * {
   for (var js in result) {
     var key = _convertLandingSectionNameToKey(js["name"]);
     yield _parseEventsWithBetOffers(js, EventCollectionKey(type: key));
@@ -140,7 +140,7 @@ EventCollectionType _convertLandingSectionNameToKey(String name) {
     case "nextoff": return EventCollectionType.landingNextOff;
     case "popular": return EventCollectionType.landingPopular;
     case "highlights": return EventCollectionType.landingHighlights;
-    case "startingsoon": return EventCollectionType.landingStatingSoon;
+    case "startingsoon": return EventCollectionType.landingStartingSoon;
     default:
       return EventCollectionType.unknown;
   }

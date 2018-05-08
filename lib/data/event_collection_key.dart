@@ -6,7 +6,7 @@ enum EventCollectionType {
   liveRightNow,
   landingPopular,
   landingHighlights,
-  landingStatingSoon,
+  landingStartingSoon,
   landingNextOff,
   landingLiveRightNow,
   landingShocker,
