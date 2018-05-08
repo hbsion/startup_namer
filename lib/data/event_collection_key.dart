@@ -3,11 +3,16 @@ import 'package:meta/meta.dart';
 
 
 enum EventCollectionType {
-  LiveRightNow,
-  Popular,
-  Highlights,
-  Favorite,
-  ListView,
+  liveRightNow,
+  landingPopular,
+  landingHighlights,
+  landingStatingSoon,
+  landingNextOff,
+  landingLiveRightNow,
+  landingShocker,
+  favorite,
+  listView,
+  unknown
 }
 
 class EventCollectionKey {

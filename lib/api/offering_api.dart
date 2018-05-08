@@ -33,7 +33,7 @@ Future<EventResponse> fetchListView({
   var response = await request.close();
 
   var key = EventCollectionKey(
-      type: EventCollectionType.ListView,
+      type: EventCollectionType.listView,
       selector: [sport, region, league, participant, filter]
   );
   if (response.statusCode != 200) {
@@ -45,6 +45,22 @@ Future<EventResponse> fetchListView({
   return compute(_parseListViewResponse, Tuple2(body, key));
 }
 
+Future<List<EventResponse>> fetchLandingPage() async {
+  var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
+      .offering}/betoffer/landing.json?lang=${ApiConstants.lang}&market=${ApiConstants.market}");
+  _log.info(uri);
+  var request = await _client.getUrl(uri);
+  var response = await request.close();
+
+  if (response.statusCode != 200) {
+    _log.warning("Failed to fetch status: ${response.statusCode} uri: $uri");
+    return [];
+  }
+
+  var body = await response.transform(utf8.decoder).join();
+  return compute(_parseLandingResponse, body);
+}
+
 Future<EventResponse> fetchLiveOpen() async {
   var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
       .offering}/event/live/open.json?lang=${ApiConstants.lang}&market=${ApiConstants.market}");
@@ -53,7 +69,7 @@ Future<EventResponse> fetchLiveOpen() async {
   var response = await request.close();
 
   var key = EventCollectionKey(
-      type: EventCollectionType.LiveRightNow
+      type: EventCollectionType.liveRightNow
   );
   if (response.statusCode != 200) {
     _log.warning("Failed to fetch status: ${response.statusCode} uri: $uri");
@@ -103,16 +119,47 @@ EventResponse _parseLiveOpenResponse(Tuple2<String, EventCollectionKey> tuple) {
   );
 }
 
+List<EventResponse> _parseLandingResponse(String body) {
+  final responseJson = json.decode(body);
+  List<dynamic> result = responseJson["result"];
+
+  return _parseLandingResult(result).toList();
+}
+
+Iterable<EventResponse> _parseLandingResult(List<Map<String, dynamic>>  result) sync * {
+  for (var js in result) {
+    var key = _convertLandingSectionNameToKey(js["name"]);
+    yield _parseEventsWithBetOffers(js, EventCollectionKey(type: key));
+  }
+}
+
+EventCollectionType _convertLandingSectionNameToKey(String name) {
+  switch(name) {
+    case "LRN": return EventCollectionType.landingLiveRightNow;
+    case "shocker": return EventCollectionType.landingShocker;
+    case "nextoff": return EventCollectionType.landingNextOff;
+    case "popular": return EventCollectionType.landingPopular;
+    case "highlights": return EventCollectionType.landingHighlights;
+    case "statingsoon": return EventCollectionType.landingStatingSoon;
+    default:
+      return EventCollectionType.unknown;
+  }
+}
+
 EventResponse _parseListViewResponse(Tuple2<String, EventCollectionKey> tuple) {
   final responseJson = json.decode(tuple.item1);
+  return _parseEventsWithBetOffers(responseJson, tuple.item2);
+}
+
+EventResponse _parseEventsWithBetOffers(Map<String, dynamic> eventsWithBetOffers, EventCollectionKey key) {
   List<Event> events = [];
   List<BetOffer> betOffers = [];
   List<Outcome> outcomes = [];
   List<LiveStats> liveStats = [];
 
   try {
-    var eventWithBettoffers = responseJson["events"];
-    for (var eventJson in eventWithBettoffers) {
+    var eventWithBetOffers = eventsWithBetOffers["events"];
+    for (var eventJson in eventWithBetOffers) {
       var event = Event.fromJson(eventJson["event"]);
       events.add(event);
       var liveData = LiveStats.fromJson(eventJson["liveData"]);
@@ -143,7 +190,7 @@ EventResponse _parseListViewResponse(Tuple2<String, EventCollectionKey> tuple) {
   }
 
   return new EventResponse(
-      key: tuple.item2,
+      key: key,
       events: events,
       betoffers: betOffers,
       outcomes: outcomes,

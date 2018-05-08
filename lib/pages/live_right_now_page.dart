@@ -36,7 +36,7 @@ class LiveRightNowPage extends StatelessWidget {
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore store) {
     EventCollectionKey key = new EventCollectionKey(
-        type: EventCollectionType.LiveRightNow
+        type: EventCollectionType.liveRightNow
     );
 
     return Observable.combineLatest2(

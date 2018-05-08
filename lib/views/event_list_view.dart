@@ -54,7 +54,7 @@ class EventListView extends StatelessWidget {
 
   SnapshotObservable<EventCollection> _collection(AppStore store) {
     EventCollectionKey key = new EventCollectionKey(
-        type: EventCollectionType.ListView,
+        type: EventCollectionType.listView,
         selector: [sport, region, league, participant, filter]
     );
     return store.collectionStore[key];
