@@ -8,8 +8,8 @@ class EmptyWidget extends StatelessWidget {
   }
 }
 
-Widget emptyIfTrue({@required bool condition, @required Widget widget}){
-  if (condition) {
+Widget emptyIfNull({@required value, @required Widget widget}){
+  if (value == null) {
     return new EmptyWidget();
   }
   return widget;

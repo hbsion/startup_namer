@@ -5,6 +5,7 @@ import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_collection_key.dart';
 import 'package:startup_namer/data/event_group.dart';
 import 'package:startup_namer/store/app_store.dart';
+import 'package:startup_namer/store/groups_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
 import 'package:startup_namer/widgets/event_list_item_widget.dart';
@@ -137,8 +138,6 @@ class LiveRightNowPage extends StatelessWidget {
     return section;
   }
 }
-
-typedef EventGroup EventGroupResolver(int id);
 
 class _ViewModel {
   final List<Event> events;

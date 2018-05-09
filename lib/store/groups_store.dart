@@ -4,6 +4,8 @@ import 'package:startup_namer/data/event_group.dart';
 import 'package:startup_namer/store/action_type.dart';
 import 'package:startup_namer/store/store.dart';
 
+typedef EventGroup EventGroupResolver(int id);
+
 class GroupStore implements Store {
   final Map<int, EventGroup> _groups = new HashMap();
   final List<int> _highlights = [];

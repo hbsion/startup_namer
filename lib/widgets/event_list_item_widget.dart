@@ -30,7 +30,7 @@ class EventListItemWidget extends StatelessWidget {
     );
   }
 
-  VoidCallback navigate(BuildContext context) {
+  VoidCallback _navigate(BuildContext context) {
     return () =>
         Navigator.push(context, new MaterialPageRoute(
             builder: (ctx) => new EventPage(eventId: eventId))
@@ -61,7 +61,7 @@ class EventListItemWidget extends StatelessWidget {
       new Padding(
           padding: EdgeInsets.only(bottom: 8.0),
           child: new InkWell(
-              onTap: navigate(context),
+              onTap: _navigate(context),
               child: new Row(
                   crossAxisAlignment: model.state == EventState.STARTED ? CrossAxisAlignment.start : CrossAxisAlignment
                       .center,
@@ -87,7 +87,7 @@ class EventListItemWidget extends StatelessWidget {
       new Padding(
           padding: EdgeInsets.only(bottom: 8.0),
           child: new InkWell(
-              onTap: navigate(context),
+              onTap: _navigate(context),
               child: new Row(children: <Widget>[
                 _buildScoreAndMatchClock(context),
                 new Expanded(child: new EventInfoWidget(key: new Key(eventId.toString()), eventId: eventId,)),
