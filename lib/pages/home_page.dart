@@ -7,6 +7,7 @@ import 'package:startup_namer/store/actions.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
+import 'package:startup_namer/widgets/cards/LiveRightNowCardWidget.dart';
 import 'package:startup_namer/widgets/platform_circular_progress_indicator.dart';
 
 class HomePage extends StatelessWidget {
@@ -40,7 +41,10 @@ class HomePage extends StatelessWidget {
         ),
       );
     }
-    return SliverFillRemaining(child: Text("home"));
+    return new SliverList(
+        delegate: new SliverChildBuilderDelegate(
+            (BuildContext context, int index) => _buildCard(context, index, model),
+            childCount: model.live.eventIds.length));
   }
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore appStore) {
@@ -71,6 +75,10 @@ class HomePage extends StatelessWidget {
             .observable,
             (live, soon, highlights, popular, nexOff, shocker) =>
         new _ViewModel(live, soon, highlights, popular, nexOff, shocker));
+  }
+
+  Widget _buildCard(BuildContext context, int index, _ViewModel model) {
+    return new LiveRightNowCardWidget(eventId: model.live.eventIds[index]);
   }
 }
 
