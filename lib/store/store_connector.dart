@@ -17,7 +17,12 @@ class StoreConnector<T> extends StatelessWidget {
   final Snapshot<T> snapshot;
   final Callable<Dispatcher> action;
 
-  const StoreConnector({Key key, @required this.widgetBuilder, @required this.mapper, this.action, this.snapshot})
+  const StoreConnector({
+    Key key,
+    @required this.widgetBuilder,
+    @required this.mapper,
+    this.action,
+    this.snapshot})
       :assert(widgetBuilder != null),
         assert(mapper != null),
         super(key: key);
@@ -78,6 +83,11 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
   }
 
   @override
+  void deactivate() {
+    super.deactivate();
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print("Lifecycle changed: " + state.toString());
     if (state == AppLifecycleState.paused && _timer != null) {
@@ -86,7 +96,6 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
       widget.action(widget.appStore.dispatch);
       _startPoller();
     }
-
   }
 
   void _startPoller() {
@@ -94,7 +103,7 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
   }
 
   void _stopPoller() {
-     _timer.cancel();
+    _timer.cancel();
     _timer = null;
   }
 
@@ -103,7 +112,7 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
     _dispose();
     super.dispose();
   }
-  
+
   void _dispose() {
     if (_subscription != null) {
       _subscription.cancel();

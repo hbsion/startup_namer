@@ -29,7 +29,8 @@ class EventListView extends StatelessWidget {
     return new StoreConnector<_ViewModel>(
         mapper: _mapStateToViewModel,
         snapshot: _mapStateToSnapshot,
-        action: listViewAction(sport: sport,
+        action: listViewAction(
+            sport: sport,
             region: region,
             league: league,
             participant: participant,

@@ -31,7 +31,6 @@ class OutcomeThemeData {
 }
 
 class AppThemeData {
-
   final ListThemeData list;
   final OutcomeThemeData outcome;
 

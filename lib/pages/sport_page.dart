@@ -36,58 +36,97 @@ class _SportPageState extends State<SportPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        drawer: new AppDrawer(),
-        body: new Builder(builder: (ctx) {
-          return new PageView(
-              controller: _pageController,
-              onPageChanged: _handlePageChanged,
-              children: <Widget>[
-                new Scaffold(
-                    key: _matchesKey,
-                    body: new CustomScrollView(
-                      key: new PageStorageKey("matches"),
-                      slivers: <Widget>[
-                        new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
-                        new EventListView(
-                            sport: widget.sport,
-                            league: widget.league,
-                            region: widget.region,
-                            participant: widget.participant,
-                            filter: "matches")
-                      ],
-                    )
+      drawer: new AppDrawer(),
+      body: new Builder(builder: (ctx) {
+        return new PageView(
+            controller: _pageController,
+            onPageChanged: _handlePageChanged,
+            children: <Widget>[
+              new Scaffold(
+                  key: _matchesKey,
+                  body: new CustomScrollView(
+                    key: new PageStorageKey("matches"),
+                    slivers: <Widget>[
+                      new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
+                      new EventListView(
+                          sport: widget.sport,
+                          league: widget.league,
+                          region: widget.region,
+                          participant: widget.participant,
+                          filter: "matches")
+                    ],
+                  )
+              ),
+              new Scaffold(
+                  key: _outrightsKey,
+                  body: new CustomScrollView(
+                    key: new PageStorageKey("competitions"),
+                    slivers: <Widget>[
+                      new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
+                      new EventListView(
+                          sport: widget.sport,
+                          league: widget.league,
+                          region: widget.region,
+                          participant: widget.participant,
+                          filter: "competitions")
+                    ],
+                  )
+              ),
+            ]
+        );
+      }),
+//        bottomNavigationBar: BottomNavigationBar(
+//          type: BottomNavigationBarType.shifting,
+//          currentIndex: _index,
+//          onTap: _handleTabTap,
+//          items: <BottomNavigationBarItem>[
+//            BottomNavigationBarItem(
+//                icon: new Icon(Icons.all_inclusive),
+//                title: new Text("Matches")),
+//            BottomNavigationBarItem(
+//                icon: new Icon(Icons.home),
+//                title: new Text("Outrights")),
+//          ],
+//        )
+      bottomNavigationBar: _buildBottomAppBar(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.event),
+
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+    );
+  }
+
+  BottomAppBar _buildBottomAppBar(BuildContext context) {
+    var selectedStyle = TextStyle(
+      fontSize: 16.0,
+      color: Theme.of(context).accentColor
+    );
+    return BottomAppBar(
+      hasNotch: true,
+      child: new Container(
+          height: 44.0,
+          margin: EdgeInsets.only(right: 40.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Expanded(
+                child: FlatButton(
+                  child: Text("Matches", style: _index == 0 ? selectedStyle : null),
+                  onPressed: () => _handleTabTap(0),
                 ),
-                new Scaffold(
-                    key: _outrightsKey,
-                    body: new CustomScrollView(
-                      key: new PageStorageKey("competitions"),
-                      slivers: <Widget>[
-                        new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
-                        new EventListView(
-                            sport: widget.sport,
-                            league: widget.league,
-                            region: widget.region,
-                            participant: widget.participant,
-                            filter: "competitions")
-                      ],
-                    )
+              ),
+              Expanded(
+                child: FlatButton(
+                  child: Text("Competitions", style: _index == 1 ? selectedStyle : null),
+                  onPressed: () => _handleTabTap(1),
                 ),
-              ]
-          );
-        }),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.shifting,
-          currentIndex: _index,
-          onTap: _handleTabTap,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: new Icon(Icons.all_inclusive),
-                title: new Text("Matches")),
-            BottomNavigationBarItem(
-                icon: new Icon(Icons.home),
-                title: new Text("Outrights")),
-          ],
-        )
+              )
+            ],
+          )
+      ),
     );
   }
 
