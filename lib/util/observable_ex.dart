@@ -24,7 +24,7 @@ class ObservableEx {
       Stream<B> streamTwo,
       Stream<C> streamThree,
       T combiner(A a, B b, C c)) =>
-      new Observable<T>(new CombineLatestStream<T,
+      new Observable<T>(new CombineLatestEagerStream<T,
           A,
           B,
           C,
