@@ -44,27 +44,21 @@ class _CountDownState extends State<CountDownWidget> {
   @override
   Widget build(BuildContext context) {
     var timeToStart = widget.time.difference(DateTime.now());
-    double pc = (timeToStart.inSeconds / (widget.minutes*60)) * 100;
+    double pc = (timeToStart.inSeconds / (widget.minutes * 60)) * 100;
 
-    return new Column(
-        children: <Widget>[
-          new AnimatedCircularChart(
-            size: const Size(24.0, 24.0),
-            initialChartData: <CircularStackEntry>[
-              new CircularStackEntry(
-                  <CircularSegmentEntry>[
-                    new CircularSegmentEntry(100 - pc, _color1),
-                    new CircularSegmentEntry(pc, _color2),
-                  ]
-              )
-            ],
-            chartType: CircularChartType.Pie,
-          ),
-          new Text(formatDurationTime(timeToStart), style: Theme
-              .of(context)
-              .textTheme
-              .caption)
-        ]);
+    return new Column(children: <Widget>[
+      new AnimatedCircularChart(
+        size: const Size(24.0, 24.0),
+        initialChartData: <CircularStackEntry>[
+          new CircularStackEntry(<CircularSegmentEntry>[
+            new CircularSegmentEntry(100 - pc, _color1),
+            new CircularSegmentEntry(pc, _color2),
+          ])
+        ],
+        chartType: CircularChartType.Pie,
+      ),
+      new Text(formatDurationTime(timeToStart), style: Theme.of(context).textTheme.caption)
+    ]);
 //    return new Text("17:00", style: Theme.of(context).textTheme.subhead);
   }
 }

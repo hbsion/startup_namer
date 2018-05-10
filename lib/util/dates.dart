@@ -14,6 +14,12 @@ String formatDurationTime(Duration duration) {
   return formatDate(dt2, [nn, ":", ss]);
 }
 
+String formatDurationTime3(Duration duration) {
+  var dt = new DateTime(2000, 1, 1);
+  var dt2 = dt.add(duration);
+  return formatDate(dt2, [HH,":", nn, ":", ss]);
+}
+
 String prettyDate(DateTime dt) {
    if (isToday(dt)) {
      return "Today";

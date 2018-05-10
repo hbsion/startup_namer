@@ -154,9 +154,10 @@ class LiveScoreWidget extends StatelessWidget {
   }
 
   _renderTeamColors(ShirtColors colors, BuildContext context) {
-    return emptyIfNull(
-        value: colors,
-        widget: new Padding(
+    return emptyIfTrue(
+        condition: colors == null,
+        context: context,
+        builder: (_) => new Padding(
           padding: const EdgeInsets.only(right: 4.0),
           child: new CustomPaint(painter: _TeamColorsPainter(colors), size: Size(12.0, 12.0)),
         ));

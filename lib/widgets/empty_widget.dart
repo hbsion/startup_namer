@@ -8,9 +8,9 @@ class EmptyWidget extends StatelessWidget {
   }
 }
 
-Widget emptyIfNull({@required value, @required Widget widget}){
-  if (value == null) {
+Widget emptyIfTrue({@required bool condition, @required WidgetBuilder builder, @required BuildContext context}){
+  if (condition) {
     return new EmptyWidget();
   }
-  return widget;
+  return builder(context);
 }
