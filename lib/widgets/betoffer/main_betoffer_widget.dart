@@ -5,11 +5,11 @@ import 'package:startup_namer/data/betoffer.dart';
 import 'package:startup_namer/data/betoffer_types.dart';
 import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_tags.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/betoffer/winner_betoffer_widget.dart';
+import 'package:startup_namer/widgets/betoffer/main_racing_betoffer_widget.dart';
+import 'package:startup_namer/widgets/betoffer/main_winner_betoffer_widget.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/outcome_widget.dart';
-import 'package:tuple/tuple.dart';
 
 class MainBetOfferWidget extends StatelessWidget {
   final int betOfferId;
@@ -22,27 +22,30 @@ class MainBetOfferWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<Tuple2<BetOffer, Event>>(
+    return new StoreConnector<_ViewModel>(
         mapper: (store) =>
             Observable.combineLatest2(
                 store.betOfferStore[betOfferId].observable,
                 store.eventStore[eventId].observable,
-                    (betoffer, event) => new Tuple2(betoffer, event)
+                    (betoffer, event) => new _ViewModel(event, betoffer)
             ),
-        snapshot: (store) => new Tuple2(store.betOfferStore[betOfferId].last, store.eventStore[eventId].last),
+        snapshot: (store) => new _ViewModel(store.eventStore[eventId].last, store.betOfferStore[betOfferId].last),
         widgetBuilder: _buildWidget
     );
   }
 
-  Widget _buildWidget(BuildContext context, Tuple2<BetOffer, Event> model) {
-    if (model == null || model.item1 == null || model.item2 == null) return new EmptyWidget();
+  Widget _buildWidget(BuildContext context, _ViewModel model) {
+    if (model == null || model.event == null || model.betOffer == null) return new EmptyWidget();
 
 //    print("Rendering betoffer $betOfferId");
-    if (model.item2.tags.contains(EventTags.competition) || model.item1.betOfferType.id == BetOfferTypes.position) {
-      return new WinnerBetOfferWidget(key: new Key(model.item1.toString()), betOfferId: model.item1.id, eventId: model.item2.id, overrideShowLabel: true);
+    if (model.event.tags.contains(EventTags.competition) || model.betOffer.betOfferType.id == BetOfferTypes.position) {
+      if (model.event.sport == "GALLOPS") {
+        return new MainRacingBetOfferWidget(key: new Key(model.betOffer.toString()), betOfferId: model.betOffer.id, eventId: model.event.id);
+      }
+      return new MainWinnerBetOfferWidget(key: new Key(model.betOffer.toString()), betOfferId: model.betOffer.id, eventId: model.event.id, overrideShowLabel: true);
     }
 
-    return new Row(children: _buildLayout(context, model.item1.outcomes));
+    return new Row(children: _buildLayout(context, model.betOffer.outcomes));
   }
 
   List<Widget> _buildLayout(BuildContext context, List<int> outcomeIds) {
@@ -78,4 +81,25 @@ class MainBetOfferWidget extends StatelessWidget {
       return new Expanded(child: widget);
     }
   }
+}
+
+class _ViewModel {
+  final Event event;
+  final BetOffer betOffer;
+
+  _ViewModel(this.event, this.betOffer);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is _ViewModel &&
+              runtimeType == other.runtimeType &&
+              event == other.event &&
+              betOffer == other.betOffer;
+
+  @override
+  int get hashCode =>
+      event.hashCode ^
+      betOffer.hashCode;
+  
 }

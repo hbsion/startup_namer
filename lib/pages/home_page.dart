@@ -9,6 +9,7 @@ import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
 import 'package:startup_namer/widgets/cards/highlights_card.dart';
 import 'package:startup_namer/widgets/cards/live_right_now_card.dart';
+import 'package:startup_namer/widgets/cards/next_off_card.dart';
 import 'package:startup_namer/widgets/cards/starting_soon_card.dart';
 import 'package:startup_namer/widgets/cards/trending_card.dart';
 import 'package:startup_namer/widgets/platform_circular_progress_indicator.dart';
@@ -59,6 +60,9 @@ class HomePage extends StatelessWidget {
   }
 
   Iterable<Widget> _buildCards(_ViewModel model) sync* {
+    for (var eventId in model.nextOff.eventIds) {
+      yield new NextOffCard(eventId: eventId);
+    }
     for (var eventId in model.live.eventIds) {
       yield new LiveRightNowCard(eventId: eventId);
     }

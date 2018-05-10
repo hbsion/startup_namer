@@ -10,7 +10,7 @@ import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/event_info_widget.dart';
 import 'package:startup_namer/widgets/event_tracker_widget.dart';
 import 'package:startup_namer/widgets/favorite_widget.dart';
-import 'package:startup_namer/widgets/main_betoffer_widget.dart';
+import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
 
 class EventListItemWidget extends StatelessWidget {
   final int eventId;

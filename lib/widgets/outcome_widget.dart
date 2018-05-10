@@ -6,9 +6,9 @@ import 'package:rxdart/rxdart.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:startup_namer/app_theme.dart';
 import 'package:startup_namer/data/betoffer.dart';
+import 'package:startup_namer/data/betoffer_tags.dart';
 import 'package:startup_namer/data/betoffer_types.dart';
 import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/odds.dart';
 import 'package:startup_namer/data/outcome.dart';
 import 'package:startup_namer/data/outcome_status.dart';
 import 'package:startup_namer/data/outcome_type.dart';
@@ -26,7 +26,12 @@ class OutcomeWidget extends StatefulWidget {
   final bool overrideShowLabel;
 
   const OutcomeWidget(
-      {Key key, @required this.outcomeId, @required this.betOfferId, @required this.eventId, this.columnLayout = false, this.overrideShowLabel = false})
+      {Key key,
+      @required this.outcomeId,
+      @required this.betOfferId,
+      @required this.eventId,
+      this.columnLayout = false,
+      this.overrideShowLabel = false})
       : assert(outcomeId != null),
         assert(betOfferId != null),
         assert(eventId != null),
@@ -44,10 +49,7 @@ class _State extends State<OutcomeWidget> {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
-        mapper: _mapStateToObservable,
-        snapshot: _mapStateToSnapshot,
-        widgetBuilder: _buildWidget
-    );
+        mapper: _mapStateToObservable, snapshot: _mapStateToSnapshot, widgetBuilder: _buildWidget);
   }
 
   @override
@@ -64,39 +66,32 @@ class _State extends State<OutcomeWidget> {
         store.outcomeStore[widget.outcomeId].observable,
         store.betOfferStore[widget.betOfferId].observable,
         store.eventStore[widget.eventId].observable,
-            (outcome, betOffer, event) => new _ViewModel(outcome: outcome, betOffer: betOffer, event: event)
-    );
+        (outcome, betOffer, event) => new _ViewModel(outcome: outcome, betOffer: betOffer, event: event));
   }
 
   _ViewModel _mapStateToSnapshot(AppStore store) {
     return new _ViewModel(
         outcome: store.outcomeStore[widget.outcomeId].last,
         betOffer: store.betOfferStore[widget.betOfferId].last,
-        event: store.eventStore[widget.eventId].last
-    );
+        event: store.eventStore[widget.eventId].last);
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel viewModel) {
-//    print("render outcome ${widget.outcomeId}");
     if (viewModel == null || viewModel.outcome == null || viewModel.betOffer == null || viewModel.event == null) {
       return _buildPlaceholder(context);
     }
     _handleOddsChange(viewModel);
 
-    return new ScopedModelDescendant<MainModel>(
-        builder: (context, child, model) {
-          return new Container(
-              height: widget.columnLayout ? 48.0 : 38.0,
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-              decoration: new BoxDecoration(
-                borderRadius: BorderRadius.circular(3.0),
-                color: AppTheme
-                    .of(context)
-                    .outcome
-                    .background(disabled: _isSuspended(viewModel)),
-              ),
-              child: _buildContentWrapper(context, viewModel, model));
-        });
+    return new ScopedModelDescendant<MainModel>(builder: (context, child, model) {
+      return new Container(
+          height: widget.columnLayout ? 48.0 : 38.0,
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+          decoration: new BoxDecoration(
+            borderRadius: BorderRadius.circular(3.0),
+            color: AppTheme.of(context).outcome.background(disabled: _isSuspended(viewModel)),
+          ),
+          child: _buildContentWrapper(context, viewModel, model));
+    });
   }
 
   Container _buildPlaceholder(BuildContext context) {
@@ -104,12 +99,7 @@ class _State extends State<OutcomeWidget> {
         height: widget.columnLayout ? 48.0 : 38.0,
         padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
         decoration: new BoxDecoration(
-            borderRadius: BorderRadius.circular(3.0),
-            color: AppTheme
-                .of(context)
-                .outcome
-                .background(disabled: true)
-        ),
+            borderRadius: BorderRadius.circular(3.0), color: AppTheme.of(context).outcome.background(disabled: true)),
         child: new EmptyWidget());
   }
 
@@ -154,59 +144,47 @@ class _State extends State<OutcomeWidget> {
         );
       } else {
         return new Column(
-          children: <Widget>[
-            new Expanded(child: new Center(child: _buildOdds(context, viewModel, model)))
-          ],
+          children: <Widget>[new Expanded(child: new Center(child: _buildOdds(context, viewModel, model)))],
         );
       }
     }
 
     if (label != null) {
       return new Row(
-        children: <Widget>[
-          new Expanded(child: _buildLabel(context, label)),
-          _buildOdds(context, viewModel, model)
-        ],
+        children: <Widget>[new Expanded(child: _buildLabel(context, label)), _buildOdds(context, viewModel, model)],
       );
     } else {
       return new Row(
         children: <Widget>[
-          new Expanded(child: _buildOdds(context, viewModel, model)),
+          new Expanded(child: new Center(child: _buildOdds(context, viewModel, model))),
         ],
       );
     }
   }
 
   Widget _buildOdds(BuildContext context, _ViewModel viewModel, MainModel model) {
-    var formatOdds = _formatOdds(viewModel.outcome.odds, model.oddsFormat);
-    OutcomeThemeData theme = AppTheme
-        .of(context)
-        .outcome;
+    var formatOdds = _formatOdds(viewModel, model.oddsFormat);
+    OutcomeThemeData theme = AppTheme.of(context).outcome;
 
     int oddsDiff = _oddsDiff(viewModel.outcome);
     if (oddsDiff != 0) {
       Color color = oddsDiff > 0 ? theme.oddsUp : theme.oddsDown;
       Icon icon = new Icon(oddsDiff > 0 ? Icons.arrow_upward : Icons.arrow_downward, color: color, size: 12.0);
-      return new Row(children: <Widget>[
+      return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         icon,
-        new Text(
-            formatOdds,
-            style: new TextStyle(color: theme.text(), fontSize: 12.0, fontWeight: FontWeight.bold))
+        new Text(formatOdds, style: new TextStyle(color: theme.text(), fontSize: 12.0, fontWeight: FontWeight.bold))
       ]);
     }
 
-    return new Text(
-        formatOdds,
-        style: new TextStyle(color: theme.text(), fontSize: 12.0, fontWeight: FontWeight.bold));
+    return new Text(formatOdds, style: new TextStyle(color: theme.text(), fontSize: 12.0, fontWeight: FontWeight.bold));
   }
 
   int _oddsDiff(Outcome outcome) {
-    if (outcome != null && outcome.odds.decimal != null && outcome.lastOdds != null &&
+    if (outcome != null &&
+        outcome.odds.decimal != null &&
+        outcome.lastOdds != null &&
         outcome.lastOdds.decimal != null) {
-      int seconds = DateTime
-          .now()
-          .difference(outcome.oddsChanged)
-          .inSeconds;
+      int seconds = DateTime.now().difference(outcome.oddsChanged).inSeconds;
       if (seconds < 5) {
         return outcome.odds.decimal - outcome.lastOdds.decimal;
       }
@@ -218,10 +196,7 @@ class _State extends State<OutcomeWidget> {
     return new Text(label ?? "?",
         overflow: TextOverflow.ellipsis,
         softWrap: false,
-        style: new TextStyle(color: AppTheme
-            .of(context)
-            .outcome
-            .text(), fontSize: 12.0));
+        style: new TextStyle(color: AppTheme.of(context).outcome.text(), fontSize: 12.0));
   }
 
   String _formatLabel(_ViewModel viewModel) {
@@ -229,54 +204,48 @@ class _State extends State<OutcomeWidget> {
     var betoffer = viewModel.betOffer;
     var event = viewModel.event;
 
-    if ((
-        betoffer.betOfferType.id == BetOfferTypes.overUnder ||
+    if ((betoffer.betOfferType.id == BetOfferTypes.overUnder ||
             betoffer.betOfferType.id == BetOfferTypes.handicap ||
-            betoffer.betOfferType.id == BetOfferTypes.asianOverUnder) && outcome.line != null) {
-      return outcome.label + " " + (
-          outcome.line / 1000).toString();
+            betoffer.betOfferType.id == BetOfferTypes.asianOverUnder) &&
+        outcome.line != null) {
+      return outcome.label + " " + (outcome.line / 1000).toString();
     }
-    if (!widget.overrideShowLabel && (
-        betoffer.betOfferType.id == BetOfferTypes.headToHead ||
+    if (!widget.overrideShowLabel &&
+        (betoffer.betOfferType.id == BetOfferTypes.headToHead ||
             betoffer.betOfferType.id == BetOfferTypes.winner ||
             betoffer.betOfferType.id == BetOfferTypes.position ||
             betoffer.betOfferType.id == BetOfferTypes.goalScorer)) {
       return null;
     }
     if (betoffer.betOfferType.id == BetOfferTypes.doubleChance) {
-      if (outcome.type == OutcomeType.ONE_OR_CROSS)
-        return event.homeName + " or Draw";
-      if (outcome.type == OutcomeType.ONE_OR_TWO)
-        return event.homeName + " or " + event.awayName;
-      if (outcome.type == OutcomeType.CROSS_OR_TWO)
-        return event.awayName + " or Draw";
+      if (outcome.type == OutcomeType.ONE_OR_CROSS) return event.homeName + " or Draw";
+      if (outcome.type == OutcomeType.ONE_OR_TWO) return event.homeName + " or " + event.awayName;
+      if (outcome.type == OutcomeType.CROSS_OR_TWO) return event.awayName + " or Draw";
     }
     if (betoffer.betOfferType.id == BetOfferTypes.asianHandicap) {
-      return outcome.label + (
-          outcome.line > 0 ? "  +" : "  ") + (
-          (
-              outcome.line) / 1000).toString();
+      return outcome.label + (outcome.line > 0 ? "  +" : "  ") + ((outcome.line) / 1000).toString();
     }
 
-    if (outcome.type == OutcomeType.CROSS)
-      return "Draw";
-    if (outcome.type == OutcomeType.ONE)
-      return event.homeName;
-    if (outcome.type == OutcomeType.TWO)
-      return event.awayName;
+    if (outcome.type == OutcomeType.CROSS) return "Draw";
+    if (outcome.type == OutcomeType.ONE) return event.homeName;
+    if (outcome.type == OutcomeType.TWO) return event.awayName;
 
     return outcome.label;
   }
 
-  String _formatOdds(Odds odds, OddsFormat format) {
+  String _formatOdds(_ViewModel model, OddsFormat format) {
+    if (model.betOffer.tags.contains(BetOfferTags.startingPrice)) {
+      return "SP";
+    }
+    
     switch (format) {
       case OddsFormat.Fractional:
-        return odds.fractional ?? "";
+        return model.outcome.odds.fractional ?? "";
       case OddsFormat.American:
-        return odds.american ?? "";
+        return model.outcome.odds.american ?? "";
       case OddsFormat.Decimal:
       default:
-        double decimal = ((odds.decimal ?? 1000) / 1000);
+        double decimal = ((model.outcome.odds.decimal ?? 1000) / 1000);
         return decimal.toStringAsFixed(2);
     }
   }
@@ -292,16 +261,12 @@ class _ViewModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is _ViewModel &&
-              runtimeType == other.runtimeType &&
-              outcome == other.outcome &&
-              betOffer == other.betOffer &&
-              event == other.event;
+      other is _ViewModel &&
+          runtimeType == other.runtimeType &&
+          outcome == other.outcome &&
+          betOffer == other.betOffer &&
+          event == other.event;
 
   @override
-  int get hashCode =>
-      outcome.hashCode ^
-      betOffer.hashCode ^
-      event.hashCode;
-
+  int get hashCode => outcome.hashCode ^ betOffer.hashCode ^ event.hashCode;
 }

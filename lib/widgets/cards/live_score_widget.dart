@@ -64,12 +64,16 @@ class LiveScoreWidget extends StatelessWidget {
             ],
           ),
           Padding(padding: EdgeInsets.all(2.0)),
-          new Row(
-            children: <Widget>[
-              _renderTeamColors(model.teamColors?.away, context),
-              Text(model.awayName, style: textStyle),
-            ],
-          ),
+          emptyIfTrue(
+            condition: model.awayName == null,
+            context: context,
+            builder: (context) => new Row(
+                  children: <Widget>[
+                    _renderTeamColors(model.teamColors?.away, context),
+                    Text(model.awayName, style: textStyle),
+                  ],
+                ),
+          )
         ],
       ),
     );
@@ -158,9 +162,9 @@ class LiveScoreWidget extends StatelessWidget {
         condition: colors == null,
         context: context,
         builder: (_) => new Padding(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: new CustomPaint(painter: _TeamColorsPainter(colors), size: Size(12.0, 12.0)),
-        ));
+              padding: const EdgeInsets.only(right: 4.0),
+              child: new CustomPaint(painter: _TeamColorsPainter(colors), size: Size(12.0, 12.0)),
+            ));
   }
 }
 

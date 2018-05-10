@@ -6,12 +6,12 @@ import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/outcome_widget.dart';
 
-class WinnerBetOfferWidget extends StatelessWidget {
+class MainWinnerBetOfferWidget extends StatelessWidget {
   final int betOfferId;
   final int eventId;
   final bool overrideShowLabel;
 
-  const WinnerBetOfferWidget({Key key, @required this.betOfferId, @required this.eventId, this.overrideShowLabel = false})
+  const MainWinnerBetOfferWidget({Key key, @required this.betOfferId, @required this.eventId, this.overrideShowLabel = false})
       : assert(betOfferId != null),
         assert(eventId != null),
         assert(overrideShowLabel != null),

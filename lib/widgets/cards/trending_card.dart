@@ -8,7 +8,7 @@ import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
 import 'package:startup_namer/widgets/empty_widget.dart';
-import 'package:startup_namer/widgets/main_betoffer_widget.dart';
+import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
 
 class TrendingCard extends StatelessWidget {
   final int eventId;

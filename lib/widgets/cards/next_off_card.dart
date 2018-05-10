@@ -9,13 +9,13 @@ import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 
-class StartingSoonCard extends StatelessWidget {
+class NextOffCard extends StatelessWidget {
   final int eventId;
 
-  const StartingSoonCard({Key key, this.eventId})
+  const NextOffCard({Key key, this.eventId})
       : assert(eventId != null),
         super(key: key);
 
@@ -65,22 +65,13 @@ class StartingSoonCard extends StatelessWidget {
 
   Text _buildTitle(BuildContext context, Event event) {
     return new Text(
-      "Starting Soon",
+      "Next off",
       style: TextStyle(fontSize: 16.0),
     );
   }
 
   Widget _buildStartTime(BuildContext context, Event event) {
     return new _TimeToStart(time: event.start);
-  }
-
-  Text _buildPath(BuildContext context, Event event) {
-    return new Text(
-      event.path.map((p) => p.name).join(" / "),
-      softWrap: false,
-      overflow: TextOverflow.ellipsis,
-      style: Theme.of(context).textTheme.caption,
-    );
   }
 
   Widget _buildBody(BuildContext context, Event model) {
@@ -93,12 +84,22 @@ class StartingSoonCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: new Column(
           children: <Widget>[
-            new Text(model.name, style: new TextStyle(fontSize: 16.0)),
+            new Text(model.originalStartTime + " " + model.name, style: new TextStyle(fontSize: 16.0)),
             Padding(padding: EdgeInsets.all(3.0)),
-            _buildPath(context, model)
+            _buildPath(context, model),
           ],
         ),
       ),
+    );
+  }
+
+
+  Text _buildPath(BuildContext context, Event event) {
+    return new Text(
+      event.path.map((p) => p.name).join(" / "),
+      softWrap: false,
+      overflow: TextOverflow.ellipsis,
+      style: Theme.of(context).textTheme.caption,
     );
   }
 
@@ -143,6 +144,6 @@ class _TimeToStartState extends State<_TimeToStart> {
   Widget build(BuildContext context) {
     var timeToStart = widget.time.difference(DateTime.now());
 
-    return new Text(formatDurationTime3( timeToStart), style: Theme.of(context).textTheme.caption);
+    return new Text(formatDurationTime3(timeToStart), style: Theme.of(context).textTheme.caption);
   }
 }
