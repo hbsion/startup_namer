@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:startup_namer/app_theme.dart';
 import 'package:startup_namer/data/event_stats.dart';
 import 'package:startup_namer/data/score.dart';
 import 'package:startup_namer/store/app_store.dart';
@@ -11,8 +12,6 @@ import 'package:startup_namer/util/observable_ex.dart';
 import 'package:startup_namer/widgets/empty_widget.dart';
 
 class ScoreWidget extends StatelessWidget {
-  static final Color serverColor = Color.fromRGBO(0xf7, 0xce, 0x00, 1.0);
-  static final Color scoreColor = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
   final int eventId;
   final String sport;
 
@@ -23,21 +22,12 @@ class ScoreWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<_ViewModel>(
-        mapper: _mapStateToViewModel,
-        widgetBuilder: _buildWidget
-    );
+    return new StoreConnector<_ViewModel>(mapper: _mapStateToViewModel, widgetBuilder: _buildWidget);
   }
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore store) {
-    return ObservableEx.combineLatestEager2(
-        store.statisticsStore
-            .score(eventId)
-            .observable,
-        store.statisticsStore
-            .eventStats(eventId)
-            .observable,
-            (score, stats) => new _ViewModel(score, stats));
+    return ObservableEx.combineLatestEager2(store.statisticsStore.score(eventId).observable,
+        store.statisticsStore.eventStats(eventId).observable, (score, stats) => new _ViewModel(score, stats));
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel model) {
@@ -53,9 +43,7 @@ class ScoreWidget extends StatelessWidget {
   }
 
   Widget _buildFootball(BuildContext context, _ViewModel model) {
-    var textTheme = Theme
-        .of(context)
-        .textTheme;
+    var textTheme = Theme.of(context).textTheme;
     return new Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -66,11 +54,9 @@ class ScoreWidget extends StatelessWidget {
   }
 
   Widget _buildSetBased(BuildContext context, _ViewModel model) {
-    var textTheme = Theme
-        .of(context)
-        .textTheme;
+    var textTheme = Theme.of(context).textTheme;
     var status = calculateGameSummary(model.stats, sport == "TENNIS");
-    var scoreTextStyle = textTheme.subhead.merge(new TextStyle(color: scoreColor));
+    var scoreTextStyle = textTheme.subhead.merge(new TextStyle(color: AppTheme.of(context).pointsColor));
 
     return new Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -83,19 +69,18 @@ class ScoreWidget extends StatelessWidget {
                 new Text(status.homeSets.toString(), style: textTheme.subhead),
                 new Text(status.awaySets.toString(), style: textTheme.subhead),
               ],
-            )
-        ),
+            )),
         sport == "TENNIS"
             ? new Container(
-            margin: EdgeInsets.only(right: 4.0),
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                new Text(status.homeGames.toString(), style: textTheme.subhead),
-                new Text(status.awayGames.toString(), style: textTheme.subhead),
-              ],
-            )
-        ) : new EmptyWidget(),
+                margin: EdgeInsets.only(right: 4.0),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Text(status.homeGames.toString(), style: textTheme.subhead),
+                    new Text(status.awayGames.toString(), style: textTheme.subhead),
+                  ],
+                ))
+            : new EmptyWidget(),
         new Container(
             margin: EdgeInsets.only(right: 4.0),
             child: new Column(
@@ -104,33 +89,27 @@ class ScoreWidget extends StatelessWidget {
                 new Text(model.score.home, style: scoreTextStyle),
                 new Text(model.score.away, style: scoreTextStyle),
               ],
-            )
-        ),
+            )),
         new Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            _buildServeIf(model.stats.sets.homeServe),
-            _buildServeIf(!model.stats.sets.homeServe),
+            _buildServeIf(model.stats.sets.homeServe, context),
+            _buildServeIf(!model.stats.sets.homeServe, context),
           ],
-        )
-        ,
+        ),
       ],
     );
   }
 
-  Widget _buildServeIf(bool serving) {
+  Widget _buildServeIf(bool serving, BuildContext context) {
     return new Container(
         height: 18.0,
         child: new Center(
             child: new Container(
-              width: 8.0,
-              height: 8.0,
-              decoration: new BoxDecoration(
-                  color: serving ? serverColor : Colors.transparent,
-                  shape: BoxShape.circle
-              ),)
-        )
-    );
+          width: 8.0,
+          height: 8.0,
+          decoration: new BoxDecoration(color: serving ? AppTheme.of(context).serverColor : Colors.transparent, shape: BoxShape.circle),
+        )));
   }
 }
 
@@ -143,15 +122,10 @@ class _ViewModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is _ViewModel &&
-              runtimeType == other.runtimeType &&
-              score == other.score &&
-              stats == other.stats;
+      other is _ViewModel && runtimeType == other.runtimeType && score == other.score && stats == other.stats;
 
   @override
-  int get hashCode =>
-      score.hashCode ^
-      stats.hashCode;
+  int get hashCode => score.hashCode ^ stats.hashCode;
 
   @override
   String toString() {

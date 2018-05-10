@@ -21,20 +21,17 @@ class EventTrackingWidget extends StatelessWidget {
     return new StoreConnector<Event>(
         mapper: (store) => store.eventStore[eventId].observable,
         snapshot: (store) => store.eventStore[eventId].last,
-        widgetBuilder: _buildWidget
-    );
+        widgetBuilder: _buildWidget);
   }
 
   Widget _buildWidget(BuildContext context, Event model) {
     Widget w;
     if (model.state == EventState.STARTED) {
-      w = new Column(
-          children: <Widget>[
-            new ScoreWidget(eventId: eventId, sport: model.sport),
-            new Padding(padding: EdgeInsets.all(2.0)),
-            new MatchClockWidget(eventId: eventId)
-          ]
-      );
+      w = new Column(children: <Widget>[
+        new ScoreWidget(eventId: eventId, sport: model.sport),
+        new Padding(padding: EdgeInsets.all(2.0)),
+        new MatchClockWidget(eventId: eventId)
+      ]);
     } else if (model.start.isAfter(DateTime.now()) &&
         model.start.subtract(new Duration(minutes: 15)).isBefore(DateTime.now())) {
       w = new CountDownWidget(time: model.start);
@@ -44,7 +41,6 @@ class EventTrackingWidget extends StatelessWidget {
 
     return Center(child: w);
   }
-
 }
 
 class _DateTimeWidget extends StatelessWidget {
