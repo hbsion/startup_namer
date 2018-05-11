@@ -7,5 +7,6 @@ enum ActionType {
   matchClockUpdate,
   scoreUpdate,
   eventStatsUpdate,
-  betOfferStatusUpdate
+  betOfferStatusUpdate,
+  silkResponse
 }

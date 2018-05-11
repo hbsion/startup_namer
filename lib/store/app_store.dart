@@ -5,6 +5,7 @@ import 'package:startup_namer/store/event_store.dart';
 import 'package:startup_namer/store/favorites_store.dart';
 import 'package:startup_namer/store/groups_store.dart';
 import 'package:startup_namer/store/outcome_store.dart';
+import 'package:startup_namer/store/silk_store.dart';
 import 'package:startup_namer/store/statistics_store.dart';
 import 'package:startup_namer/store/store.dart';
 
@@ -19,6 +20,7 @@ class AppStore {
   final FavoritesStore favoritesStore = new FavoritesStore();
   final StatisticsStore statisticsStore = new StatisticsStore();
   final EventCollectionStore collectionStore = new EventCollectionStore();
+  final SilkStore silkStore = new SilkStore();
 
   AppStore() {
     _stores..add(eventStore)
@@ -27,6 +29,7 @@ class AppStore {
       ..add(favoritesStore)
       ..add(groupStore)
       ..add(statisticsStore)
+      ..add(silkStore)
       ..add(collectionStore);
   }
 

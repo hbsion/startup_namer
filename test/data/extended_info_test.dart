@@ -13,6 +13,7 @@ main() {
             "weight": "11st 12lbs",
             "editorial": "hej hopp",
             "hasIcon": true,
+            "icon": "xyz",
             "trainerName": "G Elliott",
             "formFigures": [
               {
@@ -44,6 +45,8 @@ main() {
     expect(c.age, "5");
     expect(c.weight, "11st 12lbs");
     expect(c.editorial, "hej hopp");
+    expect(c.hasIcon, true);
+    expect(c.icon, "xyz");
     expect(c.trainerName, "G Elliott");
     expect(c.formFigures.length, equals(1));
     expect(c.lastRunDays.length, equals(2));

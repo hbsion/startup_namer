@@ -11,6 +11,7 @@ class ExtendedInfo {
   final String weight;
   final String editorial;
   final bool hasIcon;
+  final String icon;
   final String trainerName;
   final List<FormFigures> formFigures;
   final List<LastRunDays> lastRunDays;
@@ -23,6 +24,7 @@ class ExtendedInfo {
     this.weight,
     this.editorial,
     this.hasIcon,
+    this.icon,
     this.trainerName,
     this.formFigures,
     this.lastRunDays,
@@ -38,6 +40,7 @@ class ExtendedInfo {
           weight: json["weight"],
           editorial: json["editorial"],
           trainerName: json["trainerName"],
+          icon: json["icon"],
           hasIcon: json["hasIcon"] ?? false,
           formFigures: ((json["formFigures"] ?? []) as List<dynamic>).map<FormFigures>((j) => FormFigures.fromJson(j)).toList(),
           lastRunDays: ((json["lastRunDays"] ?? []) as List<dynamic>).map<LastRunDays>((j) => LastRunDays.fromJson(j)).toList(),

@@ -16,14 +16,11 @@ class StoreConnector<T> extends StatelessWidget {
   final Mapper<T> mapper;
   final Snapshot<T> snapshot;
   final Callable<Dispatcher> action;
+  final Callable2<Dispatcher, AppStore> oneshotAction;
 
-  const StoreConnector({
-    Key key,
-    @required this.widgetBuilder,
-    @required this.mapper,
-    this.action,
-    this.snapshot})
-      :assert(widgetBuilder != null),
+  const StoreConnector(
+      {Key key, @required this.widgetBuilder, @required this.mapper, this.action, this.oneshotAction, this.snapshot})
+      : assert(widgetBuilder != null),
         assert(mapper != null),
         super(key: key);
 
@@ -35,6 +32,7 @@ class StoreConnector<T> extends StatelessWidget {
       mapper: mapper,
       snapshot: snapshot,
       action: action,
+      oneshotAction: oneshotAction,
     );
   }
 }
@@ -45,10 +43,17 @@ class _StoreConnector<T> extends StatefulWidget {
   final Mapper<T> mapper;
   final Snapshot<T> snapshot;
   final Callable<Dispatcher> action;
+  final Callable2<Dispatcher, AppStore> oneshotAction;
 
   const _StoreConnector(
-      {Key key, @required this.builder, @required this.mapper, this.action, this.appStore, this.snapshot})
-      :assert(builder != null),
+      {Key key,
+      @required this.builder,
+      @required this.mapper,
+      this.action,
+      this.oneshotAction,
+      this.appStore,
+      this.snapshot})
+      : assert(builder != null),
         assert(mapper != null),
         assert(appStore != null),
         super(key: key);
@@ -78,6 +83,9 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
       widget.action(widget.appStore.dispatch);
       _startPoller();
     }
+    if (widget.oneshotAction != null) {
+      widget.oneshotAction(widget.appStore.dispatch, widget.appStore);
+    }
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
@@ -95,6 +103,9 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
     } else if (state == AppLifecycleState.resumed && widget.action != null && _timer == null) {
       widget.action(widget.appStore.dispatch);
       _startPoller();
+      if (widget.oneshotAction != null) {
+        widget.oneshotAction(widget.appStore.dispatch, widget.appStore);
+      }
     }
   }
 
@@ -128,5 +139,4 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return widget.builder(context, _snapshot);
   }
-
 }

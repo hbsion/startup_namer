@@ -43,6 +43,13 @@ Callable<Dispatcher> highlights() {
   };
 }
 
+Callable<Dispatcher> silks(int eventId) {
+  return (dispatcher) async {
+    var response = await fetchSilks(eventId);
+    dispatcher(ActionType.silkResponse, response);
+  };
+}
+
 Callable<Dispatcher> landingPage() {
   return (dispatcher) async {
     var response = await fetchLandingPage();

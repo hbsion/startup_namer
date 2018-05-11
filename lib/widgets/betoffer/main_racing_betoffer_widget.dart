@@ -5,9 +5,12 @@ import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/app_theme.dart';
 import 'package:startup_namer/data/betoffer.dart';
 import 'package:startup_namer/data/outcome.dart';
+import 'package:startup_namer/data/silk_image.dart';
 import 'package:startup_namer/pages/event_page.dart';
+import 'package:startup_namer/store/actions.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/outcome_widget.dart';
 
 class MainRacingBetOfferWidget extends StatelessWidget {
@@ -22,16 +25,30 @@ class MainRacingBetOfferWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
-        mapper: _mapStateToViewModel, snapshot: _mapStateToSnapshot, widgetBuilder: _buildWidget);
+        mapper: _mapStateToViewModel,
+        snapshot: _mapStateToSnapshot,
+        oneshotAction: loadSilks,
+        widgetBuilder: _buildWidget);
+  }
+
+  void loadSilks(Dispatcher dispatch, AppStore store) {
+    if (!store.silkStore.hasSilks(eventId)) {
+      store.silkStore.silkLoading(eventId);
+      silks(eventId)(dispatch);
+    }
   }
 
   _ViewModel _mapStateToSnapshot(AppStore store) {
-    return new _ViewModel(store.outcomeStore.snapshotByBetOffer(betOfferId), store.betOfferStore[betOfferId].last);
+    return new _ViewModel(store.outcomeStore.snapshotByBetOffer(betOfferId), store.betOfferStore[betOfferId].last,
+        store.silkStore[eventId].last);
   }
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore store) {
-    return Observable.combineLatest2(store.outcomeStore.byBetOfferId(betOfferId).observable,
-        store.betOfferStore[betOfferId].observable, (outcomes, betOffer) => new _ViewModel(outcomes, betOffer));
+    return Observable.combineLatest3(
+        store.outcomeStore.byBetOfferId(betOfferId).observable,
+        store.betOfferStore[betOfferId].observable,
+        store.silkStore[eventId].observable,
+        (outcomes, betOffer, silks) => new _ViewModel(outcomes, betOffer, silks));
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel model) {
@@ -45,7 +62,7 @@ class MainRacingBetOfferWidget extends StatelessWidget {
     );
     model.outcomes.sort((a, b) => a.odds?.decimal?.compareTo(b.odds.decimal) ?? 0);
     for (var outcome in model.outcomes.take(3)) {
-      yield new Container(margin: const EdgeInsets.only(bottom: 4.0), child: _buildOutcomeRow(outcome, context));
+      yield new Container(margin: const EdgeInsets.only(bottom: 4.0), child: _buildOutcomeRow(model, outcome, context));
     }
 
     if (model.outcomes.length > 3) {
@@ -64,11 +81,21 @@ class MainRacingBetOfferWidget extends StatelessWidget {
     }
   }
 
-  Widget _buildOutcomeRow(Outcome outcome, BuildContext context) {
+  Widget _buildOutcomeRow(_ViewModel model, Outcome outcome, BuildContext context) {
+    SilkImage silk = model.silks?.where((img) => img.participantId == outcome.participantId)?.first;
     return new Row(
       children: <Widget>[
+        silk != null && silk.image != null
+            ? new Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: new Image.memory(silk.image, width: 36.0, height: 26.0),
+              )
+            : new EmptyWidget(),
         new Expanded(
-          child: Text(outcome.label, style: TextStyle(fontSize: 16.0),),
+          child: Text(
+            outcome.label,
+            style: TextStyle(fontSize: 16.0),
+          ),
         ),
         new Container(
           width: 100.0,
@@ -89,10 +116,11 @@ class MainRacingBetOfferWidget extends StatelessWidget {
 }
 
 class _ViewModel {
+  final List<SilkImage> silks;
   final List<Outcome> outcomes;
   final BetOffer betOffer;
 
-  _ViewModel(this.outcomes, this.betOffer);
+  _ViewModel(this.outcomes, this.betOffer, this.silks);
 
   @override
   bool operator ==(Object other) =>

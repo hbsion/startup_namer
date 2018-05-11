@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:startup_namer/store/action_type.dart';
@@ -18,6 +19,7 @@ class FavoritesStore implements Store {
 
   @override
   void dispatch(ActionType type, action) {
+    base64.decode("");
     switch (type) {
       case ActionType.toggleFavorite:
         int eventId = action;
