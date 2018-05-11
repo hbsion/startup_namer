@@ -10,7 +10,6 @@ import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/actions.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/outcome_widget.dart';
 
 class MainRacingBetOfferWidget extends StatelessWidget {
@@ -33,7 +32,6 @@ class MainRacingBetOfferWidget extends StatelessWidget {
 
   void loadSilks(Dispatcher dispatch, AppStore store) {
     if (!store.silkStore.hasSilks(eventId)) {
-      store.silkStore.silkLoading(eventId);
       silks(eventId)(dispatch);
     }
   }
@@ -85,12 +83,12 @@ class MainRacingBetOfferWidget extends StatelessWidget {
     SilkImage silk = model.silks?.where((img) => img.participantId == outcome.participantId)?.first;
     return new Row(
       children: <Widget>[
-        silk != null && silk.image != null
-            ? new Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: new Image.memory(silk.image, width: 36.0, height: 26.0),
-              )
-            : new EmptyWidget(),
+        new Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: silk != null && silk.image != null
+                ? new Image.memory(silk.image, width: 36.0, height: 26.0)
+                : new Image.asset('assets/silk_placeholder.png', width: 36.0, height: 26.0)
+        ),
         new Expanded(
           child: Text(
             outcome.label,
@@ -128,6 +126,7 @@ class _ViewModel {
       other is _ViewModel &&
           runtimeType == other.runtimeType &&
           new ListEquality().equals(outcomes, other.outcomes) &&
+          new ListEquality().equals(silks, other.silks) &&
           betOffer == other.betOffer;
 
   @override

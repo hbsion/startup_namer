@@ -20,9 +20,10 @@ class SilkStore implements Store {
     return new SnapshotObservable(subject.value, subject.stream);
   }
 
-  bool hasSilks(int eventId) => _silksLoaded.contains(eventId);
-
-  void silkLoading(int eventId) => _silksLoaded.add(eventId);
+  bool hasSilks(int eventId) {
+    var subject = _silks[eventId];
+    return subject != null && subject.value != null;
+  }
 
   @override
   void dispatch(ActionType type, action) {

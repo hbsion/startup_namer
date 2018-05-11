@@ -103,7 +103,7 @@ class TrendingCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: new Column(
           children: <Widget>[
-            new Text(model.name, style: new TextStyle(fontSize: 16.0)),
+            new Text(model.originalStartTime != null ? "${model.originalStartTime} ${model.name}"  : model.name, style: new TextStyle(fontSize: 16.0)),
             Padding(padding: EdgeInsets.all(3.0)),
             _buildPath(context, model)
           ],

@@ -39,6 +39,7 @@ flutter:
   assets:
     - assets/banner_1.jpg
     - assets/banner.jpg
+    - assets/silk_placeholder.png
    
   #  - images/a_dot_ham.jpeg
 

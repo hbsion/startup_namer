@@ -169,19 +169,13 @@ EventResponse _parseEventsWithBetOffers(Map<String, dynamic> eventsWithBetOffers
       var eventBo = <BetOffer>[];
       for (var boJson in eventJson["betOffers"]) {
         var bo = BetOffer.fromJson(boJson);
-        if (bo.tags.contains(BetOfferTags.main)) {
-          event.mainBetOfferId = bo.id;
-        }
         eventBo.add(bo);
 
         for (var outcomeJson in boJson["outcomes"]) {
           outcomes.add(Outcome.fromJson(outcomeJson));
         }
       }
-      if (event.mainBetOfferId == null && eventBo.length > 0) {
-        event.mainBetOfferId = eventBo[0].id;
-      }
-
+      event.mainBetOfferId = determinMainBetOffer(eventBo);
       betOffers.addAll(eventBo);
     }
   } catch (e) {
@@ -189,6 +183,26 @@ EventResponse _parseEventsWithBetOffers(Map<String, dynamic> eventsWithBetOffers
   }
 
   return new EventResponse(key: key, events: events, betoffers: betOffers, outcomes: outcomes, liveStats: liveStats);
+}
+
+int determinMainBetOffer(List<BetOffer> betOffers) {
+  var main = betOffers.where((bo)=> bo.tags.contains(BetOfferTags.main)).toList();
+  if (main.length > 1) {
+    var mainExSP = main.where((bo) => !bo.tags.contains(BetOfferTags.startingPrice)).first;
+    if (mainExSP != null) {
+      return mainExSP.id;
+    } else {
+      return main[0].id;
+    }
+  }
+  if (main.length == 1) {
+    return main[0].id;
+  }
+  if (main.length == 0 && betOffers.length > 0) {
+    return betOffers[0].id;
+  }
+
+  return null;
 }
 
 Future<EventGroup> fetchEventGroups() async {
