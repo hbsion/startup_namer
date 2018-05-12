@@ -34,7 +34,7 @@ class _State extends State<SearchView> {
   void initState() {
     _searchStream = new Observable<String>(_onTextChanged.stream)
         .distinct()
-        .where((str) => str.length > 2)
+        .where((str) => str.length > 1)
         .debounce(const Duration(milliseconds: 250))
         .switchMap(_buildSearch())
         .mergeWith([_onClear.stream]);
@@ -77,7 +77,7 @@ class _State extends State<SearchView> {
           return new Stack(
             children: <Widget>[
               // Fade in an intro screen if no term has been entered
-              new SearchIntroWidget(model.result == null),
+              new SearchIntroWidget(model.result == null && !model.isLoading),
               // Fade in an Empty Result screen if the search contained// no items
               new EmptyResultWidget(model.result?.resultTerms?.isEmpty ?? false),
               // Fade in a loading screen when results are being fetched

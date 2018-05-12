@@ -10,13 +10,13 @@ class SportPage extends StatefulWidget {
   final String region;
   final String participant;
   final EventGroup eventGroup;
+  final String title;
 
-  SportPage({Key key, this.sport, this.region, this.league, this.participant = "all", this.eventGroup})
+  SportPage({Key key, this.sport, this.region, this.league, this.participant = "all", this.eventGroup, this.title})
       : assert(sport != null),
         assert(region != null),
         assert(league != null),
         assert(participant != null),
-        assert(eventGroup != null),
         super(key: key);
 
   @override
@@ -29,8 +29,15 @@ class _SportPageState extends State<SportPage> {
   final GlobalKey<ScaffoldState> _matchesKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<ScaffoldState> _outrightsKey = new GlobalKey<ScaffoldState>();
 
-  final PageController _pageController = new PageController(keepPage: true);
+  PageController _pageController;
   int _index = 0;
+
+  @override
+  void initState() {
+    _index = widget.participant != "all" ? 1 : 0;
+    _pageController = new PageController(keepPage: true, initialPage: _index);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,19 +75,6 @@ class _SportPageState extends State<SportPage> {
               )),
         ]);
       }),
-//        bottomNavigationBar: BottomNavigationBar(
-//          type: BottomNavigationBarType.shifting,
-//          currentIndex: _index,
-//          onTap: _handleTabTap,
-//          items: <BottomNavigationBarItem>[
-//            BottomNavigationBarItem(
-//                icon: new Icon(Icons.all_inclusive),
-//                title: new Text("Matches")),
-//            BottomNavigationBarItem(
-//                icon: new Icon(Icons.home),
-//                title: new Text("Outrights")),
-//          ],
-//        )
       bottomNavigationBar: _buildBottomAppBar(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -133,6 +127,6 @@ class _SportPageState extends State<SportPage> {
   }
 
   String _buildTitle() {
-    return widget.eventGroup.name;
+    return widget.eventGroup?.name ?? widget.title ?? widget.sport;
   }
 }
