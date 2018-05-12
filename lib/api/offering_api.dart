@@ -12,6 +12,7 @@ import 'package:startup_namer/data/event_group.dart';
 import 'package:startup_namer/data/event_response.dart';
 import 'package:startup_namer/data/live_stats.dart';
 import 'package:startup_namer/data/outcome.dart';
+import 'package:startup_namer/data/search_result.dart';
 import 'package:startup_namer/data/silk_image.dart';
 import 'package:startup_namer/data/silk_response.dart';
 import 'package:tuple/tuple.dart';
@@ -236,6 +237,23 @@ Future<List<int>> fetchHighlights() async {
     var body = await response.transform(utf8.decoder).join();
     var js = json.decode(body);
     return ((js["groups"] ?? []) as List<dynamic>).map<int>((g) => g["id"]).toList();
+  }
+}
+
+Future<SearchResult> doSearch(String term) async {
+  var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
+      .offering}/term/search.json?lang=${ApiConstants.lang}&market=${ApiConstants.market}&term=$term");
+  _log.info(uri);
+  var request = await _client.getUrl(uri);
+  var response = await request.close();
+
+  if (response.statusCode != 200) {
+    _log.warning("Failed to fetch status: ${response.statusCode} uri: $uri");
+    return null;
+  } else {
+    var body = await response.transform(utf8.decoder).join();
+    var js = json.decode(body);
+    return SearchResult.fromJson(js);
   }
 }
 

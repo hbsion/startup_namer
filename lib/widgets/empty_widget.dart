@@ -8,7 +8,7 @@ class EmptyWidget extends StatelessWidget {
   }
 }
 
-Widget emptyIfTrue({@required bool condition, @required WidgetBuilder builder, @required BuildContext context}){
+Widget emptyIfTrue({@required bool condition, @required WidgetBuilder builder, @required BuildContext context}) {
   if (condition) {
     return new EmptyWidget();
   }

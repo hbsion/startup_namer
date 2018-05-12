@@ -9,7 +9,6 @@ import 'package:startup_namer/util/flowable.dart';
 
 class SilkStore implements Store {
   final Map<int, BehaviorSubject<List<SilkImage>>> _silks = new HashMap();
-  final Set<int> _silksLoaded = new HashSet();
 
   SnapshotObservable<List<SilkImage>> operator [](int eventId) {
     var subject = _silks[eventId];

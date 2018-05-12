@@ -4,7 +4,6 @@ import 'package:meta/meta.dart';
 import 'package:startup_namer/widgets/section_header.dart';
 
 class SectionListView extends StatefulWidget {
-
   final List<ListSection> sections;
 
   const SectionListView({Key key, this.sections}) : super(key: key);
@@ -21,10 +20,9 @@ class _SectionListViewState extends State<SectionListView> {
     return new SliverList(
 //        itemExtent: 126.0,
         delegate: new SliverChildBuilderDelegate(
-          _buildRow,
-          childCount: _childCount(),
-        )
-    );
+      _buildRow,
+      childCount: _childCount(),
+    ));
   }
 
   @override
@@ -52,8 +50,7 @@ class _SectionListViewState extends State<SectionListView> {
         cursor++;
         // debugPrint("Expanded Section finding row at cursor: " + cursor.toString() + " index: " + index.toString());
 
-        if (index < (
-            cursor + section.count)) {
+        if (index < (cursor + section.count)) {
           return _buildListItem(section.builder(context, index - cursor));
         } else {
           cursor += section.count;
@@ -78,7 +75,8 @@ class _SectionListViewState extends State<SectionListView> {
   }
 
   Widget _buildSectionHeader(ListSection section) {
-    return new _SectionListItem(key: new Key(section.title),
+    return new _SectionListItem(
+        key: new Key(section.title),
         child: new SectionHeader(
           leading: section.leading,
           title: section.title,
@@ -90,15 +88,11 @@ class _SectionListViewState extends State<SectionListView> {
               _saveState();
             });
           },
-        )
-    );
+        ));
   }
 
   Widget _buildListItem(Widget widget) {
-    return new _SectionListItem(
-        key: widget.key,
-        child: widget
-    );
+    return new _SectionListItem(key: widget.key, child: widget);
   }
 }
 
@@ -127,7 +121,6 @@ class _SectionListItem extends StatelessWidget {
 }
 
 class SliverHybridList extends SliverFixedExtentList {
-
   const SliverHybridList({
     Key key,
     @required SliverChildDelegate delegate,
@@ -138,5 +131,4 @@ class SliverHybridList extends SliverFixedExtentList {
   void updateRenderObject(BuildContext context, RenderSliverFixedExtentList renderObject) {
     renderObject.itemExtent = 126.0;
   }
-
 }

@@ -9,8 +9,8 @@ import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 
 class StartingSoonCard extends StatelessWidget {
   final int eventId;
@@ -143,6 +143,6 @@ class _TimeToStartState extends State<_TimeToStart> {
   Widget build(BuildContext context) {
     var timeToStart = widget.time.difference(DateTime.now());
 
-    return new Text(formatDurationTime3( timeToStart), style: Theme.of(context).textTheme.caption);
+    return new Text(formatDurationTime3(timeToStart), style: Theme.of(context).textTheme.caption);
   }
 }

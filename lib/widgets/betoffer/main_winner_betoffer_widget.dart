@@ -11,7 +11,8 @@ class MainWinnerBetOfferWidget extends StatelessWidget {
   final int eventId;
   final bool overrideShowLabel;
 
-  const MainWinnerBetOfferWidget({Key key, @required this.betOfferId, @required this.eventId, this.overrideShowLabel = false})
+  const MainWinnerBetOfferWidget(
+      {Key key, @required this.betOfferId, @required this.eventId, this.overrideShowLabel = false})
       : assert(betOfferId != null),
         assert(eventId != null),
         assert(overrideShowLabel != null),
@@ -20,23 +21,15 @@ class MainWinnerBetOfferWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<List<Outcome>>(
-        mapper: _mapStateToViewModel,
-        snapshot: _mapStateToSnapshot,
-        widgetBuilder: _buildWidget
-    );
+        mapper: _mapStateToViewModel, snapshot: _mapStateToSnapshot, widgetBuilder: _buildWidget);
   }
 
   List<Outcome> _mapStateToSnapshot(store) => store.outcomeStore.snapshotByBetOffer(betOfferId);
 
-  Observable<List<Outcome>> _mapStateToViewModel(store) =>
-      store.outcomeStore
-          .byBetOfferId(betOfferId)
-          .observable;
+  Observable<List<Outcome>> _mapStateToViewModel(store) => store.outcomeStore.byBetOfferId(betOfferId).observable;
 
   Widget _buildWidget(BuildContext context, List<Outcome> model) {
-    return new Column(
-        children: _buildChilds(context, model).toList()
-    );
+    return new Column(children: _buildChilds(context, model).toList());
   }
 
   Iterable<Widget> _buildChilds(BuildContext context, List<Outcome> model) sync* {
@@ -44,8 +37,12 @@ class MainWinnerBetOfferWidget extends StatelessWidget {
     for (var outcome in model.take(4)) {
       yield new Container(
           margin: const EdgeInsets.only(bottom: 4.0),
-          child: new OutcomeWidget(outcomeId: outcome.id, betOfferId: betOfferId, eventId: eventId, overrideShowLabel: overrideShowLabel,)
-      );
+          child: new OutcomeWidget(
+            outcomeId: outcome.id,
+            betOfferId: betOfferId,
+            eventId: eventId,
+            overrideShowLabel: overrideShowLabel,
+          ));
     }
 
     if (model.length > 4) {
@@ -54,17 +51,14 @@ class MainWinnerBetOfferWidget extends StatelessWidget {
           child: new Container(
             padding: EdgeInsets.all(12.0),
             child: new Row(children: <Widget>[
-              new Expanded(child: new Center(child: new Text("Show all ${model.length} participants")))]),
-          )
-      );
+              new Expanded(child: new Center(child: new Text("Show all ${model.length} participants")))
+            ]),
+          ));
     }
   }
 
   VoidCallback _navigateToEvent(BuildContext context) {
     return () =>
-        Navigator.of(context).push(new MaterialPageRoute(
-            builder: (context) => new EventPage(eventId: eventId)
-        ));
+        Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new EventPage(eventId: eventId)));
   }
-
 }

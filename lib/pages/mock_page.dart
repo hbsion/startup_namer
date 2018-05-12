@@ -16,13 +16,9 @@ class MockPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: new CustomScrollView(
-        slivers: <Widget>[
-          new AppToolbar(title: "MOCK"),
-          new _MockView()
-        ],
+        slivers: <Widget>[new AppToolbar(title: "MOCK"), new _MockView()],
       ),
-      drawer: new AppDrawer(onSelect: (Widget page) {}
-      ),
+      drawer: new AppDrawer(onSelect: (Widget page) {}),
     );
   }
 }
@@ -39,7 +35,6 @@ class _MockView extends StatelessWidget {
   Widget build(BuildContext context) {
     return new SectionListView(sections: buildSections(prefix));
   }
-
 }
 
 List<ListSection> buildSections(String prefix) {
@@ -67,7 +62,6 @@ class _MockSection extends ListSection {
 
   @override
   String get title => "Section $section";
-
 }
 
 ListSection buildTile(int i, String prefix) {
@@ -87,11 +81,12 @@ List<Widget> buildRows(int section) {
 }
 
 Widget buildRow(int section, int row) {
-  return new _EventListItemWidget(key: Key("$section - $row"),);
+  return new _EventListItemWidget(
+    key: Key("$section - $row"),
+  );
 }
 
 class _EventListItemWidget extends StatelessWidget {
-
   const _EventListItemWidget({Key key}) : super(key: key);
 
   @override
@@ -105,8 +100,7 @@ class _EventListItemWidget extends StatelessWidget {
                 _EventTimeWidget(),
                 new Expanded(child: new _EventInfoWidget()),
                 new _FavoriteWidget(),
-              ])
-          ),
+              ])),
           new _BetOfferWidget(),
           new Divider()
         ]));
@@ -121,43 +115,32 @@ class _EventInfoWidget extends StatelessWidget {
 
   Widget _buildWidget(BuildContext context) {
     //    print("Render list view item: $eventId");
-    var textTheme = Theme
-        .of(context)
-        .textTheme;
-    return new Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new Text("Barcelona", overflow: TextOverflow.ellipsis, style: textTheme.subhead),
-          new Text("Arsenal" ?? "", style: textTheme.subhead),
-          new Padding(padding: EdgeInsets.all(2.0)),
-          _buildGroupPath(textTheme),
-        ]
-    );
+    var textTheme = Theme.of(context).textTheme;
+    return new Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+      new Text("Barcelona", overflow: TextOverflow.ellipsis, style: textTheme.subhead),
+      new Text("Arsenal" ?? "", style: textTheme.subhead),
+      new Padding(padding: EdgeInsets.all(2.0)),
+      _buildGroupPath(textTheme),
+    ]);
   }
 
   Widget _buildGroupPath(TextTheme textTheme) {
     return new Container(
-      //        color: Colors.yellow,
-        child: new Row(
-            children: _buildGroupPathElements(textTheme).toList()
-        )
-    );
+        //        color: Colors.yellow,
+        child: new Row(children: _buildGroupPathElements(textTheme).toList()));
   }
 
   Iterable<Widget> _buildGroupPathElements(TextTheme textTheme) sync* {
     yield new Padding(
         padding: EdgeInsets.only(right: 2.0),
         child: new Text("Live",
-            style: textTheme.caption.merge(new TextStyle(color: Colors.red, fontStyle: FontStyle.italic))
-        )
-    );
+            style: textTheme.caption.merge(new TextStyle(color: Colors.red, fontStyle: FontStyle.italic))));
     for (var i = 0; i < 3; ++i) {
       if (i > 0) {
         yield new Padding(
             padding: EdgeInsets.only(left: 2.0, right: 2.0), child: new Text("/", style: textTheme.caption));
       }
-      yield new Flexible(child: new Container(
-          child: new Text("path-$i", softWrap: false, style: textTheme.caption)));
+      yield new Flexible(child: new Container(child: new Text("path-$i", softWrap: false, style: textTheme.caption)));
     }
   }
 }
@@ -173,10 +156,7 @@ class _EventTimeWidget extends StatelessWidget {
 class _FavoriteWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new IconButton(
-        icon: new Icon(Icons.star, color: Colors.orangeAccent),
-        onPressed: () {}
-    );
+    return new IconButton(icon: new Icon(Icons.star, color: Colors.orangeAccent), onPressed: () {});
   }
 }
 
@@ -193,6 +173,7 @@ class _BetOfferWidget extends StatelessWidget {
 
 class _OutcomeWidget extends StatelessWidget {
   static final Color blue = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
+
   @override
   Widget build(BuildContext context) {
     return _buildWidget(context);
@@ -202,17 +183,16 @@ class _OutcomeWidget extends StatelessWidget {
 //    print("render outcome ${widget.outcomeId}");
     //_handleOddsChange(viewModel);
 
-    return new ScopedModelDescendant<MainModel>(
-        builder: (context, child, model) {
-          return new Container(
-              height: 38.0,
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
-              decoration: new BoxDecoration(
-                borderRadius: BorderRadius.circular(3.0),
-                color: _isSuspended() ? Colors.grey : blue,
-              ),
-              child: _buildContentWrapper(model));
-        });
+    return new ScopedModelDescendant<MainModel>(builder: (context, child, model) {
+      return new Container(
+          height: 38.0,
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 4.0, bottom: 4.0),
+          decoration: new BoxDecoration(
+            borderRadius: BorderRadius.circular(3.0),
+            color: _isSuspended() ? Colors.grey : blue,
+          ),
+          child: _buildContentWrapper(model));
+    });
   }
 
 //  Container _buildPlaceholder() {
@@ -246,9 +226,7 @@ class _OutcomeWidget extends StatelessWidget {
 
     return new Material(
       color: Colors.transparent,
-      child: new InkWell(
-          onTap: () => print("outcome tap " + DateTime.now().toString()),
-          child: _buildContent(model)),
+      child: new InkWell(onTap: () => print("outcome tap " + DateTime.now().toString()), child: _buildContent(model)),
     );
   }
 
@@ -257,13 +235,9 @@ class _OutcomeWidget extends StatelessWidget {
   Widget _buildContent(MainModel model) {
     var label = _formatLabel();
 
-
     if (label != null) {
       return new Row(
-        children: <Widget>[
-          new Expanded(child: _buildLabel(label)),
-          _buildOdds(model)
-        ],
+        children: <Widget>[new Expanded(child: _buildLabel(label)), _buildOdds(model)],
       );
     } else {
       return new Row(
@@ -277,9 +251,7 @@ class _OutcomeWidget extends StatelessWidget {
   Widget _buildOdds(MainModel model) {
     var formatOdds = _formatOdds(new Odds(decimal: 1123), model.oddsFormat);
 
-    return new Text(
-        formatOdds,
-        style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold));
+    return new Text(formatOdds, style: new TextStyle(color: Colors.white, fontSize: 12.0, fontWeight: FontWeight.bold));
   }
 
   Text _buildLabel(String label) {
@@ -290,7 +262,7 @@ class _OutcomeWidget extends StatelessWidget {
   }
 
   String _formatLabel() {
-   return "Manchester";
+    return "Manchester";
   }
 
   String _formatOdds(Odds odds, OddsFormat format) {
@@ -301,9 +273,7 @@ class _OutcomeWidget extends StatelessWidget {
         return odds.american ?? "";
       case OddsFormat.Decimal:
       default:
-        return (
-            (
-                odds.decimal ?? 1000) / 1000).toString();
+        return ((odds.decimal ?? 1000) / 1000).toString();
     }
   }
 }

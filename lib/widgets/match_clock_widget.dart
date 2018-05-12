@@ -15,14 +15,8 @@ class MatchClockWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<MatchClock>(
-      mapper: (store) =>
-      store.statisticsStore
-          .matchClock(eventId)
-          .observable,
-      snapshot: (store) =>
-      store.statisticsStore
-          .matchClock(eventId)
-          .last,
+      mapper: (store) => store.statisticsStore.matchClock(eventId).observable,
+      snapshot: (store) => store.statisticsStore.matchClock(eventId).last,
       widgetBuilder: _buildWidget,
     );
   }
@@ -45,9 +39,7 @@ Widget _buildTimeWidget(BuildContext context, int minute, int second) {
     return value.toString().padLeft(2, '0');
   }
 
-  return new Text("${pad(minute)}:${pad(second)}",
-      style: Theme.of(context).textTheme.caption
-  );
+  return new Text("${pad(minute)}:${pad(second)}", style: Theme.of(context).textTheme.caption);
 }
 
 class _TimeTickWidget extends StatefulWidget {
@@ -93,4 +85,3 @@ class _TimeTickWidgetState extends State<_TimeTickWidget> {
     }
   }
 }
-

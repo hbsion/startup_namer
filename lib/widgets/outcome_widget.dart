@@ -237,7 +237,7 @@ class _State extends State<OutcomeWidget> {
     if (model.betOffer.tags.contains(BetOfferTags.startingPrice)) {
       return "SP";
     }
-    
+
     switch (format) {
       case OddsFormat.Fractional:
         return model.outcome.odds.fractional ?? "";

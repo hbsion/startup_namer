@@ -23,15 +23,10 @@ class MainBetOfferWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
-        mapper: (store) =>
-            Observable.combineLatest2(
-                store.betOfferStore[betOfferId].observable,
-                store.eventStore[eventId].observable,
-                    (betoffer, event) => new _ViewModel(event, betoffer)
-            ),
+        mapper: (store) => Observable.combineLatest2(store.betOfferStore[betOfferId].observable,
+            store.eventStore[eventId].observable, (betoffer, event) => new _ViewModel(event, betoffer)),
         snapshot: (store) => new _ViewModel(store.eventStore[eventId].last, store.betOfferStore[betOfferId].last),
-        widgetBuilder: _buildWidget
-    );
+        widgetBuilder: _buildWidget);
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel model) {
@@ -40,18 +35,21 @@ class MainBetOfferWidget extends StatelessWidget {
 //    print("Rendering betoffer $betOfferId");
     if (model.event.tags.contains(EventTags.competition) || model.betOffer.betOfferType.id == BetOfferTypes.position) {
       if (model.event.sport == "GALLOPS") {
-        return new MainRacingBetOfferWidget(key: new Key(model.betOffer.toString()), betOfferId: model.betOffer.id, eventId: model.event.id);
+        return new MainRacingBetOfferWidget(
+            key: new Key(model.betOffer.toString()), betOfferId: model.betOffer.id, eventId: model.event.id);
       }
-      return new MainWinnerBetOfferWidget(key: new Key(model.betOffer.toString()), betOfferId: model.betOffer.id, eventId: model.event.id, overrideShowLabel: true);
+      return new MainWinnerBetOfferWidget(
+          key: new Key(model.betOffer.toString()),
+          betOfferId: model.betOffer.id,
+          eventId: model.event.id,
+          overrideShowLabel: true);
     }
 
     return new Row(children: _buildLayout(context, model.betOffer.outcomes));
   }
 
   List<Widget> _buildLayout(BuildContext context, List<int> outcomeIds) {
-    var orientation = MediaQuery
-        .of(context)
-        .orientation;
+    var orientation = MediaQuery.of(context).orientation;
     List<Widget> widgets = [];
     if (outcomeIds != null) {
       for (var i = 0; i < outcomeIds.length; ++i) {
@@ -71,12 +69,7 @@ class MainBetOfferWidget extends StatelessWidget {
         columnLayout: orientation == Orientation.landscape);
 
     if (!isLast) {
-      return
-        new Expanded(child: new Padding(
-            padding: EdgeInsets.only(right: 4.0),
-            child: widget
-        )
-        );
+      return new Expanded(child: new Padding(padding: EdgeInsets.only(right: 4.0), child: widget));
     } else {
       return new Expanded(child: widget);
     }
@@ -92,14 +85,8 @@ class _ViewModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is _ViewModel &&
-              runtimeType == other.runtimeType &&
-              event == other.event &&
-              betOffer == other.betOffer;
+      other is _ViewModel && runtimeType == other.runtimeType && event == other.event && betOffer == other.betOffer;
 
   @override
-  int get hashCode =>
-      event.hashCode ^
-      betOffer.hashCode;
-  
+  int get hashCode => event.hashCode ^ betOffer.hashCode;
 }

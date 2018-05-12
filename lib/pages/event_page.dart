@@ -22,7 +22,6 @@ class EventPage extends StatelessWidget {
   }
 
   Iterable<StickyListRow> _buildRows(BuildContext context) sync* {
-    
     for (int section = 0; section < 10; section++) {
       yield new HeaderRow(child: new Text("Section-$section"));
       for (int row = 0; row < 10; row++) {

@@ -59,28 +59,26 @@ class MenuEntryRow extends StatelessWidget {
           child: Row(
             children: <Widget>[
               new Expanded(child: new Row(children: row, crossAxisAlignment: CrossAxisAlignment.end)),
-              entry.eventGroup != null ? new Text(entry.eventGroup.boCount.toString(), style: Theme
-                  .of(context)
-                  .textTheme
-                  .caption)
+              entry.eventGroup != null
+                  ? new Text(entry.eventGroup.boCount.toString(), style: Theme.of(context).textTheme.caption)
                   : new EmptyWidget()
             ],
           ),
         ),
-        onTap: _navigate(context, entry)
-    );
+        onTap: _navigate(context, entry));
   }
 
   _navigate(BuildContext context, _MenuEntry entry) {
     return () {
       Navigator.pop(context);
-      Navigator.of(context).push(new MaterialPageRoute(builder: entry.builder ?? (context) =>
-      new SportPage(
-        sport: entry._sport != null ? entry._sport.termKey : "all",
-        league: entry._league != null ? entry._league.termKey : "all",
-        region: entry._region != null ? entry._region.termKey : "all",
-        eventGroup: entry.eventGroup,
-      )));
+      Navigator.of(context).push(new MaterialPageRoute(
+          builder: entry.builder ??
+              (context) => new SportPage(
+                    sport: entry._sport != null ? entry._sport.termKey : "all",
+                    league: entry._league != null ? entry._league.termKey : "all",
+                    region: entry._region != null ? entry._region.termKey : "all",
+                    eventGroup: entry.eventGroup,
+                  )));
     };
   }
 }
@@ -93,22 +91,14 @@ class AppMenu extends StatelessWidget {
     return new Theme(
       data: new ThemeData(
           brightness: Brightness.dark,
-          accentColor: Theme
-              .of(context)
-              .accentColor,
-          platform: Theme
-              .of(context)
-              .platform)
-      ,
+          accentColor: Theme.of(context).accentColor,
+          platform: Theme.of(context).platform),
       child: new Scaffold(
         //key: _scaffoldKey,
         body: new CustomScrollView(
           slivers: <Widget>[
             _buildAppBar(context),
-            new StoreConnector<_ViewModel>(
-                mapper: _mapStateToViewModel,
-                widgetBuilder: _buildBody
-            )
+            new StoreConnector<_ViewModel>(mapper: _mapStateToViewModel, widgetBuilder: _buildBody)
           ],
         ),
       ),
@@ -116,10 +106,7 @@ class AppMenu extends StatelessWidget {
   }
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore store) {
-    return new Observable.just(new _ViewModel(
-        store.groupStore.sports,
-        store.groupStore.highlights
-    ));
+    return new Observable.just(new _ViewModel(store.groupStore.sports, store.groupStore.highlights));
   }
 
   SliverList _buildBody(BuildContext context, _ViewModel viewModel) {
@@ -149,13 +136,10 @@ class AppMenu extends StatelessWidget {
             title: new Text("More Sports"),
             initiallyExpanded: true,
             children: moreSports.map((eg) => new MenuEntryRow(new _MenuEntry(eventGroup: eg))).toList()),
-
       ]);
     }
 
-    return new SliverList(
-        delegate: new SliverChildListDelegate(tiles)
-    );
+    return new SliverList(delegate: new SliverChildListDelegate(tiles));
   }
 
   SliverAppBar _buildAppBar(BuildContext context) {
@@ -179,13 +163,10 @@ class AppMenu extends StatelessWidget {
             tooltip: 'Edit',
             onPressed: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (context) => new SettingsPage())
-              );
+              Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new SettingsPage()));
             },
           ),
-        ]
-    );
+        ]);
   }
 }
 
@@ -204,11 +185,7 @@ class _MenuEntry {
   EventGroup _region;
   EventGroup _league;
 
-  _MenuEntry({
-    this.title,
-    this.builder,
-    this.eventGroup
-  }) {
+  _MenuEntry({this.title, this.builder, this.eventGroup}) {
     if (eventGroup != null) {
       // fucking tree
       if (eventGroup.parent.isRoot) {

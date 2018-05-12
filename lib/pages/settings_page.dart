@@ -14,7 +14,6 @@ class SettingsPage extends StatelessWidget {
       },
     );
   }
-
 }
 
 class _SettingsPage extends StatefulWidget {
@@ -45,61 +44,49 @@ class _SettingPageSate extends State<_SettingsPage> {
                 item.isExpanded = false;
               });
             }
-            return new Form(
-                child: new Builder(
-                    builder: (BuildContext context) {
-                      return new CollapsibleBody(
-                        onSave: () {
-                          Form.of(context).save();
-                          widget.mainModel.updateTheme(item.value);
-                          close();
-                        },
-                        onCancel: () {
-                          Form.of(context).reset();
-                          close();
-                        },
-                        child: new FormField<Brightness>(
-                            initialValue: item.value,
-                            onSaved: (Brightness result) {
-                              item.value = result;
-                            },
-                            builder: (FormFieldState<Brightness> field) {
-                              return new Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    new Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          new Radio<Brightness>(
-                                            value: Brightness.light,
-                                            groupValue: field.value,
-                                            onChanged: field.didChange,
-                                          ),
-                                          const Text('Light')
-                                        ]
-                                    ),
-                                    new Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          new Radio<Brightness>(
-                                            value: Brightness.dark,
-                                            groupValue: field.value,
-                                            onChanged: field.didChange,
-                                          ),
-                                          const Text('Dark')
-                                        ]
-                                    ),
-                                  ]
-                              );
-                            }
-                        ),
-                      );
-                    }
-                )
-            );
-          }
-      ),
+
+            return new Form(child: new Builder(builder: (BuildContext context) {
+              return new CollapsibleBody(
+                onSave: () {
+                  Form.of(context).save();
+                  widget.mainModel.updateTheme(item.value);
+                  close();
+                },
+                onCancel: () {
+                  Form.of(context).reset();
+                  close();
+                },
+                child: new FormField<Brightness>(
+                    initialValue: item.value,
+                    onSaved: (Brightness result) {
+                      item.value = result;
+                    },
+                    builder: (FormFieldState<Brightness> field) {
+                      return new Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                              new Radio<Brightness>(
+                                value: Brightness.light,
+                                groupValue: field.value,
+                                onChanged: field.didChange,
+                              ),
+                              const Text('Light')
+                            ]),
+                            new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                              new Radio<Brightness>(
+                                value: Brightness.dark,
+                                groupValue: field.value,
+                                onChanged: field.didChange,
+                              ),
+                              const Text('Dark')
+                            ]),
+                          ]);
+                    }),
+              );
+            }));
+          }),
       new SettingsItem<OddsFormat>(
           name: 'Odds Format',
           value: widget.mainModel.oddsFormat,
@@ -111,72 +98,57 @@ class _SettingPageSate extends State<_SettingsPage> {
                 item.isExpanded = false;
               });
             }
-            return new Form(
-                child: new Builder(
-                    builder: (BuildContext context) {
-                      return new CollapsibleBody(
-                        onSave: () {
-                          Form.of(context).save();
-                          widget.mainModel.uppdateOddsFormat(item.value);
-                          close();
-                        },
-                        onCancel: () {
-                          Form.of(context).reset();
-                          close();
-                        },
-                        child: new FormField<OddsFormat>(
-                            initialValue: item.value,
-                            onSaved: (OddsFormat result) {
-                              item.value = result;
-                            },
-                            builder: (FormFieldState<OddsFormat> field) {
-                              return new Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    new Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          new Radio<OddsFormat>(
-                                            value: OddsFormat.Decimal,
-                                            groupValue: field.value,
-                                            onChanged: field.didChange,
-                                          ),
-                                          const Text('Decimal')
-                                        ]
-                                    ),
-                                    new Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          new Radio<OddsFormat>(
-                                            value: OddsFormat.Fractional,
-                                            groupValue: field.value,
-                                            onChanged: field.didChange,
-                                          ),
-                                          const Text('Fractional')
-                                        ]
-                                    ),
-                                    new Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          new Radio<OddsFormat>(
-                                            value: OddsFormat.American,
-                                            groupValue: field.value,
-                                            onChanged: field.didChange,
-                                          ),
-                                          const Text('American')
-                                        ]
-                                    ),
-                                  ]
-                              );
-                            }
-                        ),
-                      );
-                    }
-                )
-            );
-          }
-      ),
+
+            return new Form(child: new Builder(builder: (BuildContext context) {
+              return new CollapsibleBody(
+                onSave: () {
+                  Form.of(context).save();
+                  widget.mainModel.uppdateOddsFormat(item.value);
+                  close();
+                },
+                onCancel: () {
+                  Form.of(context).reset();
+                  close();
+                },
+                child: new FormField<OddsFormat>(
+                    initialValue: item.value,
+                    onSaved: (OddsFormat result) {
+                      item.value = result;
+                    },
+                    builder: (FormFieldState<OddsFormat> field) {
+                      return new Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                              new Radio<OddsFormat>(
+                                value: OddsFormat.Decimal,
+                                groupValue: field.value,
+                                onChanged: field.didChange,
+                              ),
+                              const Text('Decimal')
+                            ]),
+                            new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                              new Radio<OddsFormat>(
+                                value: OddsFormat.Fractional,
+                                groupValue: field.value,
+                                onChanged: field.didChange,
+                              ),
+                              const Text('Fractional')
+                            ]),
+                            new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                              new Radio<OddsFormat>(
+                                value: OddsFormat.American,
+                                groupValue: field.value,
+                                onChanged: field.didChange,
+                              ),
+                              const Text('American')
+                            ]),
+                          ]);
+                    }),
+              );
+            }));
+          }),
     ];
   }
 
@@ -198,12 +170,8 @@ class _SettingPageSate extends State<_SettingsPage> {
                 },
                 children: _settingsItems.map((SettingsItem<dynamic> item) {
                   return new ExpansionPanel(
-                      isExpanded: item.isExpanded,
-                      headerBuilder: item.headerBuilder,
-                      body: item.build()
-                  );
-                }).toList()
-            ),
+                      isExpanded: item.isExpanded, headerBuilder: item.headerBuilder, body: item.build());
+                }).toList()),
           ),
         ),
       ),
@@ -211,17 +179,11 @@ class _SettingPageSate extends State<_SettingsPage> {
   }
 }
 
-
 typedef Widget DemoItemBodyBuilder<T>(SettingsItem<T> item);
 typedef String ValueToString<T>(T value);
 
 class DualHeaderWithHint extends StatelessWidget {
-  const DualHeaderWithHint({
-    this.name,
-    this.value,
-    this.hint,
-    this.showHint
-  });
+  const DualHeaderWithHint({this.name, this.value, this.hint, this.showHint});
 
   final String name;
   final String value;
@@ -245,45 +207,33 @@ class DualHeaderWithHint extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
 
-    return new Row(
-        children: <Widget>[
-          new Expanded(
-            flex: 2,
-            child: new Container(
-              margin: const EdgeInsets.only(left: 24.0),
-              child: new FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: new Text(
-                  name,
-                  style: textTheme.body1.copyWith(fontSize: 15.0),
-                ),
-              ),
+    return new Row(children: <Widget>[
+      new Expanded(
+        flex: 2,
+        child: new Container(
+          margin: const EdgeInsets.only(left: 24.0),
+          child: new FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: new Text(
+              name,
+              style: textTheme.body1.copyWith(fontSize: 15.0),
             ),
           ),
-          new Expanded(
-              flex: 3,
-              child: new Container(
-                  margin: const EdgeInsets.only(left: 24.0),
-                  child: _crossFade(
-                      new Text(value, style: textTheme.caption.copyWith(fontSize: 15.0)),
-                      new Text(hint, style: textTheme.caption.copyWith(fontSize: 15.0)),
-                      showHint
-                  )
-              )
-          )
-        ]
-    );
+        ),
+      ),
+      new Expanded(
+          flex: 3,
+          child: new Container(
+              margin: const EdgeInsets.only(left: 24.0),
+              child: _crossFade(new Text(value, style: textTheme.caption.copyWith(fontSize: 15.0)),
+                  new Text(hint, style: textTheme.caption.copyWith(fontSize: 15.0)), showHint)))
+    ]);
   }
 }
 
 class CollapsibleBody extends StatelessWidget {
-  const CollapsibleBody({
-    this.margin: EdgeInsets.zero,
-    this.child,
-    this.onSave,
-    this.onCancel
-  });
+  const CollapsibleBody({this.margin: EdgeInsets.zero, this.child, this.onSave, this.onCancel});
 
   final EdgeInsets margin;
   final Widget child;
@@ -295,65 +245,37 @@ class CollapsibleBody extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
 
-    return new Column(
-        children: <Widget>[
-          new Container(
-              margin: const EdgeInsets.only(
-                  left: 24.0,
-                  right: 24.0,
-                  bottom: 24.0
-              ) - margin,
-              child: new Center(
-                  child: new DefaultTextStyle(
-                      style: textTheme.caption.copyWith(fontSize: 15.0),
-                      child: child
-                  )
-              )
-          ),
-          const Divider(height: 1.0),
-          new Container(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    new Container(
-                        margin: const EdgeInsets.only(right: 8.0),
-                        child: new FlatButton(
-                            onPressed: onCancel,
-                            child: const Text('CANCEL', style: const TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.w500
-                            ))
-                        )
-                    ),
-                    new Container(
-                        margin: const EdgeInsets.only(right: 8.0),
-                        child: new FlatButton(
-                            onPressed: onSave,
-                            textTheme: ButtonTextTheme.accent,
-                            child: const Text('SAVE',
-                              style: const TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w500
-                              ),)
-                        )
-                    )
-                  ]
-              )
-          )
-        ]
-    );
+    return new Column(children: <Widget>[
+      new Container(
+          margin: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 24.0) - margin,
+          child:
+              new Center(child: new DefaultTextStyle(style: textTheme.caption.copyWith(fontSize: 15.0), child: child))),
+      const Divider(height: 1.0),
+      new Container(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: new Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+            new Container(
+                margin: const EdgeInsets.only(right: 8.0),
+                child: new FlatButton(
+                    onPressed: onCancel,
+                    child: const Text('CANCEL', style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500)))),
+            new Container(
+                margin: const EdgeInsets.only(right: 8.0),
+                child: new FlatButton(
+                    onPressed: onSave,
+                    textTheme: ButtonTextTheme.accent,
+                    child: const Text(
+                      'SAVE',
+                      style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),
+                    )))
+          ]))
+    ]);
   }
 }
 
 class SettingsItem<T> {
-  SettingsItem({
-    this.name,
-    this.value,
-    this.hint,
-    this.builder,
-    this.valueToString
-  }) : textController = new TextEditingController(text: valueToString(value));
+  SettingsItem({this.name, this.value, this.hint, this.builder, this.valueToString})
+      : textController = new TextEditingController(text: valueToString(value));
 
   final String name;
   final String hint;
@@ -365,12 +287,7 @@ class SettingsItem<T> {
 
   ExpansionPanelHeaderBuilder get headerBuilder {
     return (BuildContext context, bool isExpanded) {
-      return new DualHeaderWithHint(
-          name: name,
-          value: valueToString(value),
-          hint: hint,
-          showHint: isExpanded
-      );
+      return new DualHeaderWithHint(name: name, value: valueToString(value), hint: hint, showHint: isExpanded);
     };
   }
 

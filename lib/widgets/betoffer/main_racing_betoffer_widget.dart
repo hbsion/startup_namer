@@ -87,8 +87,7 @@ class MainRacingBetOfferWidget extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8.0),
             child: silk != null && silk.image != null
                 ? new Image.memory(silk.image, width: 36.0, height: 26.0)
-                : new Image.asset('assets/silk_placeholder.png', width: 36.0, height: 26.0)
-        ),
+                : new Image.asset('assets/silk_placeholder.png', width: 36.0, height: 26.0)),
         new Expanded(
           child: Text(
             outcome.label,

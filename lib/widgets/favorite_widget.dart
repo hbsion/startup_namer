@@ -14,29 +14,22 @@ class FavoriteWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<_ViewModel>(
-        mapper: mapStateToViewModel,
-        widgetBuilder: _buildWidget
-    );
+    return new StoreConnector<_ViewModel>(mapper: mapStateToViewModel, widgetBuilder: _buildWidget);
   }
 
   Observable<_ViewModel> mapStateToViewModel(AppStore store) {
-    return store.favoritesStore
-        .favorites()
-        .observable
-        .map((favorites) {
+    return store.favoritesStore.favorites().observable.map((favorites) {
       return new _ViewModel(
-          isFavorite: favorites.contains(eventId),
-          toggle: () => store.dispatch(ActionType.toggleFavorite, eventId)
-      );
+          isFavorite: favorites.contains(eventId), toggle: () => store.dispatch(ActionType.toggleFavorite, eventId));
     });
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel model) {
     return new IconButton(
-        icon: model != null && model.isFavorite ? new Icon(Icons.star, color: Colors.orangeAccent) : new Icon(Icons.star_border),
-        onPressed: model != null ? model.toggle : () {}
-    );
+        icon: model != null && model.isFavorite
+            ? new Icon(Icons.star, color: Colors.orangeAccent)
+            : new Icon(Icons.star_border),
+        onPressed: model != null ? model.toggle : () {});
   }
 }
 
@@ -45,5 +38,4 @@ class _ViewModel {
   final VoidCallback toggle;
 
   _ViewModel({this.isFavorite, this.toggle});
-
 }

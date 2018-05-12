@@ -7,8 +7,8 @@ import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 
 class TrendingCard extends StatelessWidget {
   final int eventId;
@@ -103,7 +103,8 @@ class TrendingCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: new Column(
           children: <Widget>[
-            new Text(model.originalStartTime != null ? "${model.originalStartTime} ${model.name}"  : model.name, style: new TextStyle(fontSize: 16.0)),
+            new Text(model.originalStartTime != null ? "${model.originalStartTime} ${model.name}" : model.name,
+                style: new TextStyle(fontSize: 16.0)),
             Padding(padding: EdgeInsets.all(3.0)),
             _buildPath(context, model)
           ],

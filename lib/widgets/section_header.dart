@@ -27,16 +27,16 @@ class SectionHeader extends StatelessWidget {
                         child: Row(
                           children: <Widget>[
                             leading != null ? leading : new EmptyWidget(),
-                            new Expanded(child: new Text(title, style: titleStyle != null ? Theme.of(context).textTheme.subhead.merge(titleStyle) : Theme.of(context).textTheme.subhead)),
+                            new Expanded(
+                                child: new Text(title,
+                                    style: titleStyle != null
+                                        ? Theme.of(context).textTheme.subhead.merge(titleStyle)
+                                        : Theme.of(context).textTheme.subhead)),
                             new Text(count.toString())
                           ],
-                        )
-                    ),
+                        )),
                     new Divider(color: appTheme.list.headerDivider, height: 2.0)
                   ],
-                )
-            )
-        )
-    );
+                ))));
   }
 }

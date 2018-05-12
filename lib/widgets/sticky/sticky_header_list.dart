@@ -33,17 +33,12 @@ class StickyList extends StatefulWidget {
   /// This constructor is appropriate for list views with a large (or infinite)
   /// number of children because the builder is called only for those children
   /// that are actually visible.
-  StickyList.builder(
-      {Color background: Colors.transparent,
-      int itemCount,
-      StickyWidgetBuilder builder})
-      : childrenDelegate =
-            new _StickyChildBuilderDelegate.builder(builder, itemCount),
+  StickyList.builder({Color background: Colors.transparent, int itemCount, StickyWidgetBuilder builder})
+      : childrenDelegate = new _StickyChildBuilderDelegate.builder(builder, itemCount),
         background = background;
 
   @override
-  _StickyListState createState() =>
-      new _StickyListState(background: background, delegate: childrenDelegate);
+  _StickyListState createState() => new _StickyListState(background: background, delegate: childrenDelegate);
 }
 
 class _StickyListState extends State<StickyList> {
@@ -104,8 +99,7 @@ class _StickyListState extends State<StickyList> {
       stickyWidget = new ClipRect(
           child: new Container(
         child: header,
-        transform:
-            new Matrix4.translationValues(0.0, -_stickyTranslationOffset, 0.0),
+        transform: new Matrix4.translationValues(0.0, -_stickyTranslationOffset, 0.0),
       ));
     }
     return stickyWidget;
@@ -145,17 +139,12 @@ class _StickyListState extends State<StickyList> {
     }
   }
 
-  void _calculateStickyOffset(
-      BuildContext ctx, int newPosition, double pixels) {
-    if ((newPosition > 0) &&
-        this._childrenDelegate.build(ctx, newPosition).isSticky()) {
-      final headerHeight =
-          this._childrenDelegate.build(ctx, newPosition).getHeight();
-      if (_getOffsetForCurrentRow(context, pixels, newPosition) <
-          headerHeight) {
+  void _calculateStickyOffset(BuildContext ctx, int newPosition, double pixels) {
+    if ((newPosition > 0) && this._childrenDelegate.build(ctx, newPosition).isSticky()) {
+      final headerHeight = this._childrenDelegate.build(ctx, newPosition).getHeight();
+      if (_getOffsetForCurrentRow(context, pixels, newPosition) < headerHeight) {
         setState(() {
-          _stickyTranslationOffset = headerHeight -
-              _getOffsetForCurrentRow(context, pixels, newPosition);
+          _stickyTranslationOffset = headerHeight - _getOffsetForCurrentRow(context, pixels, newPosition);
         });
       }
     } else {
@@ -167,16 +156,13 @@ class _StickyListState extends State<StickyList> {
     }
   }
 
-  double _getOffsetForCurrentRow(
-      BuildContext ctx, double offset, int position) {
+  double _getOffsetForCurrentRow(BuildContext ctx, double offset, int position) {
     double calcOffset = offset;
     for (var i = 0; i < position - 1; i++) {
-      calcOffset =
-          calcOffset - this._childrenDelegate.build(ctx, i).getHeight();
+      calcOffset = calcOffset - this._childrenDelegate.build(ctx, i).getHeight();
     }
 
-    return (this._childrenDelegate.build(ctx, position - 1).getHeight() -
-        calcOffset);
+    return (this._childrenDelegate.build(ctx, position - 1).getHeight() - calcOffset);
   }
 
   int _getPositionForOffset(BuildContext ctx, double offset) {
@@ -184,8 +170,7 @@ class _StickyListState extends State<StickyList> {
     double calcOffset = offset;
 
     while (calcOffset > 0) {
-      calcOffset =
-          calcOffset - this._childrenDelegate.build(ctx, counter).getHeight();
+      calcOffset = calcOffset - this._childrenDelegate.build(ctx, counter).getHeight();
       counter++;
     }
 

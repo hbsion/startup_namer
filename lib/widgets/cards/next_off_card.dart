@@ -93,7 +93,6 @@ class NextOffCard extends StatelessWidget {
     );
   }
 
-
   Text _buildPath(BuildContext context, Event event) {
     return new Text(
       event.path.map((p) => p.name).join(" / "),

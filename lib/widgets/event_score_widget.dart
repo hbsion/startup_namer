@@ -108,7 +108,8 @@ class ScoreWidget extends StatelessWidget {
             child: new Container(
           width: 8.0,
           height: 8.0,
-          decoration: new BoxDecoration(color: serving ? AppTheme.of(context).serverColor : Colors.transparent, shape: BoxShape.circle),
+          decoration: new BoxDecoration(
+              color: serving ? AppTheme.of(context).serverColor : Colors.transparent, shape: BoxShape.circle),
         )));
   }
 }

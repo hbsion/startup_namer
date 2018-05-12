@@ -5,9 +5,9 @@ import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
+import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:startup_namer/widgets/cards/live_score_widget.dart';
 import 'package:startup_namer/widgets/empty_widget.dart';
-import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:startup_namer/widgets/match_clock_widget.dart';
 
 class LiveRightNowCard extends StatelessWidget {
@@ -38,18 +38,15 @@ class LiveRightNowCard extends StatelessWidget {
       child: new Column(
         children: <Widget>[
           _buildHeader(context, model),
-          Divider(height: 1.0, color: AppTheme
-              .of(context)
-              .list
-              .itemDivider),
+          Divider(height: 1.0, color: AppTheme.of(context).list.itemDivider),
           _buildBody(context, model),
           emptyIfTrue(
               condition: model.mainBetOfferId == null,
               context: context,
               builder: (context) => new Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                child: MainBetOfferWidget(betOfferId: model.mainBetOfferId, eventId: eventId),
-              ))
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                    child: MainBetOfferWidget(betOfferId: model.mainBetOfferId, eventId: eventId),
+                  ))
         ],
       ),
     );
@@ -62,11 +59,8 @@ class LiveRightNowCard extends StatelessWidget {
         children: <Widget>[
           new Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: new Text("Live", style: new TextStyle(
-                color: Colors.red,
-                fontSize: 16.0,
-                fontStyle: FontStyle.italic
-            )),
+            child:
+                new Text("Live", style: new TextStyle(color: Colors.red, fontSize: 16.0, fontStyle: FontStyle.italic)),
           ),
           Expanded(child: _buildPath(context, event)),
           new MatchClockWidget(eventId: eventId)
@@ -76,7 +70,8 @@ class LiveRightNowCard extends StatelessWidget {
   }
 
   Text _buildPath(BuildContext context, Event event) {
-    return new Text(event.path.map((p) => p.name).join(" / "),
+    return new Text(
+      event.path.map((p) => p.name).join(" / "),
       softWrap: false,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(fontSize: 16.0),
@@ -97,10 +92,6 @@ class LiveRightNowCard extends StatelessWidget {
   }
 
   VoidCallback _navigate(BuildContext context) {
-    return () =>
-        Navigator.push(context, new MaterialPageRoute(
-            builder: (ctx) => new EventPage(eventId: eventId))
-        );
+    return () => Navigator.push(context, new MaterialPageRoute(builder: (ctx) => new EventPage(eventId: eventId)));
   }
-
 }

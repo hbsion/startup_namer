@@ -13,44 +13,27 @@ import 'package:startup_namer/widgets/platform_circular_progress_indicator.dart'
 import 'package:startup_namer/widgets/section_list_view.dart';
 
 class LiveRightNowPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
         body: new CustomScrollView(
-          slivers: <Widget>[
-            new AppToolbar(title: "Live Right Now"),
-            _buildBody()
-          ],
+          slivers: <Widget>[new AppToolbar(title: "Live Right Now"), _buildBody()],
         ),
-        drawer: new AppDrawer(onSelect: (Widget page) {}
-        )
-    );
+        drawer: new AppDrawer(onSelect: (Widget page) {}));
   }
 
   _buildBody() {
-    return new StoreConnector<_ViewModel>(
-        mapper: _mapStateToViewModel,
-        widgetBuilder: _buildListView
-    );
+    return new StoreConnector<_ViewModel>(mapper: _mapStateToViewModel, widgetBuilder: _buildListView);
   }
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore store) {
-    EventCollectionKey key = new EventCollectionKey(
-        type: EventCollectionType.liveRightNow
-    );
+    EventCollectionKey key = new EventCollectionKey(type: EventCollectionType.liveRightNow);
 
     return Observable.combineLatest2(
         store.collectionStore[key].observable,
-        store.favoritesStore
-            .favorites()
-            .observable,
-            (collection, favorites) =>
-        new _ViewModel(
-            store.eventStore.snapshot(collection.eventIds),
-            store.eventStore.snapshot(favorites),
-            store.groupStore.groupById
-        ));
+        store.favoritesStore.favorites().observable,
+        (collection, favorites) => new _ViewModel(store.eventStore.snapshot(collection.eventIds),
+            store.eventStore.snapshot(favorites), store.groupStore.groupById));
   }
 
   Widget _buildListView(BuildContext context, _ViewModel model) {
@@ -73,10 +56,7 @@ class LiveRightNowPage extends StatelessWidget {
       );
     }
 
-    return new SectionListView(
-        key: new PageStorageKey("lrn"),
-        sections: _buildSections(context, model)
-    );
+    return new SectionListView(key: new PageStorageKey("lrn"), sections: _buildSections(context, model));
   }
 
   List<_EventSection> _buildSections(BuildContext context, _ViewModel model) {
@@ -88,16 +68,16 @@ class LiveRightNowPage extends StatelessWidget {
     }
 
     sections.sort((a, b) {
-       var sortOrder = a.sortOrder.compareTo(b.sortOrder);
-       if (sortOrder == 0) {
-         sortOrder = a.title.compareTo(b.title);
-       }
-       return sortOrder;
+      var sortOrder = a.sortOrder.compareTo(b.sortOrder);
+      if (sortOrder == 0) {
+        sortOrder = a.title.compareTo(b.title);
+      }
+      return sortOrder;
     });
 
     var favorites = new _EventSection()
-      ..leading = new Container(
-          padding: EdgeInsets.only(right: 4.0), child: new Icon(Icons.star, color: Colors.orangeAccent))
+      ..leading =
+          new Container(padding: EdgeInsets.only(right: 4.0), child: new Icon(Icons.star, color: Colors.orangeAccent))
       ..events = model.favorites
       ..sport = "no-sport"
       ..title = "Favorites";
@@ -108,8 +88,7 @@ class LiveRightNowPage extends StatelessWidget {
     for (var section in sections) {
       section.initiallyExpanded = true;
       expanded += section.count;
-      if (expanded > 5)
-        break;
+      if (expanded > 5) break;
     }
 
     return sections;
@@ -124,15 +103,17 @@ class LiveRightNowPage extends StatelessWidget {
 
     var eventGroup = EventGroup.resolveRoot(model.eventGroupResolver(event.groupId));
     var section = new _EventSection()
-      ..leading = new Container(padding: EdgeInsets.only(right: 4.0), child: new Text("Live", style: Theme
-          .of(context)
-          .textTheme
-          .subhead
-          .merge(new TextStyle(color: Colors.red, fontStyle: FontStyle.italic))))
+      ..leading = new Container(
+          padding: EdgeInsets.only(right: 4.0),
+          child: new Text("Live",
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .subhead
+                  .merge(new TextStyle(color: Colors.red, fontStyle: FontStyle.italic))))
       ..sport = event.sport
       ..title = eventGroup?.name ?? "Unknown group ${event.groupId}"
-      ..sortOrder = eventGroup?.sortOrder ?? 1000
-    ;
+      ..sortOrder = eventGroup?.sortOrder ?? 1000;
     sections.add(section);
 
     return section;
@@ -149,16 +130,10 @@ class _ViewModel {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is _ViewModel &&
-              runtimeType == other.runtimeType &&
-              events == other.events &&
-              favorites == other.favorites;
+      other is _ViewModel && runtimeType == other.runtimeType && events == other.events && favorites == other.favorites;
 
   @override
-  int get hashCode =>
-      events.hashCode ^
-      favorites.hashCode;
-
+  int get hashCode => events.hashCode ^ favorites.hashCode;
 }
 
 class _EventSection extends ListSection {
@@ -171,7 +146,7 @@ class _EventSection extends ListSection {
 
   @override
   IndexedWidgetBuilder get builder =>
-          (context, index) => _buildEventRow(context, events[index], index == events.length - 1);
+      (context, index) => _buildEventRow(context, events[index], index == events.length - 1);
 
   @override
   int get count => events.length;
@@ -192,5 +167,9 @@ class _EventSection extends ListSection {
 }
 
 Widget _buildEventRow(BuildContext context, Event event, bool isLast) {
-  return new EventListItemWidget(key: Key("lrn-" + event.id.toString()), eventId: event.id, showDivider: !isLast,);
+  return new EventListItemWidget(
+    key: Key("lrn-" + event.id.toString()),
+    eventId: event.id,
+    showDivider: !isLast,
+  );
 }
