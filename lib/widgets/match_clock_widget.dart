@@ -7,8 +7,9 @@ import 'package:startup_namer/widgets/empty_widget.dart';
 
 class MatchClockWidget extends StatelessWidget {
   final int eventId;
+  final TextStyle style;
 
-  const MatchClockWidget({Key key, this.eventId})
+  const MatchClockWidget({Key key, this.eventId, this.style})
       : assert(eventId != null),
         super(key: key);
 
@@ -27,25 +28,26 @@ class MatchClockWidget extends StatelessWidget {
     }
 
     if (model.running) {
-      return new _TimeTickWidget(clock: model);
+      return new _TimeTickWidget(clock: model, style: style);
     } else {
-      return _buildTimeWidget(context, model.minute, model.second);
+      return _buildTimeWidget(context, model.minute, model.second, style);
     }
   }
 }
 
-Widget _buildTimeWidget(BuildContext context, int minute, int second) {
+Widget _buildTimeWidget(BuildContext context, int minute, int second, TextStyle style) {
   String pad(int value) {
     return value.toString().padLeft(2, '0');
   }
 
-  return new Text("${pad(minute)}:${pad(second)}", style: Theme.of(context).textTheme.caption);
+  return new Text("${pad(minute)}:${pad(second)}", style: Theme.of(context).textTheme.caption.merge(style));
 }
 
 class _TimeTickWidget extends StatefulWidget {
   final MatchClock clock;
+  final TextStyle style;
 
-  const _TimeTickWidget({Key key, this.clock}) : super(key: key);
+  const _TimeTickWidget({Key key, this.clock, this.style}) : super(key: key);
 
   @override
   _TimeTickWidgetState createState() => new _TimeTickWidgetState();
@@ -72,7 +74,7 @@ class _TimeTickWidgetState extends State<_TimeTickWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildTimeWidget(context, _minute, _second);
+    return _buildTimeWidget(context, _minute, _second, widget.style);
   }
 
   void _timeTick(Timer timer) {

@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:color/color.dart' as ColorEx;
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,6 +12,7 @@ import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/observable_ex.dart';
 import 'package:startup_namer/widgets/empty_widget.dart';
+import 'package:startup_namer/widgets/render/TeamColorsPainter.dart';
 
 class LiveScoreWidget extends StatelessWidget {
   final int eventId;
@@ -56,6 +56,7 @@ class LiveScoreWidget extends StatelessWidget {
     return new Expanded(
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           new Row(
             children: <Widget>[
@@ -87,6 +88,7 @@ class LiveScoreWidget extends StatelessWidget {
     return new Padding(
       padding: const EdgeInsets.only(left: 4.0),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(model.score != null ? model.score.home : "-", style: textStyle),
           Padding(padding: EdgeInsets.all(2.0)),
@@ -163,58 +165,11 @@ class LiveScoreWidget extends StatelessWidget {
         context: context,
         builder: (_) => new Padding(
               padding: const EdgeInsets.only(right: 4.0),
-              child: new CustomPaint(painter: _TeamColorsPainter(colors), size: Size(12.0, 12.0)),
+              child: new CustomPaint(painter: new TeamColorsPainter(colors), size: Size(12.0, 12.0)),
             ));
   }
 }
 
-class _TeamColorsPainter extends CustomPainter {
-  final ShirtColors colors;
-
-  _TeamColorsPainter(this.colors);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = new Paint();
-    paint.style = PaintingStyle.fill;
-
-    paint.color = colors != null && colors.shirtColor1 != null ? hexColor(colors.shirtColor1) : Colors.white;
-//    paint.strokeWidth = stack.width;
-    var radius = size.width / 2;
-    var offset = new Offset(radius, size.height / 2);
-    canvas.drawCircle(offset, radius, paint);
-
-    paint.color = colors != null && colors.shirtColor2 != null ? hexColor(colors.shirtColor2) : Colors.white;
-
-    //    paint.strokeWidth = stack.width;
-    canvas.drawArc(
-      new Rect.fromCircle(
-        center: offset,
-        radius: radius,
-      ),
-      degToRad(-60),
-      degToRad(180),
-      true,
-      paint,
-    );
-
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = 1.0;
-    paint.color = Colors.grey;
-    canvas.drawCircle(offset, radius, paint);
-  }
-
-  Color hexColor(String hex) {
-    var hexColor = new ColorEx.HexColor(hex);
-
-    return new Color.fromARGB(255, hexColor.r, hexColor.g, hexColor.b);
-  }
-
-  static num degToRad(num deg) => deg * (pi / 180.0);
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
-}
 
 class _ViewModel {
   final Event event;

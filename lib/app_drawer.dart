@@ -145,6 +145,7 @@ class AppMenu extends StatelessWidget {
   SliverAppBar _buildAppBar(BuildContext context) {
     return new SliverAppBar(
         expandedHeight: _appBarHeight,
+        leading: EmptyWidget(),
         pinned: false,
         floating: true,
         snap: false,
@@ -158,13 +159,19 @@ class AppMenu extends StatelessWidget {
           ),
         ),
         actions: <Widget>[
-          new IconButton(
-            icon: const Icon(Icons.create),
-            tooltip: 'Edit',
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new SettingsPage()));
-            },
+          new Container(
+            decoration: new BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.black45
+            ),
+            child: new IconButton(
+              icon: const Icon(Icons.create),
+              tooltip: 'Edit',
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new SettingsPage()));
+              },
+            ),
           ),
         ]);
   }

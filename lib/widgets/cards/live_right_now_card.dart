@@ -6,7 +6,7 @@ import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
-import 'package:startup_namer/widgets/cards/live_score_widget.dart';
+import 'package:startup_namer/widgets/live_score_widget.dart';
 import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/match_clock_widget.dart';
 
