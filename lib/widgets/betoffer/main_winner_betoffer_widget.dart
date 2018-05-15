@@ -33,7 +33,7 @@ class MainWinnerBetOfferWidget extends StatelessWidget {
   }
 
   Iterable<Widget> _buildChilds(BuildContext context, List<Outcome> model) sync* {
-    model.sort((a, b) => a.odds.decimal.compareTo(b.odds.decimal));
+    model.sort((a, b) => (a.odds.decimal ?? 1).compareTo(b.odds.decimal ?? 1));
     for (var outcome in model.take(4)) {
       yield new Container(
           margin: const EdgeInsets.only(bottom: 4.0),

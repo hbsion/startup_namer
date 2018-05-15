@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:startup_namer/app_drawer.dart';
 import 'package:startup_namer/data/event_group.dart';
 import 'package:startup_namer/views/event_list_view.dart';
+import 'package:startup_namer/widgets/PageIndicator.dart';
 import 'package:startup_namer/widgets/app_toolbar.dart';
+import 'package:startup_namer/widgets/betslip/bet_slip_fab.dart';
 
 class SportPage extends StatefulWidget {
   final String sport;
@@ -30,113 +32,84 @@ class _SportPageState extends State<SportPage> {
   final GlobalKey<ScaffoldState> _outrightsKey = new GlobalKey<ScaffoldState>();
 
   PageController _pageController;
-  int _index = 0;
+  List<Widget> _pages;
 
   @override
   void initState() {
-    _index = widget.participant != "all" ? 1 : 0;
-    _pageController = new PageController(keepPage: true, initialPage: _index);
+     var index = widget.participant != "all" ? 1 : 0;
+    _pageController = new PageController(keepPage: true, initialPage: index);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _ensurePages(context);
     return new Scaffold(
       drawer: new AppDrawer(),
       body: new PageView.builder(
           controller: _pageController,
-          onPageChanged: _handlePageChanged,
           itemCount: 2,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return new Scaffold(
-                  key: _matchesKey,
-                  body: new CustomScrollView(
-                    key: new PageStorageKey("matches"),
-                    slivers: <Widget>[
-                      new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(context), sport: widget.sport),
-                      new EventListView(
-                          sport: widget.sport,
-                          league: widget.league,
-                          region: widget.region,
-                          participant: widget.participant,
-                          filter: "matches")
-                    ],
-                  ));
-            }
-            return new Scaffold(
-                key: _outrightsKey,
-                body: new CustomScrollView(
-                  key: new PageStorageKey("competitions"),
-                  slivers: <Widget>[
-                    new AppToolbar(
-                      title: _buildTitle(),
-                      onNavPress: _openDrawer(context),
-                      sport: widget.sport,
-                    ),
-                    new EventListView(
-                        sport: widget.sport,
-                        league: widget.league,
-                        region: widget.region,
-                        participant: widget.participant,
-                        filter: "competitions")
-                  ],
-                ));
-          }),
+          itemBuilder: (context, index) => _pages[index]
+           ),
       bottomNavigationBar: _buildBottomAppBar(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.event),
-      ),
+      floatingActionButton: new BetSlipFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
-  BottomAppBar _buildBottomAppBar(BuildContext context) {
-    var selectedStyle = TextStyle(fontSize: 16.0, color: Theme.of(context).accentColor);
-    return BottomAppBar(
-      hasNotch: true,
-      child: new Container(
-          height: 44.0,
-          margin: EdgeInsets.only(right: 40.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Expanded(
-                child: FlatButton(
-                  child: Text("Matches", style: _index == 0 ? selectedStyle : null),
-                  onPressed: () => _handleTabTap(0),
-                ),
-              ),
-              Expanded(
-                child: FlatButton(
-                  child: Text("Competitions", style: _index == 1 ? selectedStyle : null),
-                  onPressed: () => _handleTabTap(1),
-                ),
-              )
-            ],
-          )),
-    );
+  Widget _buildBottomAppBar(BuildContext context) {
+    return new PageIndicator(
+        titles: ["Matches", "Competitions"],
+        controller: _pageController,
+        onPageSelected: (index) {
+          _pageController.animateToPage(index, curve: Curves.ease, duration: new Duration(milliseconds: 300));
+        });
   }
 
   VoidCallback _openDrawer(BuildContext context) {
     return () => Scaffold.of(context).openDrawer();
   }
 
-  void _handlePageChanged(int index) {
-//    _index = index;
-    setState(() => _index = index);
-  }
-
-  void _handleTabTap(int index) {
-//    _index = index;
-     setState(() => _index = index);
-
-    _pageController.animateToPage(index, curve: Curves.ease, duration: new Duration(milliseconds: 300));
-  }
-
   String _buildTitle() {
     return widget.eventGroup?.name ?? widget.title ?? widget.sport;
+  }
+
+  void _ensurePages(BuildContext context) {
+    if (_pages == null) {
+      _pages = [
+        new Scaffold(
+            key: _matchesKey,
+            body: new CustomScrollView(
+              key: new PageStorageKey("matches"),
+              slivers: <Widget>[
+                new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(context), sport: widget.sport),
+                new EventListView(
+                    sport: widget.sport,
+                    league: widget.league,
+                    region: widget.region,
+                    participant: widget.participant,
+                    filter: "matches")
+              ],
+            )),
+        new Scaffold(
+            key: _outrightsKey,
+            body: new CustomScrollView(
+              key: new PageStorageKey("competitions"),
+              slivers: <Widget>[
+                new AppToolbar(
+                  title: _buildTitle(),
+                  onNavPress: _openDrawer(context),
+                  sport: widget.sport,
+                ),
+                new EventListView(
+                    sport: widget.sport,
+                    league: widget.league,
+                    region: widget.region,
+                    participant: widget.participant,
+                    filter: "competitions")
+              ],
+            ))
+      ];
+    }
   }
 }

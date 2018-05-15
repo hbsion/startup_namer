@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -10,7 +12,8 @@ import 'package:startup_namer/util/banners.dart';
 import 'package:startup_namer/views/markets_view.dart';
 import 'package:startup_namer/views/match_events_view.dart';
 import 'package:startup_namer/views/prematch_stats_view.dart';
-import 'package:startup_namer/widgets/sticky/sticky_header_list.dart';
+import 'package:startup_namer/widgets/PageIndicator.dart';
+import 'package:startup_namer/widgets/betslip/bet_slip_fab.dart';
 
 class EventPage extends StatefulWidget {
   final int eventId;
@@ -25,7 +28,6 @@ class EventPage extends StatefulWidget {
 
 class _EventPageState extends State<EventPage> {
   PageController _pageController = new PageController();
-  int _index = 0;
   List<Widget> _pages;
 
   @override
@@ -35,12 +37,6 @@ class _EventPageState extends State<EventPage> {
       snapshot: (store) => store.eventStore[widget.eventId].last,
       widgetBuilder: _buildWidget,
     );
-  }
-
-  @override
-  void initState() {
-    //_pages = _buildPageViews(model)
-    super.initState();
   }
 
   Scaffold _buildWidget(BuildContext context, Event model) {
@@ -55,7 +51,7 @@ class _EventPageState extends State<EventPage> {
       body: new PageView.builder(
         physics: new AlwaysScrollableScrollPhysics(),
         controller: _pageController,
-        onPageChanged: _handlePageChanged,
+        //onPageChanged: _handlePageChanged,
         itemCount: model.tags.contains(EventTags.prematchStats) ? 3 : 2,
         itemBuilder: (context, index) {
           if (_pages == null) _pages = _buildPageViews(model).toList();
@@ -63,44 +59,22 @@ class _EventPageState extends State<EventPage> {
         },
       ),
       bottomNavigationBar: _buildBottomAppBar(context, model),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: brandColorDark,
-        foregroundColor: Colors.white,
-        onPressed: () {},
-        child: Icon(Icons.event),
-      ),
+      floatingActionButton: new BetSlipFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
-  BottomAppBar _buildBottomAppBar(BuildContext context, Event model) {
-    return BottomAppBar(
-      hasNotch: true,
-      child: new Container(
-          height: 44.0,
-          margin: EdgeInsets.only(right: 40.0),
-          child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: _buildTabs(context, model).toList())),
-    );
-  }
-
-  Iterable<Widget> _buildTabs(BuildContext context, Event model) sync* {
-    var selectedStyle = TextStyle(fontSize: 16.0, color: Theme.of(context).accentColor);
-    Widget buildTab(String title, int index) {
-      return Expanded(
-          child: FlatButton(
-        child: Text(title, style: _index == index ? selectedStyle : null),
-        onPressed: () => _handleTabTap(index),
-      ));
-    }
-
-    yield buildTab("Markets", 0);
-    yield buildTab("Events", 1);
+  Widget _buildBottomAppBar(BuildContext context, Event model) {
+    List<String> titles = ["Markets", "Events"];
     if (model.tags.contains(EventTags.prematchStats)) {
-      yield buildTab("Stats", 2);
+      titles.add("Stats");
     }
+    return new PageIndicator(
+        titles: titles,
+        controller: _pageController,
+        onPageSelected: (index) {
+          _pageController.animateToPage(index, curve: Curves.ease, duration: new Duration(milliseconds: 300));
+        });
   }
 
   Iterable<Widget> _buildPageViews(Event model) sync* {
@@ -111,21 +85,5 @@ class _EventPageState extends State<EventPage> {
     }
   }
 
-  Iterable<StickyListRow> _buildRows(BuildContext context) sync* {
-    for (int section = 0; section < 10; section++) {
-      yield new HeaderRow(child: new Text("Section-$section"));
-      for (int row = 0; row < 10; row++) {
-        yield new RegularRow(child: new Text("Row-$section-$row"));
-      }
-    }
-  }
-
-  void _handleTabTap(int index) {
-    //setState(() => _index = index);
-    _pageController.animateToPage(index, curve: Curves.ease, duration: new Duration(milliseconds: 300));
-  }
-
-  void _handlePageChanged(int index) {
-    setState(() => _index = index);
-  }
 }
+
