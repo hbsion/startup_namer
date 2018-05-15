@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/app_theme.dart';
-import 'package:startup_namer/data/result_term.dart';
-import 'package:startup_namer/data/search_result.dart';
-import 'package:startup_namer/pages/sport_page.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
-import 'package:startup_namer/widgets/sticky/sticky_header_list.dart';
+import 'package:svan_play/app_theme.dart';
+import 'package:svan_play/data/result_term.dart';
+import 'package:svan_play/data/search_result.dart';
+import 'package:svan_play/pages/sport_page.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
+import 'package:svan_play/widgets/sticky/sticky_header_list.dart';
 
 class SearchResultWidget extends StatelessWidget {
   final SearchResult result;

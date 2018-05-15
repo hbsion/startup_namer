@@ -1,4 +1,4 @@
-import 'package:startup_namer/data/each_way.dart';
+import 'package:svan_play/data/each_way.dart';
 import 'package:test/test.dart';
 import 'dart:convert';
 

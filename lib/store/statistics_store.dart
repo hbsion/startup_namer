@@ -1,16 +1,16 @@
 import 'dart:collection';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/event_response.dart';
-import 'package:startup_namer/data/event_stats.dart';
-import 'package:startup_namer/data/match_clock.dart';
-import 'package:startup_namer/data/push/event_stats_update.dart';
-import 'package:startup_namer/data/push/match_clock_update.dart';
-import 'package:startup_namer/data/push/score_update.dart';
-import 'package:startup_namer/data/score.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/store.dart';
-import 'package:startup_namer/util/flowable.dart';
+import 'package:svan_play/data/event_response.dart';
+import 'package:svan_play/data/event_stats.dart';
+import 'package:svan_play/data/match_clock.dart';
+import 'package:svan_play/data/push/event_stats_update.dart';
+import 'package:svan_play/data/push/match_clock_update.dart';
+import 'package:svan_play/data/push/score_update.dart';
+import 'package:svan_play/data/score.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/store.dart';
+import 'package:svan_play/util/flowable.dart';
 
 class StatisticsStore implements Store {
   final Map<int, BehaviorSubject<Score>> _scores = new HashMap();

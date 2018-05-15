@@ -1,9 +1,9 @@
 import 'package:meta/meta.dart';
-import 'package:startup_namer/data/betoffer.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/event_collection_key.dart';
-import 'package:startup_namer/data/live_stats.dart';
-import 'package:startup_namer/data/outcome.dart';
+import 'package:svan_play/data/betoffer.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_collection_key.dart';
+import 'package:svan_play/data/live_stats.dart';
+import 'package:svan_play/data/outcome.dart';
 
 class EventResponse {
   final EventCollectionKey key;

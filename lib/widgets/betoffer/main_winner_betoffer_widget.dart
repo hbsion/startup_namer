@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/outcome.dart';
-import 'package:startup_namer/pages/event_page.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/outcome_widget.dart';
+import 'package:svan_play/data/outcome.dart';
+import 'package:svan_play/pages/event_page.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/widgets/outcome_widget.dart';
 
 class MainWinnerBetOfferWidget extends StatelessWidget {
   final int betOfferId;
@@ -21,7 +21,7 @@ class MainWinnerBetOfferWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<List<Outcome>>(
-        mapper: _mapStateToViewModel, snapshot: _mapStateToSnapshot, widgetBuilder: _buildWidget);
+        stream: _mapStateToViewModel, initalData: _mapStateToSnapshot, widgetBuilder: _buildWidget);
   }
 
   List<Outcome> _mapStateToSnapshot(store) => store.outcomeStore.snapshotByBetOffer(betOfferId);

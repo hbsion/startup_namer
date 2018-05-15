@@ -1,4 +1,4 @@
-import 'package:startup_namer/data/search_result.dart';
+import 'package:svan_play/data/search_result.dart';
 
 class SearchState {
   final SearchResult result;

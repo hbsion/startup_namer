@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:startup_namer/app_theme.dart';
-import 'package:startup_namer/data/betoffer.dart';
-import 'package:startup_namer/data/betoffer_tags.dart';
-import 'package:startup_namer/data/betoffer_types.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/outcome.dart';
-import 'package:startup_namer/data/outcome_status.dart';
-import 'package:startup_namer/data/outcome_type.dart';
-import 'package:startup_namer/models/main_model.dart';
-import 'package:startup_namer/models/odds_format.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
+import 'package:svan_play/app_theme.dart';
+import 'package:svan_play/data/betoffer.dart';
+import 'package:svan_play/data/betoffer_tags.dart';
+import 'package:svan_play/data/betoffer_types.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/outcome.dart';
+import 'package:svan_play/data/outcome_status.dart';
+import 'package:svan_play/data/outcome_type.dart';
+import 'package:svan_play/models/main_model.dart';
+import 'package:svan_play/models/odds_format.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
 
 class OutcomeWidget extends StatefulWidget {
   final int outcomeId;
@@ -49,7 +49,7 @@ class _State extends State<OutcomeWidget> {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
-        mapper: _mapStateToObservable, snapshot: _mapStateToSnapshot, widgetBuilder: _buildWidget);
+        stream: _mapStateToObservable, initalData: _mapStateToSnapshot, widgetBuilder: _buildWidget);
   }
 
   @override

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/event_tags.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_tags.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
 
 class EventInfoWidget extends StatelessWidget {
   final int eventId;
@@ -12,8 +12,8 @@ class EventInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<Event>(
-        mapper: (store) => store.eventStore[eventId].observable,
-        snapshot: (store) => store.eventStore[eventId].last,
+        stream: (store) => store.eventStore[eventId].observable,
+        initalData: (store) => store.eventStore[eventId].last,
         widgetBuilder: _buildWidget);
   }
 

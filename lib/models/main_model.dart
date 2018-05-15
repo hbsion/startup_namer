@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:startup_namer/models/odds_format.dart';
+import 'package:svan_play/models/odds_format.dart';
 
 class MainModel extends Model {
   Brightness _brightness = Brightness.light;

@@ -1,4 +1,4 @@
-import 'package:startup_namer/store/action_type.dart';
+import 'package:svan_play/store/action_type.dart';
 
 
 abstract class Store {

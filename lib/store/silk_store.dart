@@ -1,11 +1,11 @@
 import 'dart:collection';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/silk_image.dart';
-import 'package:startup_namer/data/silk_response.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/store.dart';
-import 'package:startup_namer/util/flowable.dart';
+import 'package:svan_play/data/silk_image.dart';
+import 'package:svan_play/data/silk_response.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/store.dart';
+import 'package:svan_play/util/flowable.dart';
 
 class SilkStore implements Store {
   final Map<int, BehaviorSubject<List<SilkImage>>> _silks = new HashMap();

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/app_theme.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/pages/event_page.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/util/sports.dart';
-import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
-import 'package:startup_namer/widgets/live_score_widget.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
-import 'package:startup_namer/widgets/match_clock_widget.dart';
+import 'package:svan_play/app_theme.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/pages/event_page.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/util/sports.dart';
+import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
+import 'package:svan_play/widgets/live_score_widget.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
+import 'package:svan_play/widgets/match_clock_widget.dart';
 
 class LiveRightNowCard extends StatelessWidget {
   final int eventId;
@@ -21,7 +21,7 @@ class LiveRightNowCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<Event>(
-      mapper: _mapStateToViewModel,
+      stream: _mapStateToViewModel,
       widgetBuilder: _buildWidget,
     );
   }

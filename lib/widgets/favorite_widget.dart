@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/store_connector.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/store_connector.dart';
 
 class FavoriteWidget extends StatelessWidget {
   final int eventId;
@@ -14,7 +14,7 @@ class FavoriteWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<_ViewModel>(mapper: mapStateToViewModel, widgetBuilder: _buildWidget);
+    return new StoreConnector<_ViewModel>(stream: mapStateToViewModel, widgetBuilder: _buildWidget);
   }
 
   Observable<_ViewModel> mapStateToViewModel(AppStore store) {

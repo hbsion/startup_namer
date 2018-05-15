@@ -4,17 +4,17 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
-import 'package:startup_namer/data/betoffer.dart';
-import 'package:startup_namer/data/betoffer_tags.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/event_collection_key.dart';
-import 'package:startup_namer/data/event_group.dart';
-import 'package:startup_namer/data/event_response.dart';
-import 'package:startup_namer/data/live_stats.dart';
-import 'package:startup_namer/data/outcome.dart';
-import 'package:startup_namer/data/search_result.dart';
-import 'package:startup_namer/data/silk_image.dart';
-import 'package:startup_namer/data/silk_response.dart';
+import 'package:svan_play/data/betoffer.dart';
+import 'package:svan_play/data/betoffer_tags.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_collection_key.dart';
+import 'package:svan_play/data/event_group.dart';
+import 'package:svan_play/data/event_response.dart';
+import 'package:svan_play/data/live_stats.dart';
+import 'package:svan_play/data/outcome.dart';
+import 'package:svan_play/data/search_result.dart';
+import 'package:svan_play/data/silk_image.dart';
+import 'package:svan_play/data/silk_response.dart';
 import 'package:tuple/tuple.dart';
 
 import 'api_constants.dart';

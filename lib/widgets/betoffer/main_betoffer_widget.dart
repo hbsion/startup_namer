@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/betoffer.dart';
-import 'package:startup_namer/data/betoffer_types.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/event_tags.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/betoffer/main_racing_betoffer_widget.dart';
-import 'package:startup_namer/widgets/betoffer/main_winner_betoffer_widget.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
-import 'package:startup_namer/widgets/outcome_widget.dart';
+import 'package:svan_play/data/betoffer.dart';
+import 'package:svan_play/data/betoffer_types.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_tags.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/widgets/betoffer/main_racing_betoffer_widget.dart';
+import 'package:svan_play/widgets/betoffer/main_winner_betoffer_widget.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
+import 'package:svan_play/widgets/outcome_widget.dart';
 
 class MainBetOfferWidget extends StatelessWidget {
   final int betOfferId;
@@ -23,9 +23,9 @@ class MainBetOfferWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
-        mapper: (store) => Observable.combineLatest2(store.betOfferStore[betOfferId].observable,
+        stream: (store) => Observable.combineLatest2(store.betOfferStore[betOfferId].observable,
             store.eventStore[eventId].observable, (betoffer, event) => new _ViewModel(event, betoffer)),
-        snapshot: (store) => new _ViewModel(store.eventStore[eventId].last, store.betOfferStore[betOfferId].last),
+        initalData: (store) => new _ViewModel(store.eventStore[eventId].last, store.betOfferStore[betOfferId].last),
         widgetBuilder: _buildWidget);
   }
 

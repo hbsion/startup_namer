@@ -1,4 +1,4 @@
-import 'package:startup_namer/push/push_client.dart';
+import 'package:svan_play/push/push_client.dart';
 
 void main() {
   PushClient client = new PushClient('wss://e4-push.kambi.com/socket.io/?EIO=3&transport=websocket');

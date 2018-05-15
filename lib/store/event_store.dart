@@ -1,11 +1,11 @@
 import 'dart:collection';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/event_response.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/store.dart';
-import 'package:startup_namer/util/flowable.dart';
+import 'package:svan_play/data/event_response.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/store.dart';
+import 'package:svan_play/util/flowable.dart';
 
 class EventStore implements Store {
   final Map<int, BehaviorSubject<Event>> _events = new HashMap();

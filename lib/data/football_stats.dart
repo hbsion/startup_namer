@@ -1,4 +1,4 @@
-import 'package:startup_namer/data/team_stats.dart';
+import 'package:svan_play/data/team_stats.dart';
 
 class FootballStats {
   final TeamStats home;

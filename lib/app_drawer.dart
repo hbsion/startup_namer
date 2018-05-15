@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/event_group.dart';
-import 'package:startup_namer/pages/home_page.dart';
-import 'package:startup_namer/pages/live_right_now_page.dart';
-import 'package:startup_namer/pages/settings_page.dart';
-import 'package:startup_namer/pages/sport_page.dart';
-import 'package:startup_namer/pages/starting_soon_page.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/util/callable.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
+import 'package:svan_play/data/event_group.dart';
+import 'package:svan_play/pages/home_page.dart';
+import 'package:svan_play/pages/live_right_now_page.dart';
+import 'package:svan_play/pages/settings_page.dart';
+import 'package:svan_play/pages/sport_page.dart';
+import 'package:svan_play/pages/starting_soon_page.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/util/callable.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
 
 class AppDrawer extends StatelessWidget {
   final String title;
@@ -98,7 +98,7 @@ class AppMenu extends StatelessWidget {
         body: new CustomScrollView(
           slivers: <Widget>[
             _buildAppBar(context),
-            new StoreConnector<_ViewModel>(mapper: _mapStateToViewModel, widgetBuilder: _buildBody)
+            new StoreConnector<_ViewModel>(stream: _mapStateToViewModel, widgetBuilder: _buildBody)
           ],
         ),
       ),

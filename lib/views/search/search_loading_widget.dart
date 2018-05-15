@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/widgets/platform_circular_progress_indicator.dart';
+import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
 
 class SearchLoadingWidget extends StatelessWidget {
   final bool isLoading;

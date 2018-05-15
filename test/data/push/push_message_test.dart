@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/push/push_message.dart';
-import 'package:startup_namer/data/push/push_message_type.dart';
+import 'package:svan_play/data/push/push_message.dart';
+import 'package:svan_play/data/push/push_message_type.dart';
 import 'package:test/test.dart';
 
 void main() {

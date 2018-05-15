@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/app_drawer.dart';
-import 'package:startup_namer/views/event_list_view.dart';
-import 'package:startup_namer/widgets/app_toolbar.dart';
+import 'package:svan_play/app_drawer.dart';
+import 'package:svan_play/views/event_list_view.dart';
+import 'package:svan_play/widgets/app_toolbar.dart';
 
 class StartingSoonPage extends StatelessWidget {
   @override

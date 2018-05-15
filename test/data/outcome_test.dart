@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/cashout_status.dart';
-import 'package:startup_namer/data/outcome.dart';
-import 'package:startup_namer/data/outcome_status.dart';
-import 'package:startup_namer/data/outcome_type.dart';
+import 'package:svan_play/data/cashout_status.dart';
+import 'package:svan_play/data/outcome.dart';
+import 'package:svan_play/data/outcome_status.dart';
+import 'package:svan_play/data/outcome_type.dart';
 import 'package:test/test.dart';
 
 

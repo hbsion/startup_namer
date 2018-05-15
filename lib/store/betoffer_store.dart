@@ -1,12 +1,12 @@
 import 'dart:collection';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/betoffer.dart';
-import 'package:startup_namer/data/event_response.dart';
-import 'package:startup_namer/data/push/betOffer_status_update.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/store.dart';
-import 'package:startup_namer/util/flowable.dart';
+import 'package:svan_play/data/betoffer.dart';
+import 'package:svan_play/data/event_response.dart';
+import 'package:svan_play/data/push/betOffer_status_update.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/store.dart';
+import 'package:svan_play/util/flowable.dart';
 
 class BetOfferStore implements Store {
   final Map<int, BehaviorSubject<BetOffer>> _betOffers = new HashMap();

@@ -1,4 +1,4 @@
-import 'package:startup_namer/data/odds.dart';
+import 'package:svan_play/data/odds.dart';
 
 class OutcomeUpdate {
   final int id;

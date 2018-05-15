@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/app_drawer.dart';
-import 'package:startup_namer/data/event_collection.dart';
-import 'package:startup_namer/data/event_collection_key.dart';
-import 'package:startup_namer/store/actions.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/app_toolbar.dart';
-import 'package:startup_namer/widgets/cards/highlights_card.dart';
-import 'package:startup_namer/widgets/cards/live_right_now_card.dart';
-import 'package:startup_namer/widgets/cards/next_off_card.dart';
-import 'package:startup_namer/widgets/cards/starting_soon_card.dart';
-import 'package:startup_namer/widgets/cards/trending_card.dart';
-import 'package:startup_namer/widgets/platform_circular_progress_indicator.dart';
+import 'package:svan_play/app_drawer.dart';
+import 'package:svan_play/data/event_collection.dart';
+import 'package:svan_play/data/event_collection_key.dart';
+import 'package:svan_play/store/actions.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/widgets/app_toolbar.dart';
+import 'package:svan_play/widgets/cards/highlights_card.dart';
+import 'package:svan_play/widgets/cards/live_right_now_card.dart';
+import 'package:svan_play/widgets/cards/next_off_card.dart';
+import 'package:svan_play/widgets/cards/starting_soon_card.dart';
+import 'package:svan_play/widgets/cards/trending_card.dart';
+import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
 
 class HomePage extends StatelessWidget {
   final String title;
@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
-        mapper: _mapStateToViewModel, widgetBuilder: _buildView, action: landingPage());
+        stream: _mapStateToViewModel, widgetBuilder: _buildView, pollAction: landingPage());
   }
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore appStore) {

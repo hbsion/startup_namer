@@ -1,4 +1,4 @@
-import 'package:startup_namer/data/event_stats.dart';
+import 'package:svan_play/data/event_stats.dart';
 
 class EventStatsUpdate {
   final int eventId;

@@ -1,13 +1,13 @@
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/betoffer_store.dart';
-import 'package:startup_namer/store/event_collection_store.dart';
-import 'package:startup_namer/store/event_store.dart';
-import 'package:startup_namer/store/favorites_store.dart';
-import 'package:startup_namer/store/groups_store.dart';
-import 'package:startup_namer/store/outcome_store.dart';
-import 'package:startup_namer/store/silk_store.dart';
-import 'package:startup_namer/store/statistics_store.dart';
-import 'package:startup_namer/store/store.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/betoffer_store.dart';
+import 'package:svan_play/store/event_collection_store.dart';
+import 'package:svan_play/store/event_store.dart';
+import 'package:svan_play/store/favorites_store.dart';
+import 'package:svan_play/store/groups_store.dart';
+import 'package:svan_play/store/outcome_store.dart';
+import 'package:svan_play/store/silk_store.dart';
+import 'package:svan_play/store/statistics_store.dart';
+import 'package:svan_play/store/store.dart';
 
 typedef Dispatcher = void Function(ActionType type, dynamic action);
 

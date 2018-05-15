@@ -1,4 +1,4 @@
-import 'package:startup_namer/data/result_term.dart';
+import 'package:svan_play/data/result_term.dart';
 
 class SearchResult {
   final String term;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:startup_namer/app_drawer.dart';
-import 'package:startup_namer/data/odds.dart';
-import 'package:startup_namer/models/main_model.dart';
-import 'package:startup_namer/models/odds_format.dart';
-import 'package:startup_namer/widgets/app_toolbar.dart';
-import 'package:startup_namer/widgets/section_list_view.dart';
+import 'package:svan_play/app_drawer.dart';
+import 'package:svan_play/data/odds.dart';
+import 'package:svan_play/models/main_model.dart';
+import 'package:svan_play/models/odds_format.dart';
+import 'package:svan_play/widgets/app_toolbar.dart';
+import 'package:svan_play/widgets/section_list_view.dart';
 
 class MockPage extends StatelessWidget {
   final String title;

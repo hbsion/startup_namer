@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
-import 'package:startup_namer/data/last_run_days.dart';
-import 'package:startup_namer/data/race_history_stat.dart';
+import 'package:svan_play/data/last_run_days.dart';
+import 'package:svan_play/data/race_history_stat.dart';
 
 import 'form_figures.dart';
 

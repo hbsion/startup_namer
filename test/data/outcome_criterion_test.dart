@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/outcome_criterion.dart';
+import 'package:svan_play/data/outcome_criterion.dart';
 import 'package:test/test.dart';
 
 

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/push/outcome_update.dart';
+import 'package:svan_play/data/push/outcome_update.dart';
 import 'package:test/test.dart';
 
 void main() {

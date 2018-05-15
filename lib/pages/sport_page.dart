@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/app_drawer.dart';
-import 'package:startup_namer/data/event_group.dart';
-import 'package:startup_namer/views/event_list_view.dart';
-import 'package:startup_namer/widgets/PageIndicator.dart';
-import 'package:startup_namer/widgets/app_toolbar.dart';
-import 'package:startup_namer/widgets/betslip/bet_slip_fab.dart';
+import 'package:svan_play/app_drawer.dart';
+import 'package:svan_play/data/event_group.dart';
+import 'package:svan_play/views/event_list_view.dart';
+import 'package:svan_play/widgets/PageIndicator.dart';
+import 'package:svan_play/widgets/app_toolbar.dart';
+import 'package:svan_play/widgets/betslip/bet_slip_fab.dart';
 
 class SportPage extends StatefulWidget {
   final String sport;

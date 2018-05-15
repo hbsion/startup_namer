@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/app_drawer.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/event_collection_key.dart';
-import 'package:startup_namer/data/event_group.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/groups_store.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/app_toolbar.dart';
-import 'package:startup_namer/widgets/event_list_item_widget.dart';
-import 'package:startup_namer/widgets/platform_circular_progress_indicator.dart';
-import 'package:startup_namer/widgets/section_list_view.dart';
+import 'package:svan_play/app_drawer.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_collection_key.dart';
+import 'package:svan_play/data/event_group.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/groups_store.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/widgets/app_toolbar.dart';
+import 'package:svan_play/widgets/event_list_item_widget.dart';
+import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
+import 'package:svan_play/widgets/section_list_view.dart';
 
 class LiveRightNowPage extends StatelessWidget {
   @override
@@ -23,7 +23,7 @@ class LiveRightNowPage extends StatelessWidget {
   }
 
   _buildBody() {
-    return new StoreConnector<_ViewModel>(mapper: _mapStateToViewModel, widgetBuilder: _buildListView);
+    return new StoreConnector<_ViewModel>(stream: _mapStateToViewModel, widgetBuilder: _buildListView);
   }
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore store) {

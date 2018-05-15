@@ -1,11 +1,11 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:startup_namer/data/push/push_message.dart';
-import 'package:startup_namer/data/push/push_message_type.dart';
-import 'package:startup_namer/push/push_client.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/app_store.dart';
+import 'package:svan_play/data/push/push_message.dart';
+import 'package:svan_play/data/push/push_message_type.dart';
+import 'package:svan_play/push/push_client.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/app_store.dart';
 
 class PushHub extends WidgetsBindingObserver {
   final PushClient pushClient;

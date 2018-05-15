@@ -1,19 +1,16 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/app_theme.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/event_tags.dart';
-import 'package:startup_namer/pages/event_page_header.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/util/banners.dart';
-import 'package:startup_namer/views/markets_view.dart';
-import 'package:startup_namer/views/match_events_view.dart';
-import 'package:startup_namer/views/prematch_stats_view.dart';
-import 'package:startup_namer/widgets/PageIndicator.dart';
-import 'package:startup_namer/widgets/betslip/bet_slip_fab.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_tags.dart';
+import 'package:svan_play/pages/event_page_header.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/util/banners.dart';
+import 'package:svan_play/views/markets_view.dart';
+import 'package:svan_play/views/match_events_view.dart';
+import 'package:svan_play/views/prematch_stats_view.dart';
+import 'package:svan_play/widgets/PageIndicator.dart';
+import 'package:svan_play/widgets/betslip/bet_slip_fab.dart';
 
 class EventPage extends StatefulWidget {
   final int eventId;
@@ -33,8 +30,8 @@ class _EventPageState extends State<EventPage> {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<Event>(
-      mapper: (store) => new Observable.empty(),
-      snapshot: (store) => store.eventStore[widget.eventId].last,
+      stream: (store) => new Observable.empty(),
+      initalData: (store) => store.eventStore[widget.eventId].last,
       widgetBuilder: _buildWidget,
     );
   }

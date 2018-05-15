@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/app_theme.dart';
-import 'package:startup_namer/data/event_stats.dart';
-import 'package:startup_namer/data/score.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/util/observable_ex.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
+import 'package:svan_play/app_theme.dart';
+import 'package:svan_play/data/event_stats.dart';
+import 'package:svan_play/data/score.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/util/observable_ex.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
 
 class ScoreWidget extends StatelessWidget {
   final int eventId;
@@ -22,7 +22,7 @@ class ScoreWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<_ViewModel>(mapper: _mapStateToViewModel, widgetBuilder: _buildWidget);
+    return new StoreConnector<_ViewModel>(stream: _mapStateToViewModel, widgetBuilder: _buildWidget);
   }
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore store) {

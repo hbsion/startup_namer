@@ -1,16 +1,16 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/event_state.dart';
-import 'package:startup_namer/data/shirt_colors.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/util/dates.dart';
-import 'package:startup_namer/util/sports.dart';
-import 'package:startup_namer/widgets/count_down_widget.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
-import 'package:startup_namer/widgets/live_score_widget.dart';
-import 'package:startup_namer/widgets/match_clock_widget.dart';
-import 'package:startup_namer/widgets/render/TeamColorsPainter.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_state.dart';
+import 'package:svan_play/data/shirt_colors.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/util/dates.dart';
+import 'package:svan_play/util/sports.dart';
+import 'package:svan_play/widgets/count_down_widget.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
+import 'package:svan_play/widgets/live_score_widget.dart';
+import 'package:svan_play/widgets/match_clock_widget.dart';
+import 'package:svan_play/widgets/render/TeamColorsPainter.dart';
 
 class EventPageHeader extends StatelessWidget {
   final int eventId;
@@ -20,8 +20,8 @@ class EventPageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<Event>(
-      mapper: (store) => store.eventStore[eventId].observable,
-      snapshot: (store) => store.eventStore[eventId].last,
+      stream: (store) => store.eventStore[eventId].observable,
+      initalData: (store) => store.eventStore[eventId].last,
       widgetBuilder: _buildWidget,
     );
   }

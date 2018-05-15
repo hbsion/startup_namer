@@ -1,4 +1,4 @@
-import 'package:startup_namer/data/score.dart';
+import 'package:svan_play/data/score.dart';
 
 class ScoreUpdate {
   final int eventId;

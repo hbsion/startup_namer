@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/team_colors.dart';
+import 'package:svan_play/data/team_colors.dart';
 import 'package:test/test.dart';
 
 

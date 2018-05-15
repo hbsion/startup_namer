@@ -1,11 +1,11 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:startup_namer/app_theme.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/pages/event_page.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/util/dates.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
+import 'package:svan_play/app_theme.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/pages/event_page.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/util/dates.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
 
 class HighlightsCard extends StatelessWidget {
   final List<int> eventIds;
@@ -59,7 +59,7 @@ class _HighlightRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector(
-      mapper: (store) => store.eventStore[eventId].observable,
+      stream: (store) => store.eventStore[eventId].observable,
       widgetBuilder: _buildWidget,
     );
   }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/shirt_colors.dart';
+import 'package:svan_play/data/shirt_colors.dart';
 import 'package:test/test.dart';
 
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/betoffer.dart';
-import 'package:startup_namer/data/cashout_status.dart';
+import 'package:svan_play/data/betoffer.dart';
+import 'package:svan_play/data/cashout_status.dart';
 import 'package:test/test.dart';
 
 var text = '''{

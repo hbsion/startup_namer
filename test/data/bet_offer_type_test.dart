@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/betoffer_type.dart';
+import 'package:svan_play/data/betoffer_type.dart';
 import 'package:test/test.dart';
 
 var text = '''{

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:startup_namer/models/main_model.dart';
-import 'package:startup_namer/models/odds_format.dart';
+import 'package:svan_play/models/main_model.dart';
+import 'package:svan_play/models/odds_format.dart';
 
 class SettingsPage extends StatelessWidget {
   @override

@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import 'package:startup_namer/data/event_collection_key.dart';
+import 'package:svan_play/data/event_collection_key.dart';
 
 
 class EventCollection {

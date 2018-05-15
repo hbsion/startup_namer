@@ -2,12 +2,12 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/event_response.dart';
-import 'package:startup_namer/data/outcome.dart';
-import 'package:startup_namer/data/push/odds_update.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/store.dart';
-import 'package:startup_namer/util/flowable.dart';
+import 'package:svan_play/data/event_response.dart';
+import 'package:svan_play/data/outcome.dart';
+import 'package:svan_play/data/push/odds_update.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/store.dart';
+import 'package:svan_play/util/flowable.dart';
 
 class OutcomeStore implements Store {
   final Map<int, BehaviorSubject<Outcome>> _outcomes = new HashMap();

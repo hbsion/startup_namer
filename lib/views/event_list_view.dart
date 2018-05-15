@@ -2,18 +2,18 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/event_collection.dart';
-import 'package:startup_namer/data/event_collection_key.dart';
-import 'package:startup_namer/data/event_state.dart';
-import 'package:startup_namer/store/actions.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/util/dates.dart';
-import 'package:startup_namer/util/flowable.dart';
-import 'package:startup_namer/widgets/event_list_item_widget.dart';
-import 'package:startup_namer/widgets/platform_circular_progress_indicator.dart';
-import 'package:startup_namer/widgets/section_list_view.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_collection.dart';
+import 'package:svan_play/data/event_collection_key.dart';
+import 'package:svan_play/data/event_state.dart';
+import 'package:svan_play/store/actions.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/util/dates.dart';
+import 'package:svan_play/util/flowable.dart';
+import 'package:svan_play/widgets/event_list_item_widget.dart';
+import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
+import 'package:svan_play/widgets/section_list_view.dart';
 
 class EventListView extends StatelessWidget {
   final String sport;
@@ -27,9 +27,9 @@ class EventListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
-        mapper: _mapStateToViewModel,
-        snapshot: _mapStateToSnapshot,
-        action: listViewAction(
+        stream: _mapStateToViewModel,
+        initalData: _mapStateToSnapshot,
+        pollAction: listViewAction(
             sport: sport,
             region: region,
             league: league,

@@ -1,8 +1,8 @@
 import 'dart:collection';
 
-import 'package:startup_namer/data/event_group.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/store.dart';
+import 'package:svan_play/data/event_group.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/store.dart';
 
 typedef EventGroup EventGroupResolver(int id);
 

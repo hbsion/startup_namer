@@ -1,4 +1,4 @@
-import 'package:startup_namer/data/silk_image.dart';
+import 'package:svan_play/data/silk_image.dart';
 
 class SilkResponse {
   final int eventId;

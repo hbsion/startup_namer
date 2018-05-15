@@ -2,9 +2,9 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/store.dart';
-import 'package:startup_namer/util/flowable.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/store.dart';
+import 'package:svan_play/util/flowable.dart';
 
 class FavoritesStore implements Store {
   final BehaviorSubject<Set<int>> _favorites = new BehaviorSubject<Set<int>>(seedValue: new HashSet());

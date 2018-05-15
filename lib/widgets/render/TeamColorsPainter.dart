@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:startup_namer/data/shirt_colors.dart';
+import 'package:svan_play/data/shirt_colors.dart';
 import 'package:color/color.dart' as ColorEx;
 
 class TeamColorsPainter extends CustomPainter {

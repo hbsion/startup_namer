@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/match_clock.dart';
+import 'package:svan_play/data/match_clock.dart';
 import 'package:test/test.dart';
 
 void main() {

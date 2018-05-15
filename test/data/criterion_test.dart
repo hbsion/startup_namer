@@ -1,4 +1,4 @@
-import 'package:startup_namer/data/criterion.dart';
+import 'package:svan_play/data/criterion.dart';
 import 'package:test/test.dart';
 import 'dart:convert';
 

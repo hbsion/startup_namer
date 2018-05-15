@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:startup_namer/data/match_clock.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
+import 'package:svan_play/data/match_clock.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
 
 class MatchClockWidget extends StatelessWidget {
   final int eventId;
@@ -16,8 +16,8 @@ class MatchClockWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<MatchClock>(
-      mapper: (store) => store.statisticsStore.matchClock(eventId).observable,
-      snapshot: (store) => store.statisticsStore.matchClock(eventId).last,
+      stream: (store) => store.statisticsStore.matchClock(eventId).observable,
+      initalData: (store) => store.statisticsStore.matchClock(eventId).last,
       widgetBuilder: _buildWidget,
     );
   }

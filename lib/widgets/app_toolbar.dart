@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/util/banners.dart';
-import 'package:startup_namer/views/search/search_view.dart';
+import 'package:svan_play/util/banners.dart';
+import 'package:svan_play/views/search/search_view.dart';
 
 class AppToolbar extends StatelessWidget {
   final String title;

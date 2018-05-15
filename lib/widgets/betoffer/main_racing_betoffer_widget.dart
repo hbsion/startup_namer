@@ -2,15 +2,15 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/app_theme.dart';
-import 'package:startup_namer/data/betoffer.dart';
-import 'package:startup_namer/data/outcome.dart';
-import 'package:startup_namer/data/silk_image.dart';
-import 'package:startup_namer/pages/event_page.dart';
-import 'package:startup_namer/store/actions.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/outcome_widget.dart';
+import 'package:svan_play/app_theme.dart';
+import 'package:svan_play/data/betoffer.dart';
+import 'package:svan_play/data/outcome.dart';
+import 'package:svan_play/data/silk_image.dart';
+import 'package:svan_play/pages/event_page.dart';
+import 'package:svan_play/store/actions.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/widgets/outcome_widget.dart';
 
 class MainRacingBetOfferWidget extends StatelessWidget {
   final int betOfferId;
@@ -24,9 +24,9 @@ class MainRacingBetOfferWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
-        mapper: _mapStateToViewModel,
-        snapshot: _mapStateToSnapshot,
-        oneshotAction: loadSilks,
+        stream: _mapStateToViewModel,
+        initalData: _mapStateToSnapshot,
+        initAction: loadSilks,
         widgetBuilder: _buildWidget);
   }
 

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:meta/meta.dart';
-import 'package:startup_namer/util/dates.dart';
+import 'package:svan_play/util/dates.dart';
 
 class CountDownWidget extends StatefulWidget {
   final DateTime time;

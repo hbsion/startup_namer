@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/extended_info.dart';
+import 'package:svan_play/data/extended_info.dart';
 import 'package:test/test.dart';
 
 

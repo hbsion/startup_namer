@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/api/offering_api.dart';
-import 'package:startup_namer/data/search_result.dart';
-import 'package:startup_namer/views/search/empty_result_widget.dart';
-import 'package:startup_namer/views/search/search_error_widget.dart';
-import 'package:startup_namer/views/search/search_intro_widget.dart';
-import 'package:startup_namer/views/search/search_loading_widget.dart';
-import 'package:startup_namer/views/search/search_result_widget.dart';
-import 'package:startup_namer/views/search/search_state.dart';
+import 'package:svan_play/api/offering_api.dart';
+import 'package:svan_play/data/search_result.dart';
+import 'package:svan_play/views/search/empty_result_widget.dart';
+import 'package:svan_play/views/search/search_error_widget.dart';
+import 'package:svan_play/views/search/search_intro_widget.dart';
+import 'package:svan_play/views/search/search_loading_widget.dart';
+import 'package:svan_play/views/search/search_result_widget.dart';
+import 'package:svan_play/views/search/search_state.dart';
 
 class SearchView extends StatefulWidget {
   @override

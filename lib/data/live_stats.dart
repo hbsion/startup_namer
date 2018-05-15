@@ -1,6 +1,6 @@
-import 'package:startup_namer/data/event_stats.dart';
-import 'package:startup_namer/data/match_clock.dart';
-import 'package:startup_namer/data/score.dart';
+import 'package:svan_play/data/event_stats.dart';
+import 'package:svan_play/data/match_clock.dart';
+import 'package:svan_play/data/score.dart';
 
 class LiveStats {
   final int eventId;

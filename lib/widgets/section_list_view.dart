@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
-import 'package:startup_namer/widgets/section_header.dart';
+import 'package:svan_play/widgets/section_header.dart';
 
 class SectionListView extends StatefulWidget {
   final List<ListSection> sections;

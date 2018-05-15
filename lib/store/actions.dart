@@ -1,9 +1,9 @@
-import 'package:startup_namer/data/event_collection_key.dart';
-import 'package:startup_namer/data/event_response.dart';
-import 'package:startup_namer/api/offering_api.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/util/callable.dart';
+import 'package:svan_play/data/event_collection_key.dart';
+import 'package:svan_play/data/event_response.dart';
+import 'package:svan_play/api/offering_api.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/util/callable.dart';
 
 Callable<Dispatcher> listViewAction({
   String sport = "all",

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/group_path.dart';
+import 'package:svan_play/data/group_path.dart';
 import 'package:test/test.dart';
 
 

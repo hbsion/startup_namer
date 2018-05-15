@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:logging/logging.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:startup_namer/api/api_constants.dart';
-import 'package:startup_namer/models/main_model.dart';
-import 'package:startup_namer/pages/home_page.dart';
-import 'package:startup_namer/push/push_client.dart';
-import 'package:startup_namer/push/push_hub.dart';
-import 'package:startup_namer/store/actions.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/store_dispatcher.dart';
-import 'package:startup_namer/store/store_provider.dart';
+import 'package:svan_play/api/api_constants.dart';
+import 'package:svan_play/models/main_model.dart';
+import 'package:svan_play/pages/home_page.dart';
+import 'package:svan_play/push/push_client.dart';
+import 'package:svan_play/push/push_hub.dart';
+import 'package:svan_play/store/actions.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/store_dispatcher.dart';
+import 'package:svan_play/store/store_provider.dart';
 
 void main() {
   Logger.root.level = Level.ALL;

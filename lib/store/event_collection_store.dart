@@ -1,12 +1,12 @@
 import 'dart:collection';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/event_response.dart';
-import 'package:startup_namer/data/event_collection.dart';
-import 'package:startup_namer/data/event_collection_key.dart';
-import 'package:startup_namer/store/action_type.dart';
-import 'package:startup_namer/store/store.dart';
-import 'package:startup_namer/util/flowable.dart';
+import 'package:svan_play/data/event_response.dart';
+import 'package:svan_play/data/event_collection.dart';
+import 'package:svan_play/data/event_collection_key.dart';
+import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/store.dart';
+import 'package:svan_play/util/flowable.dart';
 
 
 class EventCollectionStore implements Store {

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/event_state.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_state.dart';
 import 'package:test/test.dart';
 
 main() {

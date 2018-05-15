@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:startup_namer/data/last_run_days.dart';
+import 'package:svan_play/data/last_run_days.dart';
 import 'package:test/test.dart';
 
 

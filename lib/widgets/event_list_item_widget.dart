@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:startup_namer/app_theme.dart';
-import 'package:startup_namer/data/event.dart';
-import 'package:startup_namer/data/event_state.dart';
-import 'package:startup_namer/data/event_tags.dart';
-import 'package:startup_namer/pages/event_page.dart';
-import 'package:startup_namer/store/store_connector.dart';
-import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
-import 'package:startup_namer/widgets/empty_widget.dart';
-import 'package:startup_namer/widgets/event_info_widget.dart';
-import 'package:startup_namer/widgets/event_tracker_widget.dart';
-import 'package:startup_namer/widgets/favorite_widget.dart';
+import 'package:svan_play/app_theme.dart';
+import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_state.dart';
+import 'package:svan_play/data/event_tags.dart';
+import 'package:svan_play/pages/event_page.dart';
+import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
+import 'package:svan_play/widgets/event_info_widget.dart';
+import 'package:svan_play/widgets/event_tracker_widget.dart';
+import 'package:svan_play/widgets/favorite_widget.dart';
 
 class EventListItemWidget extends StatelessWidget {
   final int eventId;
@@ -24,8 +24,8 @@ class EventListItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<Event>(
-        mapper: (store) => store.eventStore[eventId].observable,
-        snapshot: (store) => store.eventStore[eventId].last,
+        stream: (store) => store.eventStore[eventId].observable,
+        initalData: (store) => store.eventStore[eventId].last,
         widgetBuilder: _buildWidget);
   }
 

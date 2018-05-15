@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:startup_namer/push/push_client.dart';
+import 'package:svan_play/push/push_client.dart';
 
 
 void main() {

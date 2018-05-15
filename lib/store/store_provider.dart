@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:startup_namer/store/app_store.dart';
+import 'package:svan_play/store/app_store.dart';
 
 class StoreProvider extends InheritedWidget {
   final AppStore _store;

@@ -1,10 +1,10 @@
 import 'package:meta/meta.dart';
-import 'package:startup_namer/data/push/betOffer_status_update.dart';
-import 'package:startup_namer/data/push/event_stats_update.dart';
-import 'package:startup_namer/data/push/match_clock_update.dart';
-import 'package:startup_namer/data/push/odds_update.dart';
-import 'package:startup_namer/data/push/push_message_type.dart';
-import 'package:startup_namer/data/push/score_update.dart';
+import 'package:svan_play/data/push/betOffer_status_update.dart';
+import 'package:svan_play/data/push/event_stats_update.dart';
+import 'package:svan_play/data/push/match_clock_update.dart';
+import 'package:svan_play/data/push/odds_update.dart';
+import 'package:svan_play/data/push/push_message_type.dart';
+import 'package:svan_play/data/push/score_update.dart';
 
 class PushMessage {
   final PushMessageType type;

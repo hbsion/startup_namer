@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/data/push/push_message.dart';
+import 'package:svan_play/data/push/push_message.dart';
 import 'package:web_socket_channel/io.dart';
 
 class PushClient {

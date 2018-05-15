@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:startup_namer/store/app_store.dart';
-import 'package:startup_namer/store/store_provider.dart';
-import 'package:startup_namer/util/callable.dart';
+import 'package:svan_play/store/app_store.dart';
+import 'package:svan_play/store/store_provider.dart';
+import 'package:svan_play/util/callable.dart';
 
 typedef Widget WidgetModelBuilder<T>(BuildContext context, T model);
 typedef Observable<T> Mapper<T>(AppStore appStore);
@@ -13,15 +13,15 @@ typedef T Snapshot<T>(AppStore appStore);
 
 class StoreConnector<T> extends StatelessWidget {
   final WidgetModelBuilder<T> widgetBuilder;
-  final Mapper<T> mapper;
-  final Snapshot<T> snapshot;
-  final Callable<Dispatcher> action;
-  final Callable2<Dispatcher, AppStore> oneshotAction;
+  final Mapper<T> stream;
+  final Snapshot<T> initalData;
+  final Callable<Dispatcher> pollAction;
+  final Callable2<Dispatcher, AppStore> initAction;
 
   const StoreConnector(
-      {Key key, @required this.widgetBuilder, @required this.mapper, this.action, this.oneshotAction, this.snapshot})
+      {Key key, @required this.widgetBuilder, @required this.stream, this.pollAction, this.initAction, this.initalData})
       : assert(widgetBuilder != null),
-        assert(mapper != null),
+        assert(stream != null),
         super(key: key);
 
   @override
@@ -29,10 +29,10 @@ class StoreConnector<T> extends StatelessWidget {
     return new _StoreConnector(
       appStore: StoreProvider.of(context),
       builder: widgetBuilder,
-      mapper: mapper,
-      snapshot: snapshot,
-      action: action,
-      oneshotAction: oneshotAction,
+      stream: stream,
+      initalData: initalData,
+      pollAction: pollAction,
+      initAction: initAction,
     );
   }
 }
@@ -40,21 +40,21 @@ class StoreConnector<T> extends StatelessWidget {
 class _StoreConnector<T> extends StatefulWidget {
   final AppStore appStore;
   final WidgetModelBuilder<T> builder;
-  final Mapper<T> mapper;
-  final Snapshot<T> snapshot;
-  final Callable<Dispatcher> action;
-  final Callable2<Dispatcher, AppStore> oneshotAction;
+  final Mapper<T> stream;
+  final Snapshot<T> initalData;
+  final Callable<Dispatcher> pollAction;
+  final Callable2<Dispatcher, AppStore> initAction;
 
   const _StoreConnector(
       {Key key,
       @required this.builder,
-      @required this.mapper,
-      this.action,
-      this.oneshotAction,
+      @required this.stream,
+      this.pollAction,
+      this.initAction,
       this.appStore,
-      this.snapshot})
+      this.initalData})
       : assert(builder != null),
-        assert(mapper != null),
+        assert(stream != null),
         assert(appStore != null),
         super(key: key);
 
@@ -69,22 +69,22 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    if (widget.snapshot != null) {
-      _snapshot = widget.snapshot(widget.appStore);
+    if (widget.initalData != null) {
+      _snapshot = widget.initalData(widget.appStore);
     }
-    _subscription = widget.mapper(widget.appStore).listen((data) {
+    _subscription = widget.stream(widget.appStore).listen((data) {
       if (mounted && data != _snapshot) {
         setState(() {
           _snapshot = data;
         });
       }
     });
-    if (widget.action != null) {
-      widget.action(widget.appStore.dispatch);
+    if (widget.pollAction != null) {
+      widget.pollAction(widget.appStore.dispatch);
       _startPoller();
     }
-    if (widget.oneshotAction != null) {
-      widget.oneshotAction(widget.appStore.dispatch, widget.appStore);
+    if (widget.initAction != null) {
+      widget.initAction(widget.appStore.dispatch, widget.appStore);
     }
     WidgetsBinding.instance.addObserver(this);
     super.initState();
@@ -100,17 +100,17 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
     print("Lifecycle changed: " + state.toString());
     if (state == AppLifecycleState.paused && _timer != null) {
       _stopPoller();
-    } else if (state == AppLifecycleState.resumed && widget.action != null && _timer == null) {
-      widget.action(widget.appStore.dispatch);
+    } else if (state == AppLifecycleState.resumed && widget.pollAction != null && _timer == null) {
+      widget.pollAction(widget.appStore.dispatch);
       _startPoller();
-      if (widget.oneshotAction != null) {
-        widget.oneshotAction(widget.appStore.dispatch, widget.appStore);
+      if (widget.initAction != null) {
+        widget.initAction(widget.appStore.dispatch, widget.appStore);
       }
     }
   }
 
   void _startPoller() {
-    _timer = new Timer.periodic(new Duration(seconds: 30), (_) => widget.action(widget.appStore.dispatch));
+    _timer = new Timer.periodic(new Duration(seconds: 30), (_) => widget.pollAction(widget.appStore.dispatch));
   }
 
   void _stopPoller() {

@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:startup_namer/data/outcome_type.dart';
+import 'package:svan_play/data/outcome_type.dart';
 
 import 'cashout_status.dart';
 import "odds.dart";
