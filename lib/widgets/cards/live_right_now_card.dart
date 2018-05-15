@@ -5,6 +5,7 @@ import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/pages/event_page.dart';
 import 'package:startup_namer/store/app_store.dart';
 import 'package:startup_namer/store/store_connector.dart';
+import 'package:startup_namer/util/sports.dart';
 import 'package:startup_namer/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:startup_namer/widgets/live_score_widget.dart';
 import 'package:startup_namer/widgets/empty_widget.dart';
@@ -63,7 +64,7 @@ class LiveRightNowCard extends StatelessWidget {
                 new Text("Live", style: new TextStyle(color: Colors.red, fontSize: 16.0, fontStyle: FontStyle.italic)),
           ),
           Expanded(child: _buildPath(context, event)),
-          new MatchClockWidget(eventId: eventId)
+          showMatchClockForSport(event.sport) ? new MatchClockWidget(eventId: eventId) : EmptyWidget()
         ],
       ),
     );

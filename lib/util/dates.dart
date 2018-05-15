@@ -26,7 +26,7 @@ String prettyDate(DateTime dt) {
    } else if(isTomorrow(dt)) {
      return "Tomorrow";
    } else {
-     return formatDate(dt, [DD, " ", d, " ", MM, " ", yyyy]);
+     return formatDate(dt, [D, " ", d, " ", M, " ", yyyy]);
    }
 }
 

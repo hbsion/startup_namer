@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 const Color _brandColor = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
+const Color brandColorDark = Color.fromRGBO(0x00, 0x93, 0xb5, 1.0);
 
 class ListThemeData {
   final Color headerBackground;

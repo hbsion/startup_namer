@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
@@ -61,7 +59,7 @@ class LiveScoreWidget extends StatelessWidget {
           new Row(
             children: <Widget>[
               _renderTeamColors(model.teamColors?.home, context),
-              Text(model.homeName, style: textStyle),
+              new Flexible(child: Text(model.homeName, overflow: TextOverflow.clip,style: textStyle)),
             ],
           ),
           Padding(padding: EdgeInsets.all(2.0)),
@@ -71,7 +69,7 @@ class LiveScoreWidget extends StatelessWidget {
             builder: (context) => new Row(
                   children: <Widget>[
                     _renderTeamColors(model.teamColors?.away, context),
-                    Text(model.awayName, style: textStyle),
+                    new Flexible(child: Text(model.awayName, overflow: TextOverflow.clip, style: textStyle)),
                   ],
                 ),
           )
@@ -106,6 +104,7 @@ class LiveScoreWidget extends StatelessWidget {
     return new Padding(
       padding: const EdgeInsets.only(left: 4.0),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           _buildServeIf(eventStats.sets.homeServe, context),
           Padding(padding: EdgeInsets.all(2.0)),
@@ -144,6 +143,7 @@ class LiveScoreWidget extends StatelessWidget {
         yield new Padding(
           padding: const EdgeInsets.only(left: 4.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(home.toString(), style: textStyle),
               Padding(padding: EdgeInsets.all(2.0)),
@@ -169,7 +169,6 @@ class LiveScoreWidget extends StatelessWidget {
             ));
   }
 }
-
 
 class _ViewModel {
   final Event event;

@@ -42,6 +42,8 @@ flutter:
     - assets/aqua.jpg
     - assets/football-banner.jpg
     - assets/icehockey-banner.jpg
+    - assets/tennis-banner.png
+    - assets/volleyball-banner.jpg
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

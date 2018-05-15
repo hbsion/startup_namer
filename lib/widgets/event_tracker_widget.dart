@@ -5,7 +5,9 @@ import 'package:startup_namer/data/event.dart';
 import 'package:startup_namer/data/event_state.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
+import 'package:startup_namer/util/sports.dart';
 import 'package:startup_namer/widgets/count_down_widget.dart';
+import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/event_score_widget.dart';
 import 'package:startup_namer/widgets/match_clock_widget.dart';
 
@@ -30,7 +32,7 @@ class EventTrackingWidget extends StatelessWidget {
       w = new Column(children: <Widget>[
         new ScoreWidget(eventId: eventId, sport: model.sport),
         new Padding(padding: EdgeInsets.all(2.0)),
-        new MatchClockWidget(eventId: eventId)
+        showMatchClockForSport(model.sport) ? new MatchClockWidget(eventId: eventId) : new EmptyWidget()
       ]);
     } else if (model.start.isAfter(DateTime.now()) &&
         model.start.subtract(new Duration(minutes: 15)).isBefore(DateTime.now())) {
@@ -60,7 +62,7 @@ class _DateTimeWidget extends StatelessWidget {
       ]);
     }
     return new Column(children: <Widget>[
-      new Text(formatDate(event.start, [d, " ", MM]), style: new TextStyle(fontWeight: FontWeight.w700)),
+      new Text(formatDate(event.start, [d, " ", M]), style: new TextStyle(fontWeight: FontWeight.w700)),
       new Text(formatDate(event.start, [HH, ":", nn]))
     ]);
   }

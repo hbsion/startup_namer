@@ -80,7 +80,7 @@ class MainRacingBetOfferWidget extends StatelessWidget {
   }
 
   Widget _buildOutcomeRow(_ViewModel model, Outcome outcome, BuildContext context) {
-    SilkImage silk = model.silks?.where((img) => img.participantId == outcome.participantId)?.first;
+    SilkImage silk = model.silks?.firstWhere((img) => img.participantId == outcome.participantId, orElse: () => null);
     return new Row(
       children: <Widget>[
         new Padding(

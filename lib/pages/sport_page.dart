@@ -43,38 +43,46 @@ class _SportPageState extends State<SportPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       drawer: new AppDrawer(),
-      body: new Builder(builder: (ctx) {
-        return new PageView(controller: _pageController, onPageChanged: _handlePageChanged, children: <Widget>[
-          new Scaffold(
-              key: _matchesKey,
-              body: new CustomScrollView(
-                key: new PageStorageKey("matches"),
-                slivers: <Widget>[
-                  new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
-                  new EventListView(
+      body: new PageView.builder(
+          controller: _pageController,
+          onPageChanged: _handlePageChanged,
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return new Scaffold(
+                  key: _matchesKey,
+                  body: new CustomScrollView(
+                    key: new PageStorageKey("matches"),
+                    slivers: <Widget>[
+                      new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(context), sport: widget.sport),
+                      new EventListView(
+                          sport: widget.sport,
+                          league: widget.league,
+                          region: widget.region,
+                          participant: widget.participant,
+                          filter: "matches")
+                    ],
+                  ));
+            }
+            return new Scaffold(
+                key: _outrightsKey,
+                body: new CustomScrollView(
+                  key: new PageStorageKey("competitions"),
+                  slivers: <Widget>[
+                    new AppToolbar(
+                      title: _buildTitle(),
+                      onNavPress: _openDrawer(context),
                       sport: widget.sport,
-                      league: widget.league,
-                      region: widget.region,
-                      participant: widget.participant,
-                      filter: "matches")
-                ],
-              )),
-          new Scaffold(
-              key: _outrightsKey,
-              body: new CustomScrollView(
-                key: new PageStorageKey("competitions"),
-                slivers: <Widget>[
-                  new AppToolbar(title: _buildTitle(), onNavPress: _openDrawer(ctx)),
-                  new EventListView(
-                      sport: widget.sport,
-                      league: widget.league,
-                      region: widget.region,
-                      participant: widget.participant,
-                      filter: "competitions")
-                ],
-              )),
-        ]);
-      }),
+                    ),
+                    new EventListView(
+                        sport: widget.sport,
+                        league: widget.league,
+                        region: widget.region,
+                        participant: widget.participant,
+                        filter: "competitions")
+                  ],
+                ));
+          }),
       bottomNavigationBar: _buildBottomAppBar(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -117,13 +125,15 @@ class _SportPageState extends State<SportPage> {
   }
 
   void _handlePageChanged(int index) {
+//    _index = index;
     setState(() => _index = index);
   }
 
   void _handleTabTap(int index) {
-    setState(() => _index = index);
+//    _index = index;
+     setState(() => _index = index);
 
-    _pageController.animateToPage(index, curve: new ElasticInCurve(), duration: new Duration(microseconds: 200));
+    _pageController.animateToPage(index, curve: Curves.ease, duration: new Duration(milliseconds: 300));
   }
 
   String _buildTitle() {

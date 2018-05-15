@@ -86,7 +86,7 @@ class SearchResultWidget extends StatelessWidget {
                         new Flexible(child: new Text(term.localizedName, style: Theme.of(context).textTheme.subhead)),
                         new Padding(
                           padding: const EdgeInsets.only(left: 8.0),
-                          child: new Text(_unwindPath(term.parentId), style: Theme.of(context).textTheme.caption),
+                          child: new Text(_unwindPath(term.parentId) ?? "", style: Theme.of(context).textTheme.caption),
                         )
                       ],
                     )),

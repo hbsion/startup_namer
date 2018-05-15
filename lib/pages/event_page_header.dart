@@ -5,6 +5,7 @@ import 'package:startup_namer/data/event_state.dart';
 import 'package:startup_namer/data/shirt_colors.dart';
 import 'package:startup_namer/store/store_connector.dart';
 import 'package:startup_namer/util/dates.dart';
+import 'package:startup_namer/util/sports.dart';
 import 'package:startup_namer/widgets/count_down_widget.dart';
 import 'package:startup_namer/widgets/empty_widget.dart';
 import 'package:startup_namer/widgets/live_score_widget.dart';
@@ -41,23 +42,24 @@ class EventPageHeader extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(child: new LiveScoreWidget(eventId: eventId)),
-        Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: new MatchClockWidget(eventId: eventId, style: Theme
-              .of(context)
-              .textTheme
-              .subhead),
-        )
+        _buildMatchClock(context, model)
       ],
     );
   }
 
+  Widget _buildMatchClock(BuildContext context, Event model) {
+    if (!showMatchClockForSport(model.sport)) {
+      return new EmptyWidget();
+    }
+    return Padding(
+        padding: EdgeInsets.only(left: 8.0),
+        child: new MatchClockWidget(eventId: eventId, style: Theme.of(context).textTheme.subhead),
+      );
+  }
+
   Widget _buildPrematchHeader(BuildContext context, Event model) {
     return new Row(
-      children: <Widget>[
-        _buildTeamsColumn(model, context),
-        _buildTimeColum(model, context)
-      ],
+      children: <Widget>[_buildTeamsColumn(model, context), _buildTimeColum(model, context)],
     );
   }
 
@@ -71,20 +73,19 @@ class EventPageHeader extends StatelessWidget {
           new Row(
             children: <Widget>[
               _renderTeamColors(model.teamColors?.home, context),
-              Text(model.homeName, style: textStyle),
+              new Flexible(child: Text(model.homeName, softWrap: true, style: textStyle)),
             ],
           ),
           Padding(padding: EdgeInsets.all(2.0)),
           emptyIfTrue(
             condition: model.awayName == null,
             context: context,
-            builder: (context) =>
-            new Row(
-              children: <Widget>[
-                _renderTeamColors(model.teamColors?.away, context),
-                Text(model.awayName, style: textStyle),
-              ],
-            ),
+            builder: (context) => new Row(
+                  children: <Widget>[
+                    _renderTeamColors(model.teamColors?.away, context),
+                    Text(model.awayName, style: textStyle),
+                  ],
+                ),
           )
         ],
       ),
@@ -103,7 +104,7 @@ class EventPageHeader extends StatelessWidget {
       );
     } else {
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(prettyDate(model.start), style: _bodyTextStyle(context)),
@@ -115,20 +116,16 @@ class EventPageHeader extends StatelessWidget {
   }
 
   TextStyle _bodyTextStyle(BuildContext context) {
-    return Theme
-        .of(context)
-        .textTheme
-        .subhead;
+    return Theme.of(context).textTheme.subhead;
   }
 
   _renderTeamColors(ShirtColors colors, BuildContext context) {
     return emptyIfTrue(
         condition: colors == null,
         context: context,
-        builder: (_) =>
-        new Padding(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: new CustomPaint(painter: new TeamColorsPainter(colors), size: Size(12.0, 12.0)),
-        ));
+        builder: (_) => new Padding(
+              padding: const EdgeInsets.only(right: 4.0),
+              child: new CustomPaint(painter: new TeamColorsPainter(colors), size: Size(12.0, 12.0)),
+            ));
   }
 }
