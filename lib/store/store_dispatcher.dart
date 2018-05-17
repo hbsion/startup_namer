@@ -13,12 +13,12 @@ typedef T Snapshot<T>(AppStore appStore);
 
 class StoreDispatcher<T> extends StatelessWidget {
   final Widget child;
-  final Callable<Dispatcher> poll;
-  final Callable<Dispatcher> oneshot;
+  final Callable<Dispatcher> pollAction;
+  final Callable<Dispatcher> initAction;
 
-  const StoreDispatcher({Key key, @required this.child, @required this.poll, this.oneshot})
+  const StoreDispatcher({Key key, @required this.child, @required this.pollAction, this.initAction})
       :assert(child != null),
-        assert(poll != null),
+        assert(pollAction != null),
         super(key: key);
 
   @override
@@ -26,8 +26,8 @@ class StoreDispatcher<T> extends StatelessWidget {
     return new _StoreDispatcher(
       appStore: StoreProvider.of(context),
       child: child,
-      poll: poll,
-      oneshot: oneshot,
+      poll: pollAction,
+      oneshot: initAction,
     );
   }
 }

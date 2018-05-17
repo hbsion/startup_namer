@@ -46,6 +46,24 @@ Future<EventResponse> fetchListView(
   return compute(_parseListViewResponse, Tuple2(body, key));
 }
 
+Future<EventResponse> fetchBetOffers(int eventId) async {
+  var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
+      .offering}/betoffer/event/$eventId.json?lang=${ApiConstants
+      .lang}&market=${ApiConstants.market}");
+  _log.info(uri);
+  var request = await _client.getUrl(uri);
+  var response = await request.close();
+
+  var key = EventCollectionKey(type: EventCollectionType.eventView);
+  if (response.statusCode != 200) {
+    _log.warning("Failed to fetch status: ${response.statusCode} uri: $uri");
+    return new EventResponse(key: key);
+  }
+
+  var body = await response.transform(utf8.decoder).join();
+  return compute(_parseBetOfferResponse, Tuple2(body, key));
+}
+
 Future<List<EventResponse>> fetchLandingPage() async {
   var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
       .offering}/betoffer/landing.json?lang=${ApiConstants.lang}&market=${ApiConstants.market}");
@@ -146,6 +164,30 @@ EventCollectionType _convertLandingSectionNameToKey(String name) {
   }
 }
 
+EventResponse _parseBetOfferResponse(Tuple2<String, EventCollectionKey> tuple) {
+  final responseJson = json.decode(tuple.item1);
+  List<Event> events = [];
+  List<BetOffer> betOffers = [];
+  List<Outcome> outcomes = [];
+
+  for (var boJson in responseJson["betOffers"]) {
+    var bo = BetOffer.fromJson(boJson);
+    betOffers.add(bo);
+
+    for (var outcomeJson in boJson["outcomes"]) {
+      outcomes.add(Outcome.fromJson(outcomeJson));
+    }
+  }
+
+  for (var eventJson in responseJson["events"]) {
+    var event = Event.fromJson(eventJson);
+    event.mainBetOfferId = determinMainBetOffer(betOffers);
+    events.add(event);
+  }
+
+  return new EventResponse(key: tuple.item2, events: events, betoffers: betOffers, outcomes: outcomes);
+}
+
 EventResponse _parseListViewResponse(Tuple2<String, EventCollectionKey> tuple) {
   final responseJson = json.decode(tuple.item1);
   return _parseEventsWithBetOffers(responseJson, tuple.item2);
@@ -187,7 +229,7 @@ EventResponse _parseEventsWithBetOffers(Map<String, dynamic> eventsWithBetOffers
 }
 
 int determinMainBetOffer(List<BetOffer> betOffers) {
-  var main = betOffers.where((bo)=> bo.tags.contains(BetOfferTags.main)).toList();
+  var main = betOffers.where((bo) => bo.tags.contains(BetOfferTags.main)).toList();
   if (main.length > 1) {
     var mainExSP = main.where((bo) => !bo.tags.contains(BetOfferTags.startingPrice)).first;
     if (mainExSP != null) {

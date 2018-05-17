@@ -39,8 +39,8 @@ class MainApp extends StatelessWidget {
     return new StoreProvider(
         store: store,
         child: new StoreDispatcher(
-            poll: _initActions,
-            //oneshot: _initActions,
+            pollAction: _pollActions,
+            initAction: _initActions,
             child: new ScopedModel<MainModel>(
                 model: new MainModel(),
                 child: _buildMainApp()
@@ -67,10 +67,12 @@ class MainApp extends StatelessWidget {
     );
   }
 
+  Future _pollActions(Dispatcher dispatcher) async {
+    liveOpen()(dispatcher);
+  }
+
   Future _initActions(Dispatcher dispatcher) async {
     eventGroups()(dispatcher);
     highlights()(dispatcher);
-    liveOpen()(dispatcher);
-//    landingPage()(dispatcher);
   }
 }

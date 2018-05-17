@@ -12,6 +12,7 @@ enum EventCollectionType {
   landingShocker,
   favorite,
   listView,
+  eventView,
   unknown
 }
 
@@ -44,6 +45,4 @@ class EventCollectionKey {
   String toString() {
     return 'EventCollectionKey{type: $type, selector: $selector}';
   }
-
-
 }

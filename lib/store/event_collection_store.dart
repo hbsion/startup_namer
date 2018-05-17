@@ -27,6 +27,10 @@ class EventCollectionStore implements Store {
     switch (type) {
       case ActionType.eventResponse:
         EventResponse response = action;
+        if (response.key.type == EventCollectionType.eventView) {
+          return;
+        }
+        
         EventCollection collection = new EventCollection(
             key: response.key,
             eventIds: response.events.map((e)=> e.id).toList()

@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:svan_play/app_theme.dart';
 import 'package:svan_play/data/event.dart';
 import 'package:svan_play/pages/event_page.dart';
-import 'package:svan_play/store/app_store.dart';
 import 'package:svan_play/store/store_connector.dart';
 import 'package:svan_play/util/dates.dart';
 import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
@@ -22,13 +20,10 @@ class NextOffCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<Event>(
-      stream: _mapStateToViewModel,
+      stream: (store) => store.eventStore[eventId].observable,
+      initalData: (store) => store.eventStore[eventId].last,
       widgetBuilder: _buildWidget,
     );
-  }
-
-  Observable<Event> _mapStateToViewModel(AppStore appStore) {
-    return appStore.eventStore[eventId].observable;
   }
 
   Widget _buildWidget(BuildContext context, Event model) {

@@ -75,7 +75,7 @@ class _EventPageState extends State<EventPage> {
   }
 
   Iterable<Widget> _buildPageViews(Event model) sync* {
-    yield new MarketsView();
+    yield new MarketsView(eventId: widget.eventId);
     yield new MatchEventsView();
     if (model.tags.contains(EventTags.prematchStats)) {
       yield new PreMatchStatsView();

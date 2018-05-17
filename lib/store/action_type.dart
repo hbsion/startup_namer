@@ -1,5 +1,6 @@
 enum ActionType {
   eventResponse,
+  betOfferResponse,
   toggleFavorite,
   eventGroups,
   highlightGroups,

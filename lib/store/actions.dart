@@ -50,6 +50,13 @@ Callable<Dispatcher> silks(int eventId) {
   };
 }
 
+Callable<Dispatcher> betOffers(int eventId) {
+  return (dispatcher) async {
+    var response = await fetchBetOffers(eventId);
+    dispatcher(ActionType.betOfferResponse, response);
+  };
+}
+
 Callable<Dispatcher> landingPage() {
   return (dispatcher) async {
     var response = await fetchLandingPage();

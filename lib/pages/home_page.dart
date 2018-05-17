@@ -49,6 +49,7 @@ class HomePage extends StatelessWidget {
         ),
       ));
     } else {
+      debugPrint("HomePage, lrn ${model.live.eventIds.length} soon ${model.soon.eventIds.length} popular ${model.popular.eventIds.length} high ${model.highlights.eventIds.length} next ${model.nextOff.eventIds.length} shocker ${model.shocker.eventIds.length}");
       slivers.addAll(_buildCards(model).map((widget) => SliverToBoxAdapter(child: widget)));
     }
 

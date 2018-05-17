@@ -36,21 +36,22 @@ class _SportPageState extends State<SportPage> {
 
   @override
   void initState() {
-     var index = widget.participant != "all" ? 1 : 0;
+    var index = widget.participant != "all" ? 1 : 0;
     _pageController = new PageController(keepPage: true, initialPage: index);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    _ensurePages(context);
     return new Scaffold(
       drawer: new AppDrawer(),
       body: new PageView.builder(
           controller: _pageController,
           itemCount: 2,
-          itemBuilder: (context, index) => _pages[index]
-           ),
+          itemBuilder: (context, index) {
+            _ensurePages(context);
+            return _pages[index];
+          }),
       bottomNavigationBar: _buildBottomAppBar(context),
       floatingActionButton: new BetSlipFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
