@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:svan_play/data/betoffer.dart';
+import 'package:svan_play/data/betoffer_category.dart';
+import 'package:svan_play/data/betoffer_category_response.dart';
 import 'package:svan_play/data/betoffer_tags.dart';
 import 'package:svan_play/data/event.dart';
 import 'package:svan_play/data/event_collection_key.dart';
@@ -263,6 +265,24 @@ Future<EventGroup> fetchEventGroups() async {
   var body = await response.transform(utf8.decoder).join();
 
   return EventGroup.fromJson(json.decode(body)["group"]);
+}
+
+Future<BetOfferCategoryResponse> fetchBetOfferCategories(int groupId, String categoryName) async {
+  var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
+      .offering}/category/$categoryName/group/$groupId.json?lang=${ApiConstants.lang}&market=${ApiConstants.market}");
+  _log.info(uri);
+  var request = await _client.getUrl(uri);
+  var response = await request.close();
+
+  if (response.statusCode != 200) {
+    _log.warning("Failed to fetch status: ${response.statusCode} uri: $uri");
+    return null;
+  }
+
+  var body = await response.transform(utf8.decoder).join();
+  var categories = json.decode(body)["categories"].map<BetOfferCategory>((js) => new BetOfferCategory.fromJson(js)).toList();
+
+  return new BetOfferCategoryResponse(groupId, categoryName, categories);
 }
 
 Future<List<int>> fetchHighlights() async {

@@ -57,6 +57,13 @@ Callable<Dispatcher> betOffers(int eventId) {
   };
 }
 
+Callable<Dispatcher> categoryGroup(int eventGroupId, String categoryName) {
+  return (dispatcher) async {
+    var response = await fetchBetOfferCategories(eventGroupId, categoryName);
+    dispatcher(ActionType.betOfferResponse, response);
+  };
+}
+
 Callable<Dispatcher> landingPage() {
   return (dispatcher) async {
     var response = await fetchLandingPage();

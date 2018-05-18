@@ -1,4 +1,5 @@
 import 'package:svan_play/store/action_type.dart';
+import 'package:svan_play/store/betoffer_category_store.dart';
 import 'package:svan_play/store/betoffer_store.dart';
 import 'package:svan_play/store/event_collection_store.dart';
 import 'package:svan_play/store/event_store.dart';
@@ -21,16 +22,19 @@ class AppStore {
   final StatisticsStore statisticsStore = new StatisticsStore();
   final EventCollectionStore collectionStore = new EventCollectionStore();
   final SilkStore silkStore = new SilkStore();
+  final BetOfferCategoryStore categoryStore = new BetOfferCategoryStore();
 
   AppStore() {
-    _stores..add(eventStore)
+    _stores
+      ..add(eventStore)
       ..add(betOfferStore)
       ..add(outcomeStore)
       ..add(favoritesStore)
       ..add(groupStore)
       ..add(statisticsStore)
       ..add(silkStore)
-      ..add(collectionStore);
+      ..add(collectionStore)
+      ..add(categoryStore);
   }
 
   void dispatch(ActionType type, action) {

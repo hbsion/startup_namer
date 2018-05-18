@@ -81,6 +81,4 @@ class _EventPageState extends State<EventPage> {
       yield new PreMatchStatsView();
     }
   }
-
 }
-
