@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:logging/logging.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:svan_play/data/push/push_message.dart';
 import 'package:web_socket_channel/io.dart';
@@ -11,6 +12,7 @@ class PushClient {
   final PublishSubject<PushMessage> _messagePublisher =
       new PublishSubject<PushMessage>();
   final PublishSubject<void> _connectPublisher = new PublishSubject<void>();
+  final Logger _log = new Logger("PushClient");
 
   Timer _reconnectTimer;
   bool _closingDown = false;
@@ -39,10 +41,12 @@ class PushClient {
   }
 
   void subscribe(String topic) {
+    _log.info("Subscribe topic '$topic'");
     _channel.sink.add('42["subscribe",{"topic":"$topic.json"}]');
   }
 
   void unsubscribe(String topic) {
+    _log.info("Unsubscribe topic '$topic'");
     _channel.sink.add('42["unsubscribe",{"topic":"$topic.json"}]');
   }
 
@@ -76,20 +80,20 @@ class PushClient {
   }
 
   void _onDone() {
-    print("onDone, closingDown: " + _closingDown.toString());
+    _log.info("onDone, closingDown: " + _closingDown.toString());
     if (!_closingDown) {
       _reconnect();
     }
   }
 
   void _onError(error) {
-    print("onError: " + error.toString());
+    _log.severe("onError: " + error.toString());
   }
 
   void _handlePacket(int type, String payload) {
     switch (type) {
       case 0:
-        print("Open with payload: $payload");
+        _log.info("Open with payload: $payload");
         break;
       case 3:
         break;
@@ -100,7 +104,7 @@ class PushClient {
         _handleMessage(payload);
         break;
       default:
-        print("Unknown message type $type with payload: '$payload'");
+        _log.info("Unknown message type $type with payload: '$payload'");
     }
   }
 

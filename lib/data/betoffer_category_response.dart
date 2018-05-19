@@ -2,9 +2,9 @@ import 'package:svan_play/data/betoffer_category.dart';
 
 
 class BetOfferCategoryResponse {
-  final int groupId;
+  final String sport;
   final String categoryName;
   final List<BetOfferCategory> categories;
 
-  BetOfferCategoryResponse(this.groupId, this.categoryName, this.categories);
+  BetOfferCategoryResponse(this.sport, this.categoryName, this.categories);
 }

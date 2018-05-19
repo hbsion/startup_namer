@@ -59,4 +59,16 @@ class BetOfferCategory {
       displayBoTypeHeaders.hashCode ^
       sport.hashCode ^
       mappings.hashCode;
+
+  BetOfferCategory withName(String name) {
+    return new BetOfferCategory(
+        id: id,
+        name: name,
+        sport: sport,
+        boCount: boCount,
+        displayBoTypeHeaders: displayBoTypeHeaders,
+        mappings: mappings,
+        isDefault: isDefault,
+        sortOrder: sortOrder);
+  }
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:svan_play/api/api_constants.dart';
 import 'package:svan_play/data/event.dart';
+import 'package:svan_play/data/event_state.dart';
 import 'package:svan_play/data/event_tags.dart';
 import 'package:svan_play/pages/event_page_header.dart';
+import 'package:svan_play/push/push_connector.dart';
 import 'package:svan_play/store/store_connector.dart';
 import 'package:svan_play/util/banners.dart';
 import 'package:svan_play/views/markets_view.dart';
@@ -36,28 +39,31 @@ class _EventPageState extends State<EventPage> {
     );
   }
 
-  Scaffold _buildWidget(BuildContext context, Event model) {
-    return new Scaffold(
-      appBar: new AppBar(
-        flexibleSpace: bannerFor(model.sport, fallbackAsset: "assets/aqua.jpg"),
-        title: new Theme(
-            data: ThemeData.dark(),
-            child:
-                new Center(child: new EventPageHeader(key: Key(widget.eventId.toString()), eventId: widget.eventId))),
+  Widget _buildWidget(BuildContext context, Event model) {
+    return new PushConnector(
+      topics: ["ev.${widget.eventId}", "${ApiConstants.pushLang}.ev.${widget.eventId}"],
+      child: new Scaffold(
+        appBar: new AppBar(
+          flexibleSpace: bannerFor(model.sport, fallbackAsset: "assets/aqua.jpg"),
+          title: new Theme(
+              data: ThemeData.dark(),
+              child:
+                  new Center(child: new EventPageHeader(key: Key(widget.eventId.toString()), eventId: widget.eventId))),
+        ),
+        body: new PageView.builder(
+          physics: new AlwaysScrollableScrollPhysics(),
+          controller: _pageController,
+          //onPageChanged: _handlePageChanged,
+          itemCount: model.tags.contains(EventTags.prematchStats) ? 3 : 2,
+          itemBuilder: (context, index) {
+            if (_pages == null) _pages = _buildPageViews(model).toList();
+            return _pages[index];
+          },
+        ),
+        bottomNavigationBar: _buildBottomAppBar(context, model),
+        floatingActionButton: new BetSlipFab(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       ),
-      body: new PageView.builder(
-        physics: new AlwaysScrollableScrollPhysics(),
-        controller: _pageController,
-        //onPageChanged: _handlePageChanged,
-        itemCount: model.tags.contains(EventTags.prematchStats) ? 3 : 2,
-        itemBuilder: (context, index) {
-          if (_pages == null) _pages = _buildPageViews(model).toList();
-          return _pages[index];
-        },
-      ),
-      bottomNavigationBar: _buildBottomAppBar(context, model),
-      floatingActionButton: new BetSlipFab(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
@@ -75,7 +81,7 @@ class _EventPageState extends State<EventPage> {
   }
 
   Iterable<Widget> _buildPageViews(Event model) sync* {
-    yield new MarketsView(eventId: widget.eventId);
+    yield new MarketsView(eventId: widget.eventId, sport: model.sport, live: model.state == EventState.STARTED);
     yield new MatchEventsView();
     if (model.tags.contains(EventTags.prematchStats)) {
       yield new PreMatchStatsView();

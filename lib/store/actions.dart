@@ -57,10 +57,10 @@ Callable<Dispatcher> betOffers(int eventId) {
   };
 }
 
-Callable<Dispatcher> categoryGroup(int eventGroupId, String categoryName) {
+Callable<Dispatcher> categoryGroup(String sport, String categoryName) {
   return (dispatcher) async {
-    var response = await fetchBetOfferCategories(eventGroupId, categoryName);
-    dispatcher(ActionType.betOfferResponse, response);
+    var response = await fetchBetOfferCategories(sport, categoryName);
+    dispatcher(ActionType.categoryResponse, response);
   };
 }
 

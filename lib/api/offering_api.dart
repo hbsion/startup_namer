@@ -4,16 +4,12 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
-import 'package:svan_play/data/betoffer.dart';
+import 'package:svan_play/api/offering_parser.dart';
 import 'package:svan_play/data/betoffer_category.dart';
 import 'package:svan_play/data/betoffer_category_response.dart';
-import 'package:svan_play/data/betoffer_tags.dart';
-import 'package:svan_play/data/event.dart';
 import 'package:svan_play/data/event_collection_key.dart';
 import 'package:svan_play/data/event_group.dart';
 import 'package:svan_play/data/event_response.dart';
-import 'package:svan_play/data/live_stats.dart';
-import 'package:svan_play/data/outcome.dart';
 import 'package:svan_play/data/search_result.dart';
 import 'package:svan_play/data/silk_image.dart';
 import 'package:svan_play/data/silk_response.dart';
@@ -45,7 +41,7 @@ Future<EventResponse> fetchListView(
   }
 
   var body = await response.transform(utf8.decoder).join();
-  return compute(_parseListViewResponse, Tuple2(body, key));
+  return compute(parseListViewResponse, Tuple2(body, key));
 }
 
 Future<EventResponse> fetchBetOffers(int eventId) async {
@@ -63,7 +59,7 @@ Future<EventResponse> fetchBetOffers(int eventId) async {
   }
 
   var body = await response.transform(utf8.decoder).join();
-  return compute(_parseBetOfferResponse, Tuple2(body, key));
+  return compute(parseBetOfferResponse, Tuple2(body, key));
 }
 
 Future<List<EventResponse>> fetchLandingPage() async {
@@ -79,7 +75,7 @@ Future<List<EventResponse>> fetchLandingPage() async {
   }
 
   var body = await response.transform(utf8.decoder).join();
-  return compute(_parseLandingResponse, body);
+  return compute(parseLandingResponse, body);
 }
 
 Future<EventResponse> fetchLiveOpen() async {
@@ -96,159 +92,9 @@ Future<EventResponse> fetchLiveOpen() async {
   }
 
   var body = await response.transform(utf8.decoder).join();
-  return compute(_parseLiveOpenResponse, Tuple2(body, key));
+  return compute(parseLiveOpenResponse, Tuple2(body, key));
 }
 
-EventResponse _parseLiveOpenResponse(Tuple2<String, EventCollectionKey> tuple) {
-  final responseJson = json.decode(tuple.item1);
-  List<Event> events = [];
-  List<BetOffer> betOffers = [];
-  List<Outcome> outcomes = [];
-  List<LiveStats> liveStats = [];
-
-  try {
-    var eventWithBettoffers = responseJson["liveEvents"];
-    for (var eventJson in eventWithBettoffers) {
-      var event = Event.fromJson(eventJson["event"]);
-      events.add(event);
-      var liveData = LiveStats.fromJson(eventJson["liveData"]);
-      if (liveData != null) {
-        liveStats.add(liveData);
-      }
-
-      if (eventJson["mainBetOffer"] != null) {
-        var bo = BetOffer.fromJson(eventJson["mainBetOffer"]);
-        event.mainBetOfferId = bo.id;
-        betOffers.add(bo);
-        for (var outcomeJson in eventJson["mainBetOffer"]["outcomes"]) {
-          outcomes.add(Outcome.fromJson(outcomeJson));
-        }
-      }
-    }
-  } catch (e) {
-    _log.severe("Failed to parse json", e);
-  }
-
-  return new EventResponse(
-      key: tuple.item2, events: events, betoffers: betOffers, outcomes: outcomes, liveStats: liveStats);
-}
-
-List<EventResponse> _parseLandingResponse(String body) {
-  final responseJson = json.decode(body);
-  List<dynamic> result = responseJson["result"];
-
-  return _parseLandingResult(result).toList();
-}
-
-Iterable<EventResponse> _parseLandingResult(List<dynamic> result) sync* {
-  for (var js in result) {
-    var key = _convertLandingSectionNameToKey(js["name"]);
-    yield _parseEventsWithBetOffers(js, EventCollectionKey(type: key));
-  }
-}
-
-EventCollectionType _convertLandingSectionNameToKey(String name) {
-  switch (name) {
-    case "LRN":
-      return EventCollectionType.landingLiveRightNow;
-    case "shocker":
-      return EventCollectionType.landingShocker;
-    case "nextoff":
-      return EventCollectionType.landingNextOff;
-    case "popular":
-      return EventCollectionType.landingPopular;
-    case "highlights":
-      return EventCollectionType.landingHighlights;
-    case "startingsoon":
-      return EventCollectionType.landingStartingSoon;
-    default:
-      return EventCollectionType.unknown;
-  }
-}
-
-EventResponse _parseBetOfferResponse(Tuple2<String, EventCollectionKey> tuple) {
-  final responseJson = json.decode(tuple.item1);
-  List<Event> events = [];
-  List<BetOffer> betOffers = [];
-  List<Outcome> outcomes = [];
-
-  for (var boJson in responseJson["betOffers"]) {
-    var bo = BetOffer.fromJson(boJson);
-    betOffers.add(bo);
-
-    for (var outcomeJson in boJson["outcomes"]) {
-      outcomes.add(Outcome.fromJson(outcomeJson));
-    }
-  }
-
-  for (var eventJson in responseJson["events"]) {
-    var event = Event.fromJson(eventJson);
-    event.mainBetOfferId = determinMainBetOffer(betOffers);
-    events.add(event);
-  }
-
-  return new EventResponse(key: tuple.item2, events: events, betoffers: betOffers, outcomes: outcomes);
-}
-
-EventResponse _parseListViewResponse(Tuple2<String, EventCollectionKey> tuple) {
-  final responseJson = json.decode(tuple.item1);
-  return _parseEventsWithBetOffers(responseJson, tuple.item2);
-}
-
-EventResponse _parseEventsWithBetOffers(Map<String, dynamic> eventsWithBetOffers, EventCollectionKey key) {
-  List<Event> events = [];
-  List<BetOffer> betOffers = [];
-  List<Outcome> outcomes = [];
-  List<LiveStats> liveStats = [];
-
-  try {
-    var eventWithBetOffers = eventsWithBetOffers["events"];
-    for (var eventJson in eventWithBetOffers) {
-      var event = Event.fromJson(eventJson["event"]);
-      events.add(event);
-      var liveData = LiveStats.fromJson(eventJson["liveData"]);
-      if (liveData != null) {
-        liveStats.add(liveData);
-      }
-
-      var eventBo = <BetOffer>[];
-      for (var boJson in eventJson["betOffers"]) {
-        var bo = BetOffer.fromJson(boJson);
-        eventBo.add(bo);
-
-        for (var outcomeJson in boJson["outcomes"]) {
-          outcomes.add(Outcome.fromJson(outcomeJson));
-        }
-      }
-      event.mainBetOfferId = determinMainBetOffer(eventBo);
-      betOffers.addAll(eventBo);
-    }
-  } catch (e) {
-    _log.severe("Failed to parse json", e);
-  }
-
-  return new EventResponse(key: key, events: events, betoffers: betOffers, outcomes: outcomes, liveStats: liveStats);
-}
-
-int determinMainBetOffer(List<BetOffer> betOffers) {
-  var main = betOffers.where((bo) => bo.tags.contains(BetOfferTags.main)).toList();
-  if (main.length > 1) {
-    var mainExSP = main.where((bo) => !bo.tags.contains(BetOfferTags.startingPrice)).first;
-    if (mainExSP != null) {
-      return mainExSP.id;
-    } else {
-      return main[0].id;
-    }
-  }
-  if (main.length == 1) {
-    return main[0].id;
-  }
-  if (main.length == 0 && betOffers.length > 0) {
-    return betOffers[0].id;
-  }
-
-  return null;
-}
 
 Future<EventGroup> fetchEventGroups() async {
   var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
@@ -267,22 +113,22 @@ Future<EventGroup> fetchEventGroups() async {
   return EventGroup.fromJson(json.decode(body)["group"]);
 }
 
-Future<BetOfferCategoryResponse> fetchBetOfferCategories(int groupId, String categoryName) async {
+Future<BetOfferCategoryResponse> fetchBetOfferCategories(String sport, String categoryName) async {
   var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
-      .offering}/category/$categoryName/group/$groupId.json?lang=${ApiConstants.lang}&market=${ApiConstants.market}");
+      .offering}/category/$categoryName/sport/$sport.json?lang=${ApiConstants.lang}&market=${ApiConstants.market}");
   _log.info(uri);
   var request = await _client.getUrl(uri);
   var response = await request.close();
 
   if (response.statusCode != 200) {
     _log.warning("Failed to fetch status: ${response.statusCode} uri: $uri");
-    return null;
+    return new BetOfferCategoryResponse(sport, categoryName, []);
   }
 
-  var body = await response.transform(utf8.decoder).join();
-  var categories = json.decode(body)["categories"].map<BetOfferCategory>((js) => new BetOfferCategory.fromJson(js)).toList();
+  String body = await response.transform(utf8.decoder).join();
+  List<BetOfferCategory> categories = await compute(parseBetOfferCategories, body);
 
-  return new BetOfferCategoryResponse(groupId, categoryName, categories);
+  return new BetOfferCategoryResponse(sport, categoryName, categories);
 }
 
 Future<List<int>> fetchHighlights() async {

@@ -7,10 +7,6 @@ import 'package:svan_play/store/app_store.dart';
 import 'package:svan_play/store/store_provider.dart';
 import 'package:svan_play/util/callable.dart';
 
-typedef Widget WidgetModelBuilder<T>(BuildContext context, T model);
-typedef Observable<T> Mapper<T>(AppStore appStore);
-typedef T Snapshot<T>(AppStore appStore);
-
 class StoreDispatcher<T> extends StatelessWidget {
   final Widget child;
   final Callable<Dispatcher> pollAction;

@@ -9,6 +9,7 @@ import 'package:svan_play/models/main_model.dart';
 import 'package:svan_play/pages/home_page.dart';
 import 'package:svan_play/push/push_client.dart';
 import 'package:svan_play/push/push_hub.dart';
+import 'package:svan_play/push/push_provider.dart';
 import 'package:svan_play/store/actions.dart';
 import 'package:svan_play/store/app_store.dart';
 import 'package:svan_play/store/store_dispatcher.dart';
@@ -23,48 +24,44 @@ void main() {
   AppStore store = new AppStore();
   PushClient pushClient = new PushClient('wss://e4-push.kambi.com/socket.io/?EIO=3&transport=websocket');
   PushHub pushHub = new PushHub(pushClient, store.dispatch);
-  pushHub.connect(["v2018.${ApiConstants.offering}.ev","v2018.${ApiConstants.offering}.${ApiConstants.pushLang}.ev"]);
+  pushHub.connect(["ev", "${ApiConstants.pushLang}.ev"]);
 
-  runApp(new MainApp(store: store));
+  runApp(new MainApp(store: store, pushHub: pushHub));
 }
 
 class MainApp extends StatelessWidget {
   final appTitle = 'Play!';
   final AppStore store;
+  final PushHub pushHub;
 
-  const MainApp({Key key, this.store}) : super(key: key);
+  const MainApp({Key key, this.store, this.pushHub}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return new StoreProvider(
-        store: store,
-        child: new StoreDispatcher(
-            pollAction: _pollActions,
-            initAction: _initActions,
-            child: new ScopedModel<MainModel>(
-                model: new MainModel(),
-                child: _buildMainApp()
-            )
-        ));
+    return new PushProvider(
+      pushHub: pushHub,
+      child: new StoreProvider(
+          store: store,
+          child: new StoreDispatcher(
+              pollAction: _pollActions,
+              initAction: _initActions,
+              child: new ScopedModel<MainModel>(model: new MainModel(), child: _buildMainApp()))),
+    );
   }
 
   ScopedModelDescendant<MainModel> _buildMainApp() {
-    return new ScopedModelDescendant<MainModel>(
-        builder: (context, child, model) {
-          return MaterialApp(
+    return new ScopedModelDescendant<MainModel>(builder: (context, child, model) {
+      return MaterialApp(
 //              showPerformanceOverlay: true,
 //              checkerboardOffscreenLayers: true,
 //              checkerboardRasterCacheImages: true,
-              title: appTitle,
-              theme: new ThemeData(
-                  brightness: model.brightness,
-                  primaryColor: Colors.black,
-                  accentColor: Color.fromARGB(0xff, 0x00, 0xad, 0xc9)
-              ),
-              home: new HomePage()
-          );
-        }
-    );
+          title: appTitle,
+          theme: new ThemeData(
+              brightness: model.brightness,
+              primaryColor: Colors.black,
+              accentColor: Color.fromARGB(0xff, 0x00, 0xad, 0xc9)),
+          home: new HomePage());
+    });
   }
 
   Future _pollActions(Dispatcher dispatcher) async {

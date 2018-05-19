@@ -9,6 +9,8 @@ enum ActionType {
   scoreUpdate,
   eventStatsUpdate,
   betOfferStatusUpdate,
+  betOfferAdded,
+  betOfferRemoved,
   silkResponse,
   categoryResponse
 }

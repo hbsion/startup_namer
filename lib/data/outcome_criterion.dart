@@ -1,6 +1,6 @@
 
 class OutcomeCriterion {
-  final String type;
+  final int type;
   final String name;
 
   OutcomeCriterion({this.type, this.name});

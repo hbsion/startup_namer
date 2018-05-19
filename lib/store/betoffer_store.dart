@@ -5,6 +5,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:svan_play/data/betoffer.dart';
 import 'package:svan_play/data/event_response.dart';
 import 'package:svan_play/data/push/betOffer_status_update.dart';
+import 'package:svan_play/data/push/betoffer_added.dart';
+import 'package:svan_play/data/push/betoffer_removed.dart';
 import 'package:svan_play/store/action_type.dart';
 import 'package:svan_play/store/store.dart';
 import 'package:svan_play/util/flowable.dart';
@@ -58,8 +60,50 @@ class BetOfferStore implements Store {
           subject.add(subject.value.withSuspended(update.suspended));
         }
         break;
+      case ActionType.betOfferAdded:
+        BetOfferAdded added = action;
+        _mergeBetOffer(added.betOffer);
+        break;
+      case ActionType.betOfferRemoved:
+        BetOfferRemoved removed = action;
+        _removeBetOffer(removed.betOfferId);
+        break;
       default:
         break;
+    }
+  }
+
+  void _mergeBetOffer(BetOffer betOffer) {
+    var subject = _betOffers[betOffer.id];
+    if (subject != null) {
+      subject.add(betOffer);
+    } else {
+      _betOffers[betOffer.id] = new BehaviorSubject<BetOffer>(seedValue: betOffer);
+    }
+
+    var betOffersByEventSubject = _betOffersByEvent[betOffer.eventId];
+    if (betOffersByEventSubject != null && betOffersByEventSubject.value != null) {
+      List<int> ids = betOffersByEventSubject.value;
+      betOffersByEventSubject.add(new List.from(ids)..add(betOffer.id));
+    }
+  }
+
+  void _removeBetOffer(int betOfferId) {
+    var subject = _betOffers[betOfferId];
+    if (subject != null) {
+      var betOffer = subject.value;
+
+      subject.add(null);
+      subject.close();
+      _betOffers.remove(betOfferId);
+
+      if (betOffer != null) {
+        var betOffersByEventSubject = _betOffersByEvent[betOffer.eventId];
+        if (betOffersByEventSubject != null && betOffersByEventSubject.value != null) {
+          List<int> ids = betOffersByEventSubject.value;
+          betOffersByEventSubject.add(new List.from(ids)..remove(betOffer.id));
+        }
+      }
     }
   }
 
@@ -79,11 +123,10 @@ class BetOfferStore implements Store {
   void _mergeBetOffersByEvent(EventResponse response) {
     Map<int, List<BetOffer>> betOffersByEvent = groupBy(response.betoffers, (bo) => bo.eventId);
     betOffersByEvent.forEach((eventId, betOffers) {
-      var ids = betOffers.map((bo) => bo.id).toList();
-      ids.sort();
+      var ids = betOffers.map((bo) => bo.id).toList()..sort();
       var subject = _betOffersByEvent[eventId];
       if (subject != null) {
-        if (!ListEquality().equals(subject.value, ids))  {
+        if (!ListEquality().equals(subject.value, ids)) {
           subject.add(ids);
         }
       } else {

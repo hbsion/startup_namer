@@ -4,9 +4,10 @@ import 'package:meta/meta.dart';
 import 'package:svan_play/widgets/section_header.dart';
 
 class SectionListView extends StatefulWidget {
+  final bool asSliver;
   final List<ListSection> sections;
 
-  const SectionListView({Key key, this.sections}) : super(key: key);
+  const SectionListView({Key key, this.sections, this.asSliver = true}) : super(key: key);
 
   @override
   _SectionListViewState createState() => new _SectionListViewState();
@@ -17,12 +18,18 @@ class _SectionListViewState extends State<SectionListView> {
 
   @override
   Widget build(BuildContext context) {
-    return new SliverList(
-//        itemExtent: 126.0,
-        delegate: new SliverChildBuilderDelegate(
-      _buildRow,
-      childCount: _childCount(),
-    ));
+    if (widget.asSliver) {
+      return new SliverList(
+          delegate: new SliverChildBuilderDelegate(
+        _buildRow,
+        childCount: _childCount(),
+      ));
+    }
+
+    return new ListView.builder(
+      itemBuilder: _buildRow,
+      itemCount: _childCount(),
+    );
   }
 
   @override
