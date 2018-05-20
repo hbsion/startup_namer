@@ -2,8 +2,10 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:svan_play/data/betoffer.dart';
 import 'package:svan_play/data/event_response.dart';
 import 'package:svan_play/data/outcome.dart';
+import 'package:svan_play/data/push/betoffer_added.dart';
 import 'package:svan_play/data/push/odds_update.dart';
 import 'package:svan_play/store/action_type.dart';
 import 'package:svan_play/store/store.dart';
@@ -23,11 +25,10 @@ class OutcomeStore implements Store {
   }
 
   SnapshotObservable<List<Outcome>> byBetOfferId(int id) {
-    var subject = _outcomesByBetOffer [id];
+    var subject = _outcomesByBetOffer[id];
     if (subject == null) {
-      var outcomes = _outcomes.values.where((subject) => subject.value.betOfferId == id)
-          .map((subject) => subject.value)
-          .toList();
+      var outcomes =
+          _outcomes.values.where((subject) => subject.value.betOfferId == id).map((subject) => subject.value).toList();
 
       subject = new BehaviorSubject<List<Outcome>>(seedValue: outcomes);
       subject.onCancel = () {
@@ -42,7 +43,8 @@ class OutcomeStore implements Store {
   }
 
   List<Outcome> snapshot(List<int> ids) {
-    return ids.map((id) => _outcomes[id])
+    return ids
+        .map((id) => _outcomes[id])
         .where((subject) => subject != null)
         .map((subject) => subject.value)
         .toList(growable: false);
@@ -59,20 +61,46 @@ class OutcomeStore implements Store {
   void dispatch(ActionType type, action) {
     switch (type) {
       case ActionType.eventResponse:
+      case ActionType.betOfferResponse:
         EventResponse response = action;
-        _handleEventResponse(response);
+        _mergeOutcomes(response.outcomes);
+        _mergeOutccomeByBetOffer(response.betoffers);
         break;
       case ActionType.oddsUpdate:
         OddsUpdate oddsUpdate = action;
         _handleOddsUpdate(oddsUpdate);
         break;
+      case ActionType.betOfferAdded:
+        BetOfferAdded added = action;
+        _mergeOutcomes(added.outcomes);
+        _mergeOutccomeByBetOffer([added.betOffer]);
+        break;
+
       default:
         break;
     }
   }
 
-  void _handleEventResponse(EventResponse response) {
-     for (var outcome in response.outcomes) {
+  void _mergeOutccomeByBetOffer(List<BetOffer> betOffers) {
+    for (var betOffer in betOffers) {
+      var subject = _outcomesByBetOffer[betOffer.id];
+
+      if (subject != null && subject.hasListener) {
+        var outcomes = betOffer.outcomes
+            .map((id) => _outcomes[id])
+            .map((subject) => subject.value)
+            .where((outcome) => outcome != null)
+            .toList();
+        if (!new DeepCollectionEquality().equals(subject.value, outcomes)) {
+          subject.add(outcomes);
+        }
+      }
+    }
+//    logOutcomes();
+  }
+
+  void _mergeOutcomes(List<Outcome> outcomes) {
+    for (var outcome in outcomes) {
       var subject = _outcomes[outcome.id];
       if (subject != null) {
         if (subject.value != outcome) {
@@ -86,24 +114,9 @@ class OutcomeStore implements Store {
         _outcomes[outcome.id] = new BehaviorSubject<Outcome>(seedValue: outcome);
       }
     }
-
-    for (var betOffer in response.betoffers) {
-      var subject = _outcomesByBetOffer[betOffer.id];
-
-      if (subject != null && subject.hasListener) {
-        var outcomes = betOffer.outcomes.map((id) => _outcomes[id])
-            .map((subject) => subject.value)
-            .where((outcome) => outcome != null)
-            .toList();
-        if (!new DeepCollectionEquality().equals(subject.value, outcomes)) {
-          subject.add(outcomes);
-        }
-      }
-    }
-//    logOutcomes();
   }
 
-  void logOutcomes() {
+  void _logOutcomes() {
     int count = 0;
     for (var subject in _outcomes.values.where((s) => s.hasListener)) {
       print("Outcome id ${subject.value.id} has listeners ${subject.hasListener}");

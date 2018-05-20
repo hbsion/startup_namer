@@ -27,8 +27,8 @@ class AppStore {
   AppStore() {
     _stores
       ..add(eventStore)
-      ..add(betOfferStore)
       ..add(outcomeStore)
+      ..add(betOfferStore)
       ..add(favoritesStore)
       ..add(groupStore)
       ..add(statisticsStore)

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:svan_play/store/app_store.dart';
 import 'package:svan_play/store/store_provider.dart';
 import 'package:svan_play/util/callable.dart';
@@ -22,8 +21,8 @@ class StoreDispatcher<T> extends StatelessWidget {
     return new _StoreDispatcher(
       appStore: StoreProvider.of(context),
       child: child,
-      poll: pollAction,
-      oneshot: initAction,
+      pollAction: pollAction,
+      initAction: initAction,
     );
   }
 }
@@ -31,12 +30,12 @@ class StoreDispatcher<T> extends StatelessWidget {
 class _StoreDispatcher<T> extends StatefulWidget {
   final AppStore appStore;
   final Widget child;
-  final Callable<Dispatcher> poll;
-  final Callable<Dispatcher> oneshot;
+  final Callable<Dispatcher> pollAction;
+  final Callable<Dispatcher> initAction;
 
-  const _StoreDispatcher({Key key, @required this.child, @required this.poll, @required this.appStore, this.oneshot})
+  const _StoreDispatcher({Key key, @required this.child, @required this.pollAction, @required this.appStore, this.initAction})
       :assert(child != null),
-        assert(poll != null),
+        assert(pollAction != null),
         assert(appStore != null),
         super(key: key);
 
@@ -49,9 +48,9 @@ class _State<T> extends State<_StoreDispatcher<T>> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    widget.poll(widget.appStore.dispatch);
-    if (widget.oneshot != null) {
-      widget.oneshot(widget.appStore.dispatch);
+    widget.pollAction(widget.appStore.dispatch);
+    if (widget.initAction != null) {
+      widget.initAction(widget.appStore.dispatch);
     }
     _startPoller();
     WidgetsBinding.instance.addObserver(this);
@@ -63,16 +62,16 @@ class _State<T> extends State<_StoreDispatcher<T>> with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused && _timer != null) {
       _stopPoller();
     } else if (state == AppLifecycleState.resumed && _timer == null) {
-      widget.poll(widget.appStore.dispatch);
-      if (widget.oneshot != null) {
-        widget.oneshot(widget.appStore.dispatch);
+      widget.pollAction(widget.appStore.dispatch);
+      if (widget.initAction != null) {
+        widget.initAction(widget.appStore.dispatch);
       }
       _startPoller();
     }
   }
 
   void _startPoller() {
-    _timer = new Timer.periodic(new Duration(seconds: 30), (_) => widget.poll(widget.appStore.dispatch));
+    _timer = new Timer.periodic(new Duration(seconds: 30), (_) => widget.pollAction(widget.appStore.dispatch));
   }
 
   void _stopPoller() {
@@ -84,12 +83,6 @@ class _State<T> extends State<_StoreDispatcher<T>> with WidgetsBindingObserver {
   void dispose() {
     _dispose();
     super.dispose();
-  }
-
-  @override
-  void deactivate() {
-    _dispose();
-    super.deactivate();
   }
 
   void _dispose() {
