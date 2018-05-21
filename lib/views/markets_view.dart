@@ -12,6 +12,7 @@ import 'package:svan_play/store/actions.dart';
 import 'package:svan_play/store/app_store.dart';
 import 'package:svan_play/store/store_connector.dart';
 import 'package:svan_play/util/callable.dart';
+import 'package:svan_play/widgets/betoffer/handicap_widget.dart';
 import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:svan_play/widgets/betoffer/over_under_widget.dart';
 import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
@@ -234,20 +235,25 @@ class _BetOfferSection extends ListSection {
   }
 
   Widget _renderGroup(BuildContext context, _BetOfferGroup group) {
-    switch(group.type.id) {
+    switch (group.type.id) {
       case BetOfferTypes.overUnder:
       case BetOfferTypes.asianOverUnder:
-        return new OverUnderWidget(eventId: group.betOffers.first.eventId,
-        outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
+        return new OverUnderWidget(
+          eventId: group.betOffers.first.eventId,
+          outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
+        );
+      case BetOfferTypes.handicap:
+      case BetOfferTypes.asianHandicap:
+        return new HandicapWidget(
+          eventId: group.betOffers.first.eventId,
+          outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
         );
     }
     if (group.type.id == BetOfferTypes.correctScore ||
         group.type.id == BetOfferTypes.winner ||
         group.type.id == BetOfferTypes.position ||
-        group.type.id == BetOfferTypes.handicap ||
         group.type.id == BetOfferTypes.goalScorer ||
         group.type.id == BetOfferTypes.threeWayHandicap ||
-        group.type.id == BetOfferTypes.asianHandicap ||
         group.type.id == BetOfferTypes.headToHead ||
         group.type.id == BetOfferTypes.halfTimeFullTime) {
       return new Text('${group.criterion.label}(${group.criterion.id}) ${group.type.name} '
