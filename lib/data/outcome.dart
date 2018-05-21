@@ -28,49 +28,46 @@ class Outcome {
   Odds lastOdds;
   DateTime oddsChanged;
 
-  Outcome({
-    @required this.id,
-    @required this.betOfferId,
-    this.label,
-    this.odds,
-    this.type,
-    this.changedDate,
-    this.status,
-    this.participant,
-    this.participantId,
-    this.line,
-    this.homeTeamMember,
-    this.criterion,
-    this.distance,
-    this.scratched,
-    this.startNr,
-    this.prevOdds,
-    this.popular,
-    this.cashoutStatus
-  });
+  Outcome(
+      {@required this.id,
+      @required this.betOfferId,
+      this.label,
+      this.odds,
+      this.type,
+      this.changedDate,
+      this.status,
+      this.participant,
+      this.participantId,
+      this.line,
+      this.homeTeamMember,
+      this.criterion,
+      this.distance,
+      this.scratched,
+      this.startNr,
+      this.prevOdds,
+      this.popular,
+      this.cashoutStatus});
 
-  Outcome.fromJson(Map<String, dynamic> json) : this(
-      id: json["id"],
-      betOfferId: json["betOfferId"],
-      label: json["label"],
-      type: toOutcomeType(json["type"]),
-      changedDate: json["changedDate"] != null ? DateTime.parse(json["changedDate"]).toLocal() : null,
-      status: toOutcomeStatus(json["status"]),
-      cashoutStatus: toCashoutStatue(json["cashOutStatus"]),
-      odds: Odds.fromJson(json),
-      participant: json["participant"],
-      participantId: json["participantId"],
-      line: json["line"],
-      homeTeamMember: json["homeTeamMember"] ?? false,
-      criterion: OutcomeCriterion.fromJson(json["criterion"]),
-      distance: json["distance"],
-      scratched: json["scratched"] ?? false,
-      startNr: json["startNr"],
-      popular: json["popular"],
-      prevOdds: (
-          (
-              json["prevOdds"] ?? []) as List<dynamic>).map<int>((i) => i).toList()
-  );
+  Outcome.fromJson(Map<String, dynamic> json)
+      : this(
+            id: json["id"],
+            betOfferId: json["betOfferId"],
+            label: json["label"],
+            type: toOutcomeType(json["type"]),
+            changedDate: json["changedDate"] != null ? DateTime.parse(json["changedDate"]).toLocal() : null,
+            status: toOutcomeStatus(json["status"]),
+            cashoutStatus: toCashoutStatue(json["cashOutStatus"]),
+            odds: Odds.fromJson(json),
+            participant: json["participant"],
+            participantId: json["participantId"],
+            line: json["line"],
+            homeTeamMember: json["homeTeamMember"] ?? false,
+            criterion: OutcomeCriterion.fromJson(json["criterion"]),
+            distance: json["distance"],
+            scratched: json["scratched"] ?? false,
+            startNr: json["startNr"],
+            popular: json["popular"],
+            prevOdds: ((json["prevOdds"] ?? []) as List<dynamic>).map<int>((i) => i).toList());
 
   Outcome withNewOdds(Odds newOdds) {
     Outcome outcome = new Outcome(
@@ -91,8 +88,7 @@ class Outcome {
         scratched: scratched,
         startNr: startNr,
         popular: popular,
-        prevOdds: prevOdds
-    );
+        prevOdds: prevOdds);
     outcome.lastOdds = odds;
     outcome.oddsChanged = DateTime.now();
 
@@ -102,26 +98,26 @@ class Outcome {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Outcome &&
-              runtimeType == other.runtimeType &&
-              id == other.id &&
-              label == other.label &&
-              odds == other.odds &&
-              line == other.line &&
-              distance == other.distance &&
-              scratched == other.scratched &&
-              startNr == other.startNr &&
-              prevOdds == other.prevOdds &&
-              criterion == other.criterion &&
-              participant == other.participant &&
-              popular == other.popular &&
-              type == other.type &&
-              homeTeamMember == other.homeTeamMember &&
-              betOfferId == other.betOfferId &&
-              changedDate == other.changedDate &&
-              participantId == other.participantId &&
-              status == other.status &&
-              cashoutStatus == other.cashoutStatus;
+      other is Outcome &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          label == other.label &&
+          odds == other.odds &&
+          line == other.line &&
+          distance == other.distance &&
+          scratched == other.scratched &&
+          startNr == other.startNr &&
+          prevOdds == other.prevOdds &&
+          criterion == other.criterion &&
+          participant == other.participant &&
+          popular == other.popular &&
+          type == other.type &&
+          homeTeamMember == other.homeTeamMember &&
+          betOfferId == other.betOfferId &&
+          changedDate == other.changedDate &&
+          participantId == other.participantId &&
+          status == other.status &&
+          cashoutStatus == other.cashoutStatus;
 
   @override
   int get hashCode =>
@@ -148,5 +144,4 @@ class Outcome {
   String toString() {
     return 'Outcome{id: $id, label: $label, odds: $odds, line: $line, distance: $distance, scratched: $scratched, startNr: $startNr, prevOdds: $prevOdds, criterion: $criterion, participant: $participant, popular: $popular, type: $type, homeTeamMember: $homeTeamMember, betOfferId: $betOfferId, changedDate: $changedDate, participantId: $participantId, status: $status, cashoutStatus: $cashoutStatus}';
   }
-
 }

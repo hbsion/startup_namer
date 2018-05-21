@@ -49,7 +49,9 @@ class HomePage extends StatelessWidget {
         ),
       ));
     } else {
-      debugPrint("HomePage, lrn ${model.live.eventIds.length} soon ${model.soon.eventIds.length} popular ${model.popular.eventIds.length} high ${model.highlights.eventIds.length} next ${model.nextOff.eventIds.length} shocker ${model.shocker.eventIds.length}");
+      debugPrint("HomePage, lrn ${model.live.eventIds.length} soon ${model.soon.eventIds.length} popular ${model.popular
+          .eventIds.length} high ${model.highlights.eventIds.length} next ${model.nextOff.eventIds
+          .length} shocker ${model.shocker.eventIds.length}");
       slivers.addAll(_buildCards(model).map((widget) => SliverToBoxAdapter(child: widget)));
     }
 
@@ -62,19 +64,19 @@ class HomePage extends StatelessWidget {
 
   Iterable<Widget> _buildCards(_ViewModel model) sync* {
     for (var eventId in model.live.eventIds) {
-      yield new LiveRightNowCard(eventId: eventId);
+      yield new LiveRightNowCard(key: Key('lrn-$eventId'),eventId: eventId);
     }
     for (var eventId in model.nextOff.eventIds) {
-      yield new NextOffCard(eventId: eventId);
+      yield new NextOffCard(key: Key('next-$eventId'), eventId: eventId);
     }
     for (var eventId in model.highlights.eventIds) {
-      yield new TrendingCard(eventId: eventId);
+      yield new TrendingCard(key: Key('trend-$eventId'), eventId: eventId);
     }
     if (model.popular.eventIds.length > 0) {
       yield new HighlightsCard(eventIds: model.popular.eventIds);
     }
     for (var eventId in model.soon.eventIds) {
-      yield new StartingSoonCard(eventId: eventId);
+      yield new StartingSoonCard(key: Key('lrn-$eventId'), eventId: eventId);
     }
   }
 }

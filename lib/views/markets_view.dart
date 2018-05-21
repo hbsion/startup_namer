@@ -12,6 +12,7 @@ import 'package:svan_play/store/actions.dart';
 import 'package:svan_play/store/app_store.dart';
 import 'package:svan_play/store/store_connector.dart';
 import 'package:svan_play/util/callable.dart';
+import 'package:svan_play/widgets/betoffer/correct_score_widget.dart';
 import 'package:svan_play/widgets/betoffer/handicap_widget.dart';
 import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:svan_play/widgets/betoffer/over_under_widget.dart';
@@ -160,8 +161,9 @@ class MarketsView extends StatelessWidget {
           var nonSuspended = groups.where((group) => !group.betOffers.every((bo) => bo.suspended));
           if (nonSuspended.isNotEmpty) {
             yield nonSuspended.last;
+          } else {
+            yield groups.last;
           }
-          yield groups.last;
         } else {
           yield* groups;
         }
@@ -248,9 +250,13 @@ class _BetOfferSection extends ListSection {
           eventId: group.betOffers.first.eventId,
           outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
         );
+      case BetOfferTypes.correctScore:
+        return new CorrectScoreWidget(
+          eventId: group.betOffers.first.eventId,
+          outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
+        );
     }
-    if (group.type.id == BetOfferTypes.correctScore ||
-        group.type.id == BetOfferTypes.winner ||
+    if (group.type.id == BetOfferTypes.winner ||
         group.type.id == BetOfferTypes.position ||
         group.type.id == BetOfferTypes.goalScorer ||
         group.type.id == BetOfferTypes.threeWayHandicap ||

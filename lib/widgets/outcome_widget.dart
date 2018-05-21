@@ -208,7 +208,7 @@ class _State extends State<OutcomeWidget> {
             betoffer.betOfferType.id == BetOfferTypes.handicap ||
             betoffer.betOfferType.id == BetOfferTypes.asianOverUnder) &&
         outcome.line != null) {
-      return outcome.label + " " + (outcome.line / 1000).toString();
+      return outcome.label + (outcome.line > 0 ? " +" : " ") + (outcome.line / 1000).toString();
     }
     if (!widget.overrideShowLabel &&
         (betoffer.betOfferType.id == BetOfferTypes.headToHead ||

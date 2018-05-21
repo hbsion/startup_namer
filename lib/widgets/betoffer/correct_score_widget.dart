@@ -20,24 +20,42 @@ class CorrectScoreWidget extends StatelessWidget {
   }
 
   Widget _buildWidget(BuildContext context, List<Outcome> outcomes) {
-    var over = outcomes.where((o) => o.type == OutcomeType.OVER && o.line != null).toList()
-      ..sort((o1, o2) => o1.line - o2.line);
-    var under = outcomes.where((o) => o.type == OutcomeType.UNDER && o.line != null).toList()
-      ..sort((o1, o2) => o1.line - o2.line);
+    var withScore = outcomes.map(_mapOutcome);
+    var home = withScore.where((o) => o.homeScore > o.awayScore).toList()
+      ..sort((o1, o2) => o1.homeScore - o2.homeScore);
+    var draw = withScore.where((o) => o.homeScore == o.awayScore).toList()
+      ..sort((o1, o2) => o1.homeScore - o2.homeScore);
+    var away = withScore.where((o) => o.homeScore < o.awayScore).toList()
+      ..sort((o1, o2) => o1.homeScore - o2.homeScore);
 
+    if (draw.length > 0) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildColumn(context, home),
+          new Padding(padding: EdgeInsets.only(left: 4.0)),
+          _buildColumn(context, draw),
+          new Padding(padding: EdgeInsets.only(left: 4.0)),
+          _buildColumn(context, away),
+        ],
+      );
+    }
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _buildColumn(context, over),
+        _buildColumn(context, home),
         new Padding(padding: EdgeInsets.only(left: 4.0)),
-        _buildColumn(context, under),
+        _buildColumn(context, away),
       ],
     );
   }
 
-  Widget _buildColumn(BuildContext context, List<Outcome> outcomes) {
+  Widget _buildColumn(BuildContext context, List<_OutceomeWithScore> outcomes) {
     return new Expanded(
       child: Column(
-        children: outcomes.map((outcome) => _buildOutcome(context, outcome)).toList(),
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: outcomes.map((outcome) => _buildOutcome(context, outcome.outcome)).toList(),
       ),
     );
   }
