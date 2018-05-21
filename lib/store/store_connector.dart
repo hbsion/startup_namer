@@ -19,9 +19,8 @@ class StoreConnector<T> extends StatelessWidget {
   final Callable2<Dispatcher, AppStore> initAction;
 
   const StoreConnector(
-      {Key key, @required this.widgetBuilder, @required this.stream, this.pollAction, this.initAction, this.initalData})
+      {Key key, @required this.widgetBuilder, this.stream, this.pollAction, this.initAction, this.initalData})
       : assert(widgetBuilder != null),
-        assert(stream != null),
         super(key: key);
 
   @override
@@ -54,7 +53,6 @@ class _StoreConnector<T> extends StatefulWidget {
       this.appStore,
       this.initalData})
       : assert(builder != null),
-        assert(stream != null),
         assert(appStore != null),
         super(key: key);
 
@@ -72,13 +70,15 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
     if (widget.initalData != null) {
       _snapshot = widget.initalData(widget.appStore);
     }
-    _subscription = widget.stream(widget.appStore).listen((data) {
-      if (mounted && data != _snapshot) {
-        setState(() {
-          _snapshot = data;
-        });
-      }
-    });
+    if (widget.stream != null) {
+      _subscription = widget.stream(widget.appStore).listen((data) {
+        if (mounted && data != _snapshot) {
+          setState(() {
+            _snapshot = data;
+          });
+        }
+      });
+    }
     if (widget.pollAction != null) {
       widget.pollAction(widget.appStore.dispatch);
       _startPoller();
@@ -97,7 +97,6 @@ class _State<T> extends State<_StoreConnector<T>> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("Lifecycle changed: " + state.toString());
     if (state == AppLifecycleState.paused && _timer != null) {
       _stopPoller();
     } else if (state == AppLifecycleState.resumed && widget.pollAction != null && _timer == null) {
