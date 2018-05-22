@@ -132,6 +132,8 @@ class MarketsView extends StatelessWidget {
     for (var section in sections) {
       section.trailing = new Text(section.groups.expand((g) => g.betOffers).length.toString());
     }
+    sections.first.initiallyExpanded = true;
+    
     return sections;
   }
 
@@ -209,6 +211,7 @@ class MarketsView extends StatelessWidget {
 class _BetOfferSection extends ListSection {
   final List<_BetOfferGroup> groups;
   final BetOfferCategory category;
+  bool _initiallyExpanded = false;
 
   _BetOfferSection(this.groups, this.category);
 
@@ -219,7 +222,9 @@ class _BetOfferSection extends ListSection {
   int get count => groups.length;
 
   @override
-  bool get initiallyExpanded => true;
+  bool get initiallyExpanded => _initiallyExpanded;
+
+  set initiallyExpanded(bool value) => _initiallyExpanded = value;
 
   @override
   String get title => category.name;
