@@ -57,7 +57,20 @@ class GoalScorerWidget extends StatelessWidget {
         ),
         Row(
           children: criterias.map((oc) {
-            return new Expanded(child: new Center(child: Text(oc.name)));
+            return new Expanded(
+                child: new Padding(
+              padding: const EdgeInsets.only(right: 4.0),
+              child: new Center(
+                  child: new Column(
+                children: <Widget>[
+                  Text(oc.name),
+                  new Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+                    child: new Divider(color: AppTheme.of(context).list.headerDivider, height: 2.0),
+                  )
+                ],
+              )),
+            ));
           }).toList(),
         )
       ],
@@ -95,8 +108,10 @@ class GoalScorerWidget extends StatelessWidget {
 
   Widget _buildPlayerOutcomes(BuildContext context, _Player player, List<OutcomeCriterion> criterias) {
     return Row(
-        children: criterias.map((oc) => _buildOutcome(
-            context, player.outcomes.firstWhere((outcome) => outcome.criterion.type == oc.type, orElse: () => null))).toList());
+        children: criterias
+            .map((oc) => _buildOutcome(context,
+                player.outcomes.firstWhere((outcome) => outcome.criterion.type == oc.type, orElse: () => null)))
+            .toList());
   }
 
   Widget _buildOutcome(BuildContext context, Outcome outcome) {
@@ -104,7 +119,8 @@ class GoalScorerWidget extends StatelessWidget {
       return Expanded(child: new EmptyWidget());
     }
 
-    return Expanded(child: new Padding(
+    return Expanded(
+        child: new Padding(
       padding: const EdgeInsets.only(right: 4.0),
       child: new OutcomeWidget(outcomeId: outcome.id, betOfferId: outcome.betOfferId, eventId: eventId),
     ));
