@@ -50,7 +50,7 @@ class CorrectScoreWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildColumn(BuildContext context, List<_OutceomeWithScore> outcomes) {
+  Widget _buildColumn(BuildContext context, List<_OutcomeWithScore> outcomes) {
     return new Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -66,14 +66,14 @@ class CorrectScoreWidget extends StatelessWidget {
         child: new OutcomeWidget(outcomeId: outcome.id, betOfferId: outcome.betOfferId, eventId: eventId));
   }
 
-  _OutceomeWithScore _mapOutcome(Outcome outcome) {
+  _OutcomeWithScore _mapOutcome(Outcome outcome) {
     var scoreParts = outcome.label.split("-");
 
     if (scoreParts.length != 2) {
-      return new _OutceomeWithScore(outcome, 0, 0);
+      return new _OutcomeWithScore(outcome, 0, 0);
     }
 
-    return new _OutceomeWithScore(outcome, _parseScore(scoreParts[0]), _parseScore(scoreParts[1]));
+    return new _OutcomeWithScore(outcome, _parseScore(scoreParts[0]), _parseScore(scoreParts[1]));
   }
 
   int _parseScore(String text) {
@@ -83,10 +83,10 @@ class CorrectScoreWidget extends StatelessWidget {
   }
 }
 
-class _OutceomeWithScore {
+class _OutcomeWithScore {
   final Outcome outcome;
   final int homeScore;
   final int awayScore;
 
-  _OutceomeWithScore(this.outcome, this.homeScore, this.awayScore);
+  _OutcomeWithScore(this.outcome, this.homeScore, this.awayScore);
 }

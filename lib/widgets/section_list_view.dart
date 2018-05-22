@@ -86,6 +86,7 @@ class _SectionListViewState extends State<SectionListView> {
         key: new Key(section.title),
         child: new SectionHeader(
           leading: section.leading,
+          trailing: section.trailing,
           title: section.title,
           titleStyle: section.titleStyle,
           count: section.count,
@@ -105,6 +106,7 @@ class _SectionListViewState extends State<SectionListView> {
 
 abstract class ListSection {
   Widget leading;
+  Widget trailing;
   TextStyle titleStyle;
 
   String get title;
@@ -114,6 +116,7 @@ abstract class ListSection {
   int get count;
 
   bool get initiallyExpanded;
+
 }
 
 class _SectionListItem extends StatelessWidget {

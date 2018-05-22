@@ -36,7 +36,7 @@ class AppThemeData {
   final OutcomeThemeData outcome;
   final Color serverColor = Color.fromRGBO(0xf7, 0xce, 0x00, 1.0);
   final Color pointsColor = Color.fromRGBO(0x00, 0xad, 0xc9, 1.0);
-  final Color brand = _brandColor;
+  final Color brandColor = _brandColor;
 
 
 //  static final Color serverColor = Color.fromRGBO(0xf7, 0xce, 0x00, 1.0);

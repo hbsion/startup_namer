@@ -16,6 +16,7 @@ import 'package:svan_play/widgets/betoffer/correct_score_widget.dart';
 import 'package:svan_play/widgets/betoffer/handicap_widget.dart';
 import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:svan_play/widgets/betoffer/over_under_widget.dart';
+import 'package:svan_play/widgets/betoffer/three_way_handicap_widget.dart';
 import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
 import 'package:svan_play/widgets/section_list_view.dart';
 
@@ -127,6 +128,9 @@ class MarketsView extends StatelessWidget {
       }
     }
 
+    for (var section in sections) {
+      section.trailing = new Text(section.groups.expand((g) => g.betOffers).length.toString());
+    }
     return sections;
   }
 
@@ -255,12 +259,19 @@ class _BetOfferSection extends ListSection {
           eventId: group.betOffers.first.eventId,
           outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
         );
+      case BetOfferTypes.threeWayHandicap:
+        return new ThreeWayHandicapWidget(
+          eventId: group.betOffers.first.eventId,
+          outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
+        );
     }
     if (group.type.id == BetOfferTypes.winner ||
         group.type.id == BetOfferTypes.position ||
         group.type.id == BetOfferTypes.goalScorer ||
         group.type.id == BetOfferTypes.threeWayHandicap ||
         group.type.id == BetOfferTypes.headToHead ||
+        group.type.id == BetOfferTypes.scoreCast ||
+        group.type.id == BetOfferTypes.winCast ||
         group.type.id == BetOfferTypes.halfTimeFullTime) {
       return new Text('${group.criterion.label}(${group.criterion.id}) ${group.type.name} '
           '(${group.type.id}) #${group.betOffers.length} susp: ${group.betOffers[0].suspended}');

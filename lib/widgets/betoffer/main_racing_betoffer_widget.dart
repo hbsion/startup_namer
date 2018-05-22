@@ -58,7 +58,7 @@ class MainRacingBetOfferWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: new Text(model?.betOffer?.eachWay?.terms ?? "", style: Theme.of(context).textTheme.caption),
     );
-    model.outcomes.sort((a, b) => a.odds?.decimal?.compareTo(b.odds.decimal) ?? 0);
+    model.outcomes.sort((a, b) => a.odds?.decimal?.compareTo(b.odds?.decimal ?? 0) ?? 0);
     for (var outcome in model.outcomes.take(3)) {
       yield new Container(margin: const EdgeInsets.only(bottom: 4.0), child: _buildOutcomeRow(model, outcome, context));
     }

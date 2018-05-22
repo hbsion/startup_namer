@@ -8,8 +8,9 @@ class SectionHeader extends StatelessWidget {
   final int count;
   final VoidCallback onTap;
   final Widget leading;
+  final Widget trailing;
 
-  const SectionHeader({Key key, this.title, this.count, this.onTap, this.titleStyle, this.leading}) : super(key: key);
+  const SectionHeader({Key key, this.title, this.count, this.onTap, this.titleStyle, this.leading, this.trailing}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +27,13 @@ class SectionHeader extends StatelessWidget {
                         padding: EdgeInsets.all(16.0),
                         child: Row(
                           children: <Widget>[
-                            leading != null ? leading : new EmptyWidget(),
+                            leading ?? new EmptyWidget(),
                             new Expanded(
                                 child: new Text(title,
                                     style: titleStyle != null
                                         ? Theme.of(context).textTheme.subhead.merge(titleStyle)
                                         : Theme.of(context).textTheme.subhead)),
-                            new Text(count.toString())
+                            trailing ?? new Text(count.toString())
                           ],
                         )),
                     new Divider(color: appTheme.list.headerDivider, height: 2.0)
