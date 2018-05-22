@@ -264,13 +264,6 @@ class _BetOfferSection extends ListSection {
         group.type.id == BetOfferTypes.halfTimeFullTime) {
       return new Text('${group.criterion.label}(${group.criterion.id}) ${group.type.name} '
           '(${group.type.id}) #${group.betOffers.length} susp: ${group.betOffers[0].suspended}');
-
-//        return (
-//            <BetOfferGroupItem eventId={this.props.eventId}
-//                               type={group.type}
-//                               betOfferIds={group.betoffers.map(bo => bo.id)}
-//                               outcomeIds={flatMap(group.betoffers.map(bo => bo.outcomes))}/>
-//        )
     }
 
     return new Column(

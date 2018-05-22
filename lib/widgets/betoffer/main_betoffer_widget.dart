@@ -33,7 +33,6 @@ class MainBetOfferWidget extends StatelessWidget {
   Widget _buildWidget(BuildContext context, _ViewModel model) {
     if (model == null || model.event == null || model.betOffer == null) return new EmptyWidget();
 
-//    print("Rendering betoffer $betOfferId");
     if (model.event.tags.contains(EventTags.competition) || model.betOffer.betOfferType.id == BetOfferTypes.position) {
       if (model.event.sport == "GALLOPS") {
         return new MainRacingBetOfferWidget(
