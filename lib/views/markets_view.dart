@@ -13,6 +13,7 @@ import 'package:svan_play/store/app_store.dart';
 import 'package:svan_play/store/store_connector.dart';
 import 'package:svan_play/util/callable.dart';
 import 'package:svan_play/widgets/betoffer/correct_score_widget.dart';
+import 'package:svan_play/widgets/betoffer/goal_scorer_widget.dart';
 import 'package:svan_play/widgets/betoffer/handicap_widget.dart';
 import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:svan_play/widgets/betoffer/over_under_widget.dart';
@@ -264,6 +265,11 @@ class _BetOfferSection extends ListSection {
           eventId: group.betOffers.first.eventId,
           outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
         );
+      case BetOfferTypes.goalScorer:
+        return new GoalScorerWidget(
+          eventId: group.betOffers.first.eventId,
+          outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
+        );
     }
     if (group.type.id == BetOfferTypes.winner ||
         group.type.id == BetOfferTypes.position ||
@@ -281,7 +287,8 @@ class _BetOfferSection extends ListSection {
         children: group.betOffers
             .map((bo) => new Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2.0),
-                child: new MainBetOfferWidget(betOfferId: bo.id, eventId: bo.eventId, defaultOrientation: Orientation.portrait)))
+                child: new MainBetOfferWidget(
+                    betOfferId: bo.id, eventId: bo.eventId, defaultOrientation: Orientation.portrait)))
             .toList());
   }
 }
