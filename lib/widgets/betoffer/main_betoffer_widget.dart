@@ -44,34 +44,60 @@ class MainBetOfferWidget extends StatelessWidget {
           eventId: model.event.id,
           overrideShowLabel: true);
     }
+    if (model.betOffer.betOfferType.id == BetOfferTypes.doubleChance) {
+      return _buildVerticalLayout(context, model.betOffer.outcomes);
+    }
 
-    return new Row(children: _buildLayout(context, model.betOffer.outcomes));
+    return _buildHorizontalLayout(context, model.betOffer.outcomes);
   }
 
-  List<Widget> _buildLayout(BuildContext context, List<int> outcomeIds) {
+  Widget _buildHorizontalLayout(BuildContext context, List<int> outcomeIds) {
     var orientation = MediaQuery.of(context).orientation;
     List<Widget> widgets = [];
     if (outcomeIds != null) {
       for (var i = 0; i < outcomeIds.length; ++i) {
         var outcomeId = outcomeIds[i];
-        widgets.add(_buildOutcomeWidget(outcomeId, i == (outcomeIds.length - 1), orientation));
+        widgets.add(_horizontalWrap(_buildOutcomeWidget(outcomeId, orientation), i == (outcomeIds.length - 1)));
       }
     }
-    return widgets;
+    return Row(children: widgets);
   }
 
-  Widget _buildOutcomeWidget(int outcomeId, bool isLast, Orientation orientation) {
-    OutcomeWidget widget = new OutcomeWidget(
+  Widget _buildVerticalLayout(BuildContext context, List<int> outcomeIds) {
+    var orientation = MediaQuery.of(context).orientation;
+    List<Widget> widgets = [];
+    if (outcomeIds != null) {
+      for (var i = 0; i < outcomeIds.length; ++i) {
+        var outcomeId = outcomeIds[i];
+        widgets.add(_verticalWrap(_buildOutcomeWidget(outcomeId, orientation), i == (outcomeIds.length - 1)));
+      }
+    }
+
+    return Column(children: widgets);
+  }
+
+  Widget _buildOutcomeWidget(int outcomeId, Orientation orientation) {
+    return new OutcomeWidget(
         key: new Key(outcomeId.toString()),
         outcomeId: outcomeId,
         betOfferId: betOfferId,
         eventId: eventId,
         columnLayout: orientation == Orientation.landscape);
+  }
 
+  Widget _horizontalWrap(Widget widget, bool isLast) {
     if (!isLast) {
       return new Expanded(child: new Padding(padding: EdgeInsets.only(right: 4.0), child: widget));
     } else {
       return new Expanded(child: widget);
+    }
+  }
+
+  Widget _verticalWrap(Widget widget, bool isLast) {
+    if (!isLast) {
+      return new Padding(padding: EdgeInsets.only(bottom: 4.0), child: widget);
+    } else {
+      return widget;
     }
   }
 }
