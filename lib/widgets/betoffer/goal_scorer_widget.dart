@@ -65,10 +65,15 @@ class GoalScorerWidget extends StatelessWidget {
   }
 
   Widget _buildTeamPlayers(BuildContext context, List<_Player> players, List<OutcomeCriterion> criterias) {
-    players.sort((a, b) => a.name.compareTo(b.name));
+    players.sort((a, b) => _playerOdds(a, criterias[0]) - _playerOdds(b, criterias[0]));
     return Column(
       children: players.map((player) => _buildPlayer(context, player, criterias)).toList(),
     );
+  }
+
+  int _playerOdds(_Player player, OutcomeCriterion criteria) {
+    var outcome = player.outcomes.firstWhere((outcome) => outcome.criterion.type == criteria.type, orElse: () => null);
+    return outcome != null ? outcome.odds.decimal : 99999;
   }
 
   Widget _buildPlayer(BuildContext context, _Player player, List<OutcomeCriterion> criterias) {
