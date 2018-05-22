@@ -14,8 +14,9 @@ import 'package:svan_play/widgets/outcome_widget.dart';
 class MainBetOfferWidget extends StatelessWidget {
   final int betOfferId;
   final int eventId;
+  final Orientation defaultOrientation;
 
-  const MainBetOfferWidget({Key key, @required this.betOfferId, @required this.eventId})
+  const MainBetOfferWidget({Key key, @required this.betOfferId, @required this.eventId, this.defaultOrientation})
       : assert(betOfferId != null),
         assert(eventId != null),
         super(key: key);
@@ -57,7 +58,7 @@ class MainBetOfferWidget extends StatelessWidget {
     if (outcomeIds != null) {
       for (var i = 0; i < outcomeIds.length; ++i) {
         var outcomeId = outcomeIds[i];
-        widgets.add(_horizontalWrap(_buildOutcomeWidget(outcomeId, orientation), i == (outcomeIds.length - 1)));
+        widgets.add(_horizontalWrap(_buildOutcomeWidget(outcomeId, defaultOrientation ?? orientation), i == (outcomeIds.length - 1)));
       }
     }
     return Row(children: widgets);
@@ -69,7 +70,7 @@ class MainBetOfferWidget extends StatelessWidget {
     if (outcomeIds != null) {
       for (var i = 0; i < outcomeIds.length; ++i) {
         var outcomeId = outcomeIds[i];
-        widgets.add(_verticalWrap(_buildOutcomeWidget(outcomeId, orientation), i == (outcomeIds.length - 1)));
+        widgets.add(_verticalWrap(_buildOutcomeWidget(outcomeId, defaultOrientation ?? orientation), i == (outcomeIds.length - 1)));
       }
     }
 

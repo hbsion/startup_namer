@@ -277,7 +277,7 @@ class _BetOfferSection extends ListSection {
         children: group.betOffers
             .map((bo) => new Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2.0),
-                child: new MainBetOfferWidget(betOfferId: bo.id, eventId: bo.eventId)))
+                child: new MainBetOfferWidget(betOfferId: bo.id, eventId: bo.eventId, defaultOrientation: Orientation.portrait)))
             .toList());
   }
 }
