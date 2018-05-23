@@ -77,6 +77,9 @@ class _State extends State<OutcomeWidget> {
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel viewModel) {
+    if (_shouldHide(viewModel)) {
+      return EmptyWidget();
+    }
     if (viewModel == null || viewModel.outcome == null || viewModel.betOffer == null || viewModel.event == null) {
       return _buildPlaceholder(context);
     }
@@ -131,6 +134,8 @@ class _State extends State<OutcomeWidget> {
 
   bool _isSuspended(_ViewModel viewModel) =>
       viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED;
+
+  bool _shouldHide(_ViewModel viewModel) => viewModel.outcome.odds.decimal == null;
 
   Widget _buildContent(BuildContext context, _ViewModel viewModel, MainModel model) {
     var label = _formatLabel(viewModel);
@@ -240,12 +245,16 @@ class _State extends State<OutcomeWidget> {
 
     switch (format) {
       case OddsFormat.Fractional:
-        return model.outcome.odds.fractional ?? "";
+        return model.outcome.odds.fractional ?? "-";
       case OddsFormat.American:
-        return model.outcome.odds.american ?? "";
+        return model.outcome.odds.american ?? "-";
       case OddsFormat.Decimal:
       default:
-        double decimal = ((model.outcome.odds.decimal ?? 1000) / 1000);
+        if (model.outcome.odds.decimal == null) {
+          return "-";
+        }
+
+        double decimal = model.outcome.odds.decimal / 1000;
         return decimal.toStringAsFixed(2);
     }
   }
