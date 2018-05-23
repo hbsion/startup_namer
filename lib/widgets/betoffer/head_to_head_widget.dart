@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:quiver/collection.dart';
+import 'package:svan_play/app_theme.dart';
 import 'package:svan_play/data/outcome.dart';
 import 'package:svan_play/data/outcome_type.dart';
 import 'package:svan_play/store/store_connector.dart';
@@ -68,10 +69,12 @@ class HeadToHeadWidget extends StatelessWidget {
           children: <Widget>[
             Expanded(flex: 3, child: new Text(row.participant)),
             Expanded(flex: 1, child: _buildOutcome(row.yes)),
-            Expanded(flex: 1, child: new Padding(
-              padding: const EdgeInsets.only(left: 4.0),
-              child: _buildOutcome(row.no),
-            ))
+            Expanded(
+                flex: 1,
+                child: new Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: _buildOutcome(row.no),
+                ))
           ],
         ),
       ));
@@ -85,14 +88,34 @@ class HeadToHeadWidget extends StatelessWidget {
   Widget _buildHeadToHeadFlavor(BuildContext context, List<Outcome> outcomes) {
     Multimap<int, Outcome> rows = new Multimap.fromIterable(outcomes, key: (el) => el.betOfferId);
 
-    return Column(
-      children: rows.,
-    );
+    List<Widget> widgets = [];
+
+    for (var betOfferId in rows.keys) {
+      var outcomes = rows[betOfferId];
+      var title = outcomes.map((oc) => oc.participant).where((label) => label != null).join(" - ");
+      widgets.add(new Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Text(title),
+      ));
+
+      for (var outcome in outcomes) {
+        widgets.add(new Padding(
+          padding: const EdgeInsets.only(bottom: 4.0),
+          child: _buildOutcome(outcome, overrideShowLabel: true),
+        ));
+      }
+
+      widgets.add(
+        Divider(height: 8.0, color: AppTheme.of(context).list.itemDivider),
+      );
+    }
+
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: widgets);
   }
 
-  Widget _buildOutcome(Outcome outcome) {
+  Widget _buildOutcome(Outcome outcome, {overrideShowLabel = false}) {
     if (outcome == null) return EmptyWidget();
-    return new OutcomeWidget(outcomeId: outcome.id, betOfferId: outcome.betOfferId, eventId: eventId);
+    return new OutcomeWidget(outcomeId: outcome.id, betOfferId: outcome.betOfferId, eventId: eventId, overrideShowLabel: overrideShowLabel);
   }
 }
 
@@ -110,5 +133,4 @@ class _H2H {
   int betOfferId;
 
   _H2H(this.betOfferId);
-
 }
