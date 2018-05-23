@@ -20,6 +20,7 @@ import 'package:svan_play/widgets/betoffer/head_to_head_widget.dart';
 import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:svan_play/widgets/betoffer/over_under_widget.dart';
 import 'package:svan_play/widgets/betoffer/three_way_handicap_widget.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
 import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
 import 'package:svan_play/widgets/section_list_view.dart';
 
@@ -233,6 +234,7 @@ class _BetOfferSection extends ListSection {
 
   Widget _buildRow(BuildContext context, int index) {
     var group = groups[index];
+    var extra = group.betOffers[0].extra;
 
     return new Container(
         padding: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
@@ -242,6 +244,15 @@ class _BetOfferSection extends ListSection {
             new Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: new Text(group.criterion.label, style: TextStyle(fontSize: 16.0)),
+            ),
+            extra == null ? new EmptyWidget() : new Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: new Text(extra,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .caption
+                      .merge(TextStyle(fontStyle: FontStyle.italic))),
             ),
             _renderGroup(context, group)
           ],

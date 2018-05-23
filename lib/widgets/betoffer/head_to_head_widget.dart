@@ -89,8 +89,10 @@ class HeadToHeadWidget extends StatelessWidget {
     Multimap<int, Outcome> rows = new Multimap.fromIterable(outcomes, key: (el) => el.betOfferId);
 
     List<Widget> widgets = [];
+    var keys = rows.keys.toList();
 
-    for (var betOfferId in rows.keys) {
+    for (var i = 0; i < keys.length; ++i) {
+      var betOfferId = keys[i];
       var outcomes = rows[betOfferId];
       var title = outcomes.map((oc) => oc.participant).where((label) => label != null).join(" - ");
       widgets.add(new Padding(
@@ -105,9 +107,11 @@ class HeadToHeadWidget extends StatelessWidget {
         ));
       }
 
-      widgets.add(
-        Divider(height: 8.0, color: AppTheme.of(context).list.itemDivider),
-      );
+      if (i < (rows.length - 1)) {
+        widgets.add(
+          Divider(height: 8.0, color: AppTheme.of(context).list.itemDivider),
+        );
+      }
     }
 
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: widgets);
@@ -115,7 +119,8 @@ class HeadToHeadWidget extends StatelessWidget {
 
   Widget _buildOutcome(Outcome outcome, {overrideShowLabel = false}) {
     if (outcome == null) return EmptyWidget();
-    return new OutcomeWidget(outcomeId: outcome.id, betOfferId: outcome.betOfferId, eventId: eventId, overrideShowLabel: overrideShowLabel);
+    return new OutcomeWidget(
+        outcomeId: outcome.id, betOfferId: outcome.betOfferId, eventId: eventId, overrideShowLabel: overrideShowLabel);
   }
 }
 
