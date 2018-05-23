@@ -69,12 +69,14 @@ class StartingSoonCard extends StatelessWidget {
     return new _TimeToStart(time: event.start);
   }
 
-  Text _buildPath(BuildContext context, Event event) {
-    return new Text(
-      event.path.map((p) => p.name).join(" / "),
-      softWrap: false,
-      overflow: TextOverflow.ellipsis,
-      style: Theme.of(context).textTheme.caption,
+  Widget _buildPath(BuildContext context, Event event) {
+    return new Center(
+      child: new Text(
+        event.path.map((p) => p.name).join(" / "),
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(context).textTheme.caption,
+      ),
     );
   }
 
@@ -87,8 +89,9 @@ class StartingSoonCard extends StatelessWidget {
       child: new Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            new Text(model.name, style: new TextStyle(fontSize: 16.0)),
+            new Center(child: new Text(model.name, style: new TextStyle(fontSize: 16.0))),
             Padding(padding: EdgeInsets.all(3.0)),
             _buildPath(context, model)
           ],

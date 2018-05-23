@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:meta/meta.dart';
 import 'package:svan_play/widgets/section_header.dart';
+import 'package:svan_play/widgets/sticky/sticky_header_list.dart';
 
 class SectionListView extends StatefulWidget {
   final bool asSliver;
@@ -26,6 +26,10 @@ class _SectionListViewState extends State<SectionListView> {
       ));
     }
 
+//    return new StickyList.builder(
+//      builder: _buildRow,
+//      itemCount: _childCount(),
+//    );
     return new ListView.builder(
       itemBuilder: _buildRow,
       itemCount: _childCount(),
@@ -51,11 +55,9 @@ class _SectionListViewState extends State<SectionListView> {
 
     for (var section in widget.sections) {
       if (cursor == index) {
-        //debugPrint("Section found a cursor: " + cursor.toString() + " index: " + index.toString());
         return _buildSectionHeader(section);
       } else if (_expanded[section.title]) {
         cursor++;
-        // debugPrint("Expanded Section finding row at cursor: " + cursor.toString() + " index: " + index.toString());
 
         if (index < (cursor + section.count)) {
           return _buildListItem(section.builder(context, index - cursor));
@@ -116,7 +118,6 @@ abstract class ListSection {
   int get count;
 
   bool get initiallyExpanded;
-
 }
 
 class _SectionListItem extends StatelessWidget {
@@ -130,15 +131,15 @@ class _SectionListItem extends StatelessWidget {
   }
 }
 
-class SliverHybridList extends SliverFixedExtentList {
-  const SliverHybridList({
-    Key key,
-    @required SliverChildDelegate delegate,
-    @required double itemExtent,
-  }) : super(key: key, delegate: delegate, itemExtent: itemExtent);
-
-  @override
-  void updateRenderObject(BuildContext context, RenderSliverFixedExtentList renderObject) {
-    renderObject.itemExtent = 126.0;
-  }
-}
+//class SliverHybridList extends SliverFixedExtentList {
+//  const SliverHybridList({
+//    Key key,
+//    @required SliverChildDelegate delegate,
+//    @required double itemExtent,
+//  }) : super(key: key, delegate: delegate, itemExtent: itemExtent);
+//
+//  @override
+//  void updateRenderObject(BuildContext context, RenderSliverFixedExtentList renderObject) {
+//    renderObject.itemExtent = 126.0;
+//  }
+//}

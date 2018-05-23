@@ -31,6 +31,7 @@ class TrendingCard extends StatelessWidget {
 
     return new Card(
       child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           _buildHeader(context, model),
           Divider(height: 1.0, color: AppTheme.of(context).list.itemDivider),

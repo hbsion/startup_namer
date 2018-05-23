@@ -36,14 +36,7 @@ class NextOffCard extends StatelessWidget {
         children: <Widget>[
           _buildHeader(context, model),
           Divider(height: 1.0, color: AppTheme.of(context).list.itemDivider),
-          _buildBody(context, model),
-          emptyIfTrue(
-              condition: model.mainBetOfferId == null,
-              context: context,
-              builder: (_) => new Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                    child: MainBetOfferWidget(betOfferId: model.mainBetOfferId, eventId: eventId),
-                  ))
+          new InkWell(onTap: _navigate(context), child: _buildBody(context, model)),
         ],
       ),
     );
@@ -73,17 +66,21 @@ class NextOffCard extends StatelessWidget {
     if (model == null) {
       return new EmptyWidget();
     }
-    return new InkWell(
-      onTap: _navigate(context),
-      child: new Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: new Column(
-          children: <Widget>[
-            new Text(model.originalStartTime + " " + model.name, style: new TextStyle(fontSize: 16.0)),
-            Padding(padding: EdgeInsets.all(3.0)),
-            _buildPath(context, model),
-          ],
-        ),
+    return new Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: new Column(
+        children: <Widget>[
+          new Text(model.originalStartTime + " " + model.name, style: new TextStyle(fontSize: 16.0)),
+          Padding(padding: EdgeInsets.all(3.0)),
+          _buildPath(context, model),
+          emptyIfTrue(
+              condition: model.mainBetOfferId == null,
+              context: context,
+              builder: (_) => new Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                    child: new MainBetOfferWidget(betOfferId: model.mainBetOfferId, eventId: eventId),
+                  ))
+        ],
       ),
     );
   }
