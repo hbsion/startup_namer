@@ -28,7 +28,8 @@ abstract class StickyListRow {
       if (_key.currentContext != null) {
         _height = _key.currentContext.size.height;
       } else {
-        throw new Exception("Tried to get context height of non-visible row");
+        return 0.0;
+//        throw new Exception("Tried to get context height of non-visible row");
       }
     }
 

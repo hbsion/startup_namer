@@ -54,6 +54,7 @@ class CorrectScoreWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: outcomes.map((outcome) => _buildOutcome(context, outcome.outcome)).toList(),
       ),
     );

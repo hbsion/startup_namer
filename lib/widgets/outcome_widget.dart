@@ -77,9 +77,6 @@ class _State extends State<OutcomeWidget> {
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel viewModel) {
-    if (_shouldHide(viewModel)) {
-      return EmptyWidget();
-    }
     if (viewModel == null || viewModel.outcome == null || viewModel.betOffer == null || viewModel.event == null) {
       return _buildPlaceholder(context);
     }
@@ -133,7 +130,7 @@ class _State extends State<OutcomeWidget> {
   }
 
   bool _isSuspended(_ViewModel viewModel) =>
-      viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED;
+      viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED || viewModel.outcome.odds.decimal == null;
 
   bool _shouldHide(_ViewModel viewModel) => viewModel.outcome.odds.decimal == null && !viewModel.betOffer.tags.contains(BetOfferTags.startingPrice);
 

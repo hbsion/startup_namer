@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:svan_play/app_theme.dart';
 import 'package:svan_play/widgets/list_section.dart';
 import 'package:svan_play/widgets/section_header.dart';
-import 'package:svan_play/widgets/sticky/sticky_header_list.dart';
 
 class StickySectionListView extends StatefulWidget {
   final List<ListSection> sections;
@@ -17,8 +17,8 @@ class _SectionListViewState extends State<StickySectionListView> {
 
   @override
   Widget build(BuildContext context) {
-    return new StickyList.builder(
-      builder: _buildRow,
+    return new ListView.builder(
+      itemBuilder: _buildRow,
       itemCount: _childCount(),
     );
   }
@@ -37,7 +37,7 @@ class _SectionListViewState extends State<StickySectionListView> {
     PageStorage.of(context)?.writeState(context, _expanded, identifier: widget.key);
   }
 
-  StickyListRow _buildRow(BuildContext context, int index) {
+  Widget _buildRow(BuildContext context, int index) {
     int cursor = 0;
 
     for (var section in widget.sections) {
@@ -47,7 +47,7 @@ class _SectionListViewState extends State<StickySectionListView> {
         cursor++;
 
         if (index < (cursor + section.count)) {
-          return _buildListItem(section.builder(context, index - cursor));
+          return _buildListItem(context, section.builder(context, index - cursor));
         } else {
           cursor += section.count;
         }
@@ -70,9 +70,9 @@ class _SectionListViewState extends State<StickySectionListView> {
     return childCount;
   }
 
-  HeaderRow _buildSectionHeader(ListSection section) {
-    return new HeaderRow(
-        height: 44.0,
+  Widget _buildSectionHeader(ListSection section) {
+    return new _SectionListItem(
+        key: new Key(section.title),
         child: new SectionHeader(
           leading: section.leading,
           trailing: section.trailing,
@@ -88,7 +88,23 @@ class _SectionListViewState extends State<StickySectionListView> {
         ));
   }
 
-  RegularRow _buildListItem(Widget widget) {
-    return new RegularRow(child: widget);
+  Widget _buildListItem(BuildContext context, Widget widget) {
+    return new _SectionListItem(key: widget.key, child: new Column(
+      children: <Widget>[
+        widget,
+        Divider(height: 1.0, color: AppTheme.of(context).list.itemDivider),
+      ],
+    ));
+  }
+}
+
+class _SectionListItem extends StatelessWidget {
+  final Widget child;
+
+  const _SectionListItem({Key key, this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Container(child: child);
   }
 }
