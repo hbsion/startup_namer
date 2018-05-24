@@ -23,8 +23,10 @@ class SectionHeader extends StatelessWidget {
                 onTap: this.onTap,
                 child: new Column(
                   children: <Widget>[
+                    new Divider(color: appTheme.list.headerDivider, height: 2.0),
                     new Container(
-                        padding: EdgeInsets.all(16.0),
+                        height: 40.0,
+                        padding: new EdgeInsets.only(left: 16.0, right: 16.0),
                         child: Row(
                           children: <Widget>[
                             leading ?? new EmptyWidget(),

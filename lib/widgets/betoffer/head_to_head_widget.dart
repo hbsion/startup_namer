@@ -132,10 +132,3 @@ class _YesNo {
 
   _YesNo(this.betOfferId);
 }
-
-class _H2H {
-  List<Outcome> outcomes = [];
-  int betOfferId;
-
-  _H2H(this.betOfferId);
-}

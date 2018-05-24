@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:svan_play/data/betoffer_category.dart';
-import 'package:svan_play/data/betoffer_category_mapping.dart';
-import 'package:svan_play/data/betoffer_type.dart';
 import 'package:test/test.dart';
 
 var text = '''{

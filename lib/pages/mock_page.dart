@@ -5,7 +5,8 @@ import 'package:svan_play/data/odds.dart';
 import 'package:svan_play/models/main_model.dart';
 import 'package:svan_play/models/odds_format.dart';
 import 'package:svan_play/widgets/app_toolbar.dart';
-import 'package:svan_play/widgets/section_list_view.dart';
+import 'package:svan_play/widgets/list_section.dart';
+import 'package:svan_play/widgets/sliver_section_list_view.dart';
 
 class MockPage extends StatelessWidget {
   final String title;
@@ -33,7 +34,7 @@ class _MockView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new SectionListView(sections: buildSections(prefix));
+    return new SliverSectionListView(sections: buildSections(prefix));
   }
 }
 

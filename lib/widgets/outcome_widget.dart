@@ -135,7 +135,7 @@ class _State extends State<OutcomeWidget> {
   bool _isSuspended(_ViewModel viewModel) =>
       viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED;
 
-  bool _shouldHide(_ViewModel viewModel) => viewModel.outcome.odds.decimal == null;
+  bool _shouldHide(_ViewModel viewModel) => viewModel.outcome.odds.decimal == null && !viewModel.betOffer.tags.contains(BetOfferTags.startingPrice);
 
   Widget _buildContent(BuildContext context, _ViewModel viewModel, MainModel model) {
     var label = _formatLabel(viewModel);

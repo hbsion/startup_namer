@@ -21,8 +21,10 @@ import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:svan_play/widgets/betoffer/over_under_widget.dart';
 import 'package:svan_play/widgets/betoffer/three_way_handicap_widget.dart';
 import 'package:svan_play/widgets/empty_widget.dart';
+import 'package:svan_play/widgets/list_section.dart';
 import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
-import 'package:svan_play/widgets/section_list_view.dart';
+import 'package:svan_play/widgets/sliver_section_list_view.dart';
+import 'package:svan_play/widgets/sticky_section_list_view.dart';
 
 class MarketsView extends StatelessWidget {
   final int eventId;
@@ -105,7 +107,7 @@ class MarketsView extends StatelessWidget {
     }
 
     debugPrint("Rendering marketsview");
-    return new SectionListView(key: Key("markets-$eventId"), asSliver: false, sections: prepareData(model));
+    return new StickySectionListView(key: Key("markets-$eventId"),sections: prepareData(model));
   }
 
   List<_BetOfferSection> prepareData(_ViewModel model) {

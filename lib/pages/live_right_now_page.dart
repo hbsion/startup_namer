@@ -9,8 +9,9 @@ import 'package:svan_play/store/groups_store.dart';
 import 'package:svan_play/store/store_connector.dart';
 import 'package:svan_play/widgets/app_toolbar.dart';
 import 'package:svan_play/widgets/event_list_item_widget.dart';
+import 'package:svan_play/widgets/list_section.dart';
 import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
-import 'package:svan_play/widgets/section_list_view.dart';
+import 'package:svan_play/widgets/sliver_section_list_view.dart';
 
 class LiveRightNowPage extends StatelessWidget {
   @override
@@ -56,7 +57,7 @@ class LiveRightNowPage extends StatelessWidget {
       );
     }
 
-    return new SectionListView(key: new PageStorageKey("lrn"), sections: _buildSections(context, model));
+    return new SliverSectionListView(key: new PageStorageKey("lrn"), sections: _buildSections(context, model));
   }
 
   List<_EventSection> _buildSections(BuildContext context, _ViewModel model) {

@@ -1,37 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:svan_play/widgets/list_section.dart';
 import 'package:svan_play/widgets/section_header.dart';
 import 'package:svan_play/widgets/sticky/sticky_header_list.dart';
 
-class SectionListView extends StatefulWidget {
-  final bool asSliver;
+class StickySectionListView extends StatefulWidget {
   final List<ListSection> sections;
 
-  const SectionListView({Key key, this.sections, this.asSliver = true}) : super(key: key);
+  const StickySectionListView({Key key, this.sections}) : super(key: key);
 
   @override
   _SectionListViewState createState() => new _SectionListViewState();
 }
 
-class _SectionListViewState extends State<SectionListView> {
+class _SectionListViewState extends State<StickySectionListView> {
   Map<String, bool> _expanded = {};
 
   @override
   Widget build(BuildContext context) {
-    if (widget.asSliver) {
-      return new SliverList(
-          delegate: new SliverChildBuilderDelegate(
-        _buildRow,
-        childCount: _childCount(),
-      ));
-    }
-
-//    return new StickyList.builder(
-//      builder: _buildRow,
-//      itemCount: _childCount(),
-//    );
-    return new ListView.builder(
-      itemBuilder: _buildRow,
+    return new StickyList.builder(
+      builder: _buildRow,
       itemCount: _childCount(),
     );
   }
@@ -50,7 +37,7 @@ class _SectionListViewState extends State<SectionListView> {
     PageStorage.of(context)?.writeState(context, _expanded, identifier: widget.key);
   }
 
-  Widget _buildRow(BuildContext context, int index) {
+  StickyListRow _buildRow(BuildContext context, int index) {
     int cursor = 0;
 
     for (var section in widget.sections) {
@@ -83,9 +70,9 @@ class _SectionListViewState extends State<SectionListView> {
     return childCount;
   }
 
-  Widget _buildSectionHeader(ListSection section) {
-    return new _SectionListItem(
-        key: new Key(section.title),
+  HeaderRow _buildSectionHeader(ListSection section) {
+    return new HeaderRow(
+        height: 44.0,
         child: new SectionHeader(
           leading: section.leading,
           trailing: section.trailing,
@@ -101,45 +88,7 @@ class _SectionListViewState extends State<SectionListView> {
         ));
   }
 
-  Widget _buildListItem(Widget widget) {
-    return new _SectionListItem(key: widget.key, child: widget);
+  RegularRow _buildListItem(Widget widget) {
+    return new RegularRow(child: widget);
   }
 }
-
-abstract class ListSection {
-  Widget leading;
-  Widget trailing;
-  TextStyle titleStyle;
-
-  String get title;
-
-  IndexedWidgetBuilder get builder;
-
-  int get count;
-
-  bool get initiallyExpanded;
-}
-
-class _SectionListItem extends StatelessWidget {
-  final Widget child;
-
-  const _SectionListItem({Key key, this.child}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return new Container(child: child);
-  }
-}
-
-//class SliverHybridList extends SliverFixedExtentList {
-//  const SliverHybridList({
-//    Key key,
-//    @required SliverChildDelegate delegate,
-//    @required double itemExtent,
-//  }) : super(key: key, delegate: delegate, itemExtent: itemExtent);
-//
-//  @override
-//  void updateRenderObject(BuildContext context, RenderSliverFixedExtentList renderObject) {
-//    renderObject.itemExtent = 126.0;
-//  }
-//}

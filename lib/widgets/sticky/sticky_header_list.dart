@@ -63,9 +63,9 @@ class _StickyListState extends State<StickyList> {
     return new Container(
       child: new Stack(
         children: <Widget>[
-          new Container(
-            decoration: new BoxDecoration(color: _background),
-          ),
+//          new Container(
+//            decoration: new BoxDecoration(color: _background),
+//          ),
           new ListView.builder(
             itemBuilder: (BuildContext context, int index) {
               return this._childrenDelegate.build(context, index).child;

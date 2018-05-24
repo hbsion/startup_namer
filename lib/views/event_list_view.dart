@@ -12,8 +12,9 @@ import 'package:svan_play/store/store_connector.dart';
 import 'package:svan_play/util/dates.dart';
 import 'package:svan_play/util/flowable.dart';
 import 'package:svan_play/widgets/event_list_item_widget.dart';
+import 'package:svan_play/widgets/list_section.dart';
 import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
-import 'package:svan_play/widgets/section_list_view.dart';
+import 'package:svan_play/widgets/sliver_section_list_view.dart';
 
 class EventListView extends StatelessWidget {
   final String sport;
@@ -81,7 +82,7 @@ class EventListView extends StatelessWidget {
       );
     }
 
-    return new SectionListView(
+    return new SliverSectionListView(
         key: new PageStorageKey(filter),
         sections: _buildSections(model)
     );

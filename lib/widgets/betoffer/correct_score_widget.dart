@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:svan_play/data/outcome.dart';
-import 'package:svan_play/data/outcome_type.dart';
 import 'package:svan_play/store/store_connector.dart';
 import 'package:svan_play/widgets/outcome_widget.dart';
 

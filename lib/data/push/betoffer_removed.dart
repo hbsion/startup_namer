@@ -1,4 +1,4 @@
-import 'package:svan_play/data/betoffer.dart';
+
 
 class BetOfferRemoved {
   final int betOfferId;
