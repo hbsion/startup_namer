@@ -6,13 +6,15 @@ const Color brandColorDark = Color.fromRGBO(0x00, 0x93, 0xb5, 1.0);
 
 class ListThemeData {
   final Color headerBackground;
+  final Color headerForeground;
   final Color headerDivider;
-  final Color itemDivider;
+  final Color itemDividerColor;
 
   ListThemeData({
     @required this.headerBackground,
+    @required this.headerForeground,
     @required this.headerDivider,
-    @required this.itemDivider,
+    @required this.itemDividerColor,
   });
 
 }
@@ -48,16 +50,18 @@ class AppTheme {
   static final AppThemeData _dark = new AppThemeData(
       list: ListThemeData(
         headerBackground: Colors.black87,
+        headerForeground: Colors.white70,
         headerDivider: Color.fromARGB(255, 0xa9, 0xa9, 0xa9),
-        itemDivider: Color.fromARGB(255, 0xa9, 0xa9, 0xa9),
+        itemDividerColor: Color.fromARGB(255, 0xa9, 0xa9, 0xa9),
       ),
       outcome: OutcomeThemeData()
   );
   static final AppThemeData _light = new AppThemeData(
       list: ListThemeData(
         headerBackground: Colors.white,
+        headerForeground: Colors.black87,
         headerDivider: Color.fromARGB(255, 0xd1, 0xd1, 0xd1),
-        itemDivider: Color.fromARGB(255, 0xd1, 0xd1, 0xd1),
+        itemDividerColor: Color.fromARGB(255, 0xd1, 0xd1, 0xd1),
       ),
       outcome: OutcomeThemeData()
   );

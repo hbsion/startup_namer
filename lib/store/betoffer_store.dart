@@ -33,7 +33,7 @@ class BetOfferStore implements Store {
     return new SnapshotObservable(subject.value, subject.stream);
   }
 
-  List<BetOffer> snapshot(List<int> ids) {
+  List<BetOffer> snapshot(Iterable<int> ids) {
     return ids
         .map((id) => _betOffers[id])
         .where((subject) => subject != null)

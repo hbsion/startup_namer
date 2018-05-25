@@ -66,7 +66,7 @@ class MainRacingBetOfferWidget extends StatelessWidget {
     if (model.outcomes.length > 3) {
       yield new Padding(
         padding: const EdgeInsets.only(top: 8.0),
-        child: Divider(height: 1.0, color: AppTheme.of(context).list.itemDivider),
+        child: Divider(height: 1.0, color: AppTheme.of(context).list.itemDividerColor),
       );
       yield new InkWell(
           onTap: _navigateToEvent(context),

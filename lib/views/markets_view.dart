@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:svan_play/app_theme.dart';
 import 'package:svan_play/data/betoffer.dart';
 import 'package:svan_play/data/betoffer_categories.dart';
 import 'package:svan_play/data/betoffer_category.dart';
@@ -19,11 +20,12 @@ import 'package:svan_play/widgets/betoffer/handicap_widget.dart';
 import 'package:svan_play/widgets/betoffer/head_to_head_widget.dart';
 import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:svan_play/widgets/betoffer/over_under_widget.dart';
+import 'package:svan_play/widgets/betoffer/position_widget.dart';
 import 'package:svan_play/widgets/betoffer/three_way_handicap_widget.dart';
+import 'package:svan_play/widgets/betoffer/winner_widget.dart';
 import 'package:svan_play/widgets/empty_widget.dart';
 import 'package:svan_play/widgets/list_section.dart';
 import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
-import 'package:svan_play/widgets/sliver_section_list_view.dart';
 import 'package:svan_play/widgets/sticky_section_list_view.dart';
 
 class MarketsView extends StatelessWidget {
@@ -107,10 +109,10 @@ class MarketsView extends StatelessWidget {
     }
 
     debugPrint("Rendering marketsview");
-    return new StickySectionListView(key: Key("markets-$eventId"),sections: prepareData(model));
+    return new StickySectionListView(key: Key("markets-$eventId"), sections: prepareData(context, model));
   }
 
-  List<_BetOfferSection> prepareData(_ViewModel model) {
+  List<_BetOfferSection> prepareData(BuildContext context, _ViewModel model) {
     List<_BetOfferSection> sections = model.categories
         .where((category) => category.mappings.length > 0)
         .map((category) => filterAndGroupBetOffers(model.betOffers, category))
@@ -135,9 +137,12 @@ class MarketsView extends StatelessWidget {
     }
 
     for (var section in sections) {
-      section.trailing = new Text(section.groups.expand((g) => g.betOffers).length.toString());
+      section.trailing = new Text(section.groups.expand((g) => g.betOffers).length.toString(),
+          style: TextStyle(color: AppTheme.of(context).list.headerForeground, fontWeight: FontWeight.w600));
     }
-    sections.first.initiallyExpanded = true;
+    if (sections.length > 0) {
+      sections.first.initiallyExpanded = true;
+    }
 
     return sections;
   }
@@ -247,15 +252,13 @@ class _BetOfferSection extends ListSection {
               padding: const EdgeInsets.symmetric(vertical: 4.0),
               child: new Text(group.criterion.label, style: TextStyle(fontSize: 16.0)),
             ),
-            extra == null ? new EmptyWidget() : new Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: new Text(extra,
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .caption
-                      .merge(TextStyle(fontStyle: FontStyle.italic))),
-            ),
+            extra == null
+                ? new EmptyWidget()
+                : new Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: new Text(extra,
+                        style: Theme.of(context).textTheme.caption.merge(TextStyle(fontStyle: FontStyle.italic))),
+                  ),
             _renderGroup(context, group)
           ],
         ));
@@ -300,11 +303,18 @@ class _BetOfferSection extends ListSection {
           eventId: group.betOffers.first.eventId,
           outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
         );
+      case BetOfferTypes.winner:
+        return new WinnerWidget(
+          eventId: group.betOffers.first.eventId,
+          outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
+        );
+      case BetOfferTypes.position:
+        return new PositionWidget(
+          eventId: group.betOffers.first.eventId,
+          outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
+        );
     }
-    if (group.type.id == BetOfferTypes.winner ||
-        group.type.id == BetOfferTypes.position ||
-        group.type.id == BetOfferTypes.scoreCast ||
-        group.type.id == BetOfferTypes.winCast) {
+    if (group.type.id == BetOfferTypes.scoreCast || group.type.id == BetOfferTypes.winCast) {
       return new Text('${group.criterion.label}(${group.criterion.id}) ${group.type.name} '
           '(${group.type.id}) #${group.betOffers.length} susp: ${group.betOffers[0].suspended}');
     }

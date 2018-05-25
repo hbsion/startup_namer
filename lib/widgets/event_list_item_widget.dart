@@ -103,7 +103,7 @@ class EventListItemWidget extends StatelessWidget {
                         : new EmptyWidget()),
               ]))),
       new Padding(padding: EdgeInsets.all(model.mainBetOfferId != null ? 4.0 : 0.0)),
-      new Divider(color: AppTheme.of(context).list.itemDivider, height: 1.0),
+      new Divider(color: AppTheme.of(context).list.itemDividerColor, height: 1.0),
     ]);
   }
 
@@ -114,6 +114,6 @@ class EventListItemWidget extends StatelessWidget {
   Widget _buildDivider(BuildContext context) {
     if (!showDivider) return EmptyWidget();
 
-    return new Divider(color: AppTheme.of(context).list.itemDivider, height: 1.0);
+    return new Divider(color: AppTheme.of(context).list.itemDividerColor, height: 1.0);
   }
 }

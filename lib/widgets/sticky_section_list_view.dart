@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 import 'package:svan_play/app_theme.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
 import 'package:svan_play/widgets/list_section.dart';
 import 'package:svan_play/widgets/section_header.dart';
 
@@ -18,8 +20,8 @@ class _SectionListViewState extends State<StickySectionListView> {
   @override
   Widget build(BuildContext context) {
     return new ListView.builder(
-      itemBuilder: _buildRow,
-      itemCount: _childCount(),
+      itemBuilder: _buildSection,
+      itemCount: widget.sections.length,
     );
   }
 
@@ -37,37 +39,33 @@ class _SectionListViewState extends State<StickySectionListView> {
     PageStorage.of(context)?.writeState(context, _expanded, identifier: widget.key);
   }
 
-  Widget _buildRow(BuildContext context, int index) {
-    int cursor = 0;
-
-    for (var section in widget.sections) {
-      if (cursor == index) {
-        return _buildSectionHeader(section);
-      } else if (_expanded[section.title]) {
-        cursor++;
-
-        if (index < (cursor + section.count)) {
-          return _buildListItem(context, section.builder(context, index - cursor));
-        } else {
-          cursor += section.count;
-        }
-      } else {
-        cursor++;
-      }
-    }
-
-    return null;
+  Widget _buildSection(BuildContext context, int index) {
+    var section = widget.sections[index];
+    return new StickyHeader(
+      header: _buildSectionHeader(section),
+      content: new Container(
+        child: _buildSectionBody(context, section),
+      ),
+    );
   }
 
-  _childCount() {
-    int childCount = widget.sections.length;
-    for (var section in widget.sections) {
-      if (_expanded.containsKey(section.title)) {
-        childCount += section.count;
-      }
-    }
+  Widget _buildSectionBody(BuildContext context, ListSection section) {
+    var isExapanded = _expanded[section.title];
 
-    return childCount;
+    if (isExapanded) {
+      var dividedColor = AppTheme.of(context).list.itemDividerColor;
+      List<Widget> widgets = [];
+      for (var i = 0; i < section.count; ++i) {
+        if (i > 0) {
+          widgets.add(Divider(height: 1.0, color: dividedColor));
+        }
+        widgets.add(section.builder(context, i));
+      }
+      return Column(
+        children: widgets,
+      );
+    }
+    return new EmptyWidget();
   }
 
   Widget _buildSectionHeader(ListSection section) {
@@ -89,12 +87,14 @@ class _SectionListViewState extends State<StickySectionListView> {
   }
 
   Widget _buildListItem(BuildContext context, Widget widget) {
-    return new _SectionListItem(key: widget.key, child: new Column(
-      children: <Widget>[
-        widget,
-        Divider(height: 1.0, color: AppTheme.of(context).list.itemDivider),
-      ],
-    ));
+    return new _SectionListItem(
+        key: widget.key,
+        child: new Column(
+          children: <Widget>[
+            widget,
+            Divider(height: 1.0, color: AppTheme.of(context).list.itemDividerColor),
+          ],
+        ));
   }
 }
 

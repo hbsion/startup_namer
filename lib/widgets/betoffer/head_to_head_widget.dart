@@ -109,7 +109,7 @@ class HeadToHeadWidget extends StatelessWidget {
 
       if (i < (rows.length - 1)) {
         widgets.add(
-          Divider(height: 8.0, color: AppTheme.of(context).list.itemDivider),
+          Divider(height: 8.0, color: AppTheme.of(context).list.itemDividerColor),
         );
       }
     }

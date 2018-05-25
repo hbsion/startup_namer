@@ -35,7 +35,7 @@ class NextOffCard extends StatelessWidget {
       child: new Column(
         children: <Widget>[
           _buildHeader(context, model),
-          Divider(height: 1.0, color: AppTheme.of(context).list.itemDivider),
+          Divider(height: 1.0, color: AppTheme.of(context).list.itemDividerColor),
           new InkWell(onTap: _navigate(context), child: _buildBody(context, model)),
         ],
       ),

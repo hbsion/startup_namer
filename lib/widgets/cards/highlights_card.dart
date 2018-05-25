@@ -21,7 +21,7 @@ class HighlightsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildHeader(context),
-          Divider(height: 1.0, color: AppTheme.of(context).list.itemDivider),
+          Divider(height: 1.0, color: AppTheme.of(context).list.itemDividerColor),
           _buildBody(context),
         ],
       ),
@@ -43,7 +43,7 @@ class HighlightsCard extends StatelessWidget {
       if (i < (eventIds.length - 1)) {
         childs.add(new Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-          child: new Divider(height: 1.0, color: AppTheme.of(context).list.itemDivider),
+          child: new Divider(height: 1.0, color: AppTheme.of(context).list.itemDividerColor),
         ));
       }
     }

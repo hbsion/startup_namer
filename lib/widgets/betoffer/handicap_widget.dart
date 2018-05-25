@@ -37,6 +37,7 @@ class HandicapWidget extends StatelessWidget {
   Widget _buildColumn(BuildContext context, List<Outcome> outcomes) {
     return new Expanded(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: outcomes.map((outcome) => _buildOutcome(context, outcome)).toList(),
       ),
     );

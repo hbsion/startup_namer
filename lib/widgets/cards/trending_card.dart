@@ -34,7 +34,7 @@ class TrendingCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           _buildHeader(context, model),
-          Divider(height: 1.0, color: AppTheme.of(context).list.itemDivider),
+          Divider(height: 1.0, color: AppTheme.of(context).list.itemDividerColor),
           _buildBody(context, model),
           emptyIfTrue(
               condition: model.mainBetOfferId == null,
