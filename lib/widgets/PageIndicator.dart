@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:svan_play/app_theme.dart';
 
 class PageIndicator extends AnimatedWidget {
   final List<String> titles;
@@ -40,7 +41,7 @@ class PageIndicator extends AnimatedWidget {
       ),
     );
 
-    var colorTween = ColorTween(begin: Colors.white, end: Theme.of(context).accentColor);
+    var colorTween = ColorTween(begin: AppTheme.of(context).tabs.defaultColor, end: AppTheme.of(context).tabs.selectedColor);
     var style = TextStyle(fontSize: 12.0 + 6 * selectedness, color: colorTween.lerp(selectedness));
 
     return Expanded(
