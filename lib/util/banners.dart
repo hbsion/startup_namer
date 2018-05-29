@@ -40,7 +40,7 @@ final Image _defaultFallback = new Image.asset(_defaultFallbackName, fit: BoxFit
 
 Widget bannerFor(String sport, {String fallbackAsset = _defaultFallbackName}) {
   switch (sport?.toLowerCase()) {
-    case "football":
+    case "football": 
       return _football;
     case "tennis":
       return _tennis;
@@ -61,6 +61,7 @@ Widget bannerFor(String sport, {String fallbackAsset = _defaultFallbackName}) {
     case "american_football":
          return _americanFootball;
     case "motorsports":
+    case "formula_1":
          return _formulaOne;
     case "snooker":
          return _snooker;
