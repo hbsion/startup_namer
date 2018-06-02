@@ -21,6 +21,7 @@ import 'package:svan_play/widgets/betoffer/head_to_head_widget.dart';
 import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:svan_play/widgets/betoffer/over_under_widget.dart';
 import 'package:svan_play/widgets/betoffer/position_widget.dart';
+import 'package:svan_play/widgets/betoffer/scorecast_widget.dart';
 import 'package:svan_play/widgets/betoffer/three_way_handicap_widget.dart';
 import 'package:svan_play/widgets/betoffer/winner_widget.dart';
 import 'package:svan_play/widgets/empty_widget.dart';
@@ -313,6 +314,9 @@ class _BetOfferSection extends ListSection {
           eventId: group.betOffers.first.eventId,
           outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
         );
+      case BetOfferTypes.scoreCast:
+      case BetOfferTypes.winCast:
+        return new ScoreCastWidget();
     }
     if (group.type.id == BetOfferTypes.scoreCast || group.type.id == BetOfferTypes.winCast) {
       return new Text('${group.criterion.label}(${group.criterion.id}) ${group.type.name} '
