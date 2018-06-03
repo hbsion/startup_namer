@@ -48,8 +48,8 @@ class EventListView extends StatelessWidget {
 
   _ViewModel _mapStateToSnapshot(AppStore store) {
     var snapshot = _collection(store);
-    if (snapshot.last != null) {
-      return new _ViewModel(store.eventStore.snapshot(snapshot.last.eventIds));
+    if (snapshot.latest != null) {
+      return new _ViewModel(store.eventStore.snapshot(snapshot.latest.eventIds));
     }
     return null;
   }

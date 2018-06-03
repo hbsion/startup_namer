@@ -71,9 +71,9 @@ class _State extends State<OutcomeWidget> {
 
   _ViewModel _mapStateToSnapshot(AppStore store) {
     return new _ViewModel(
-        outcome: store.outcomeStore[widget.outcomeId].last,
-        betOffer: store.betOfferStore[widget.betOfferId].last,
-        event: store.eventStore[widget.eventId].last);
+        outcome: store.outcomeStore[widget.outcomeId].latest,
+        betOffer: store.betOfferStore[widget.betOfferId].latest,
+        event: store.eventStore[widget.eventId].latest);
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel viewModel) {
@@ -130,7 +130,7 @@ class _State extends State<OutcomeWidget> {
   }
 
   bool _isSuspended(_ViewModel viewModel) =>
-      viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED || viewModel.outcome.odds.decimal == null;
+      viewModel.betOffer.suspended || viewModel.outcome.status == OutcomeStatus.SUSPENDED || (viewModel.outcome.odds.decimal == null && !viewModel.betOffer.tags.contains(BetOfferTags.startingPrice));
 
   bool _shouldHide(_ViewModel viewModel) => viewModel.outcome.odds.decimal == null && !viewModel.betOffer.tags.contains(BetOfferTags.startingPrice);
 

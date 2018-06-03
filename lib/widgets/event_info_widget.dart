@@ -13,7 +13,7 @@ class EventInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return new StoreConnector<Event>(
         stream: (store) => store.eventStore[eventId].observable,
-        initalData: (store) => store.eventStore[eventId].last,
+        initalData: (store) => store.eventStore[eventId].latest,
         widgetBuilder: _buildWidget);
   }
 

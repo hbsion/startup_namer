@@ -37,8 +37,8 @@ class MainRacingBetOfferWidget extends StatelessWidget {
   }
 
   _ViewModel _mapStateToSnapshot(AppStore store) {
-    return new _ViewModel(store.outcomeStore.snapshotByBetOffer(betOfferId), store.betOfferStore[betOfferId].last,
-        store.silkStore[eventId].last);
+    return new _ViewModel(store.outcomeStore.snapshotByBetOffer(betOfferId), store.betOfferStore[betOfferId].latest,
+        store.silkStore[eventId].latest);
   }
 
   Observable<_ViewModel> _mapStateToViewModel(AppStore store) {

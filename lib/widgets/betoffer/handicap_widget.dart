@@ -14,7 +14,7 @@ class HandicapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<_ViewModel>(
-      initalData: (store) => new _ViewModel(store.outcomeStore.snapshot(outcomeIds), store.eventStore[eventId].last),
+      initalData: (store) => new _ViewModel(store.outcomeStore.snapshot(outcomeIds), store.eventStore[eventId].latest),
       widgetBuilder: _buildWidget,
     );
   }

@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 
 class SnapshotObservable<T>{
-  final T last;
+  final T latest;
   final Observable<T> observable;
 
-  SnapshotObservable(this.last, this.observable);
+  SnapshotObservable(this.latest, this.observable);
 
 }
 

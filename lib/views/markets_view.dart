@@ -88,15 +88,15 @@ class MarketsView extends StatelessWidget {
   }
 
   _ViewModel _mapStateToInitialData(AppStore store) {
-    var ids = store.betOfferStore.byEventId(eventId).last;
+    var ids = store.betOfferStore.byEventId(eventId).latest;
     List<BetOffer> betoffers = ids != null ? store.betOfferStore.snapshot(ids) : null;
 
     if (live) {
-      return new _ViewModel(betoffers, store.categoryStore.get(sport, BetOfferCategories.liveEvent).last,
-          selectedCategories: store.categoryStore.get(sport, BetOfferCategories.selectedLive).last,
-          instantCategories: store.categoryStore.get(sport, BetOfferCategories.instantBetting).last);
+      return new _ViewModel(betoffers, store.categoryStore.get(sport, BetOfferCategories.liveEvent).latest,
+          selectedCategories: store.categoryStore.get(sport, BetOfferCategories.selectedLive).latest,
+          instantCategories: store.categoryStore.get(sport, BetOfferCategories.instantBetting).latest);
     } else {
-      return new _ViewModel(betoffers, store.categoryStore.get(sport, BetOfferCategories.preMatchEvent).last);
+      return new _ViewModel(betoffers, store.categoryStore.get(sport, BetOfferCategories.preMatchEvent).latest);
     }
   }
 
@@ -316,7 +316,10 @@ class _BetOfferSection extends ListSection {
         );
       case BetOfferTypes.scoreCast:
       case BetOfferTypes.winCast:
-        return new ScoreCastWidget();
+        return new ScoreCastWidget(
+          betOfferId: group.betOffers.first.id,
+          eventId: group.betOffers.first.eventId
+        );
     }
     if (group.type.id == BetOfferTypes.scoreCast || group.type.id == BetOfferTypes.winCast) {
       return new Text('${group.criterion.label}(${group.criterion.id}) ${group.type.name} '

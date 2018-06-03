@@ -26,7 +26,7 @@ class MainBetOfferWidget extends StatelessWidget {
     return new StoreConnector<_ViewModel>(
         stream: (store) => Observable.combineLatest2(store.betOfferStore[betOfferId].observable,
             store.eventStore[eventId].observable, (betoffer, event) => new _ViewModel(event, betoffer)),
-        initalData: (store) => new _ViewModel(store.eventStore[eventId].last, store.betOfferStore[betOfferId].last),
+        initalData: (store) => new _ViewModel(store.eventStore[eventId].latest, store.betOfferStore[betOfferId].latest),
         widgetBuilder: _buildWidget);
   }
 

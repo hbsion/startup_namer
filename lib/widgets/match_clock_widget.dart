@@ -17,7 +17,7 @@ class MatchClockWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return new StoreConnector<MatchClock>(
       stream: (store) => store.statisticsStore.matchClock(eventId).observable,
-      initalData: (store) => store.statisticsStore.matchClock(eventId).last,
+      initalData: (store) => store.statisticsStore.matchClock(eventId).latest,
       widgetBuilder: _buildWidget,
     );
   }

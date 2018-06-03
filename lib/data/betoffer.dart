@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:svan_play/data/combinable_outcomes.dart';
 
 import 'betoffer_type.dart';
 import 'cashout_status.dart';
@@ -25,6 +26,7 @@ class BetOffer {
   final int from;
   final int to;
   final String description;
+  final CombinableOutcomes combinableOutcomes;
 
   //     oddsStats: OddsStats;
   // combinableOutcomes
@@ -48,6 +50,7 @@ class BetOffer {
     this.from,
     this.to,
     this.description,
+    this.combinableOutcomes
   });
 
   BetOffer.fromJson(Map<String, dynamic> json) : this (
@@ -69,6 +72,7 @@ class BetOffer {
     from: json["from"],
     to: json["to"],
     description: json["description"],
+    combinableOutcomes: CombinableOutcomes.fromJson(json["combinableOutcomes"])
   );
 
   @override

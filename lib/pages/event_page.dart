@@ -34,7 +34,7 @@ class _EventPageState extends State<EventPage> {
   Widget build(BuildContext context) {
     return new StoreConnector<Event>(
       stream: (store) => new Observable.empty(),
-      initalData: (store) => store.eventStore[widget.eventId].last,
+      initalData: (store) => store.eventStore[widget.eventId].latest,
       widgetBuilder: _buildWidget,
     );
   }
