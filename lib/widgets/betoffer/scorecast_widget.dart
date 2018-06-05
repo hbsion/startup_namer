@@ -82,11 +82,11 @@ class _PlayerCastWidget extends StatelessWidget {
   Expanded _buildTeamHeader(String name) {
     return Expanded(
         child: Container(
-          child: Text(name),
+          padding: EdgeInsets.all(8.0),
+          child: new Center(child: Text(name)),
         ),
       );
   }
-
 }
 
 class _ViewModel {

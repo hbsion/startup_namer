@@ -72,6 +72,7 @@ class _SectionListViewState extends State<StickySectionListView> {
     return new _SectionListItem(
         key: new Key(section.title),
         child: new SectionHeader(
+          isExpanded: _expanded[section.title] ?? false,
           leading: section.leading,
           trailing: section.trailing,
           title: section.title,
@@ -86,16 +87,6 @@ class _SectionListViewState extends State<StickySectionListView> {
         ));
   }
 
-  Widget _buildListItem(BuildContext context, Widget widget) {
-    return new _SectionListItem(
-        key: widget.key,
-        child: new Column(
-          children: <Widget>[
-            widget,
-            Divider(height: 1.0, color: AppTheme.of(context).list.itemDividerColor),
-          ],
-        ));
-  }
 }
 
 class _SectionListItem extends StatelessWidget {

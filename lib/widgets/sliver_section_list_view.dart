@@ -74,6 +74,7 @@ class _SectionListViewState extends State<SliverSectionListView> {
     return new _SectionListItem(
         key: new Key(section.title),
         child: new SectionHeader(
+          isExpanded: _expanded[section.title] ?? false,
           leading: section.leading,
           trailing: section.trailing,
           title: section.title,
