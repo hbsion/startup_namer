@@ -67,13 +67,12 @@ class CorrectScoreWidget extends StatelessWidget {
   }
 
   _OutcomeWithScore _mapOutcome(Outcome outcome) {
-    var scoreParts = outcome.label.split("-");
 
-    if (scoreParts.length != 2) {
+    if (outcome.homeScore == null || outcome.awayScore == null) {
       return new _OutcomeWithScore(outcome, 0, 0);
     }
 
-    return new _OutcomeWithScore(outcome, _parseScore(scoreParts[0]), _parseScore(scoreParts[1]));
+    return new _OutcomeWithScore(outcome, _parseScore(outcome.homeScore), _parseScore(outcome.awayScore));
   }
 
   int _parseScore(String text) {

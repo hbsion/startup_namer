@@ -18,6 +18,7 @@ class ExpandIconX extends StatefulWidget {
     this.isExpanded: false,
     this.size: 24.0,
     @required this.onPressed,
+    this.color,
     this.padding: const EdgeInsets.all(8.0)
   }) : assert(isExpanded != null),
        assert(size != null),
@@ -46,6 +47,8 @@ class ExpandIconX extends StatefulWidget {
   ///
   /// This property must not be null. It defaults to 8.0 padding on all sides.
   final EdgeInsetsGeometry padding;
+
+  final Color color;
 
   @override
   _ExpandIconState createState() => new _ExpandIconState();
@@ -98,7 +101,7 @@ class _ExpandIconState extends State<ExpandIconX> with SingleTickerProviderState
   Widget build(BuildContext context) {
     return new IconButton(
       padding: widget.padding,
-      //color: Colors.black38,
+      color: widget.color,
       onPressed: widget.onPressed == null ? null : _handlePressed,
       icon: new RotationTransition(
         turns: _iconTurns,

@@ -25,6 +25,8 @@ class Outcome {
   final int participantId;
   final OutcomeStatus status;
   final CashoutStatus cashoutStatus;
+  final String homeScore;
+  final String awayScore;
   Odds lastOdds;
   DateTime oddsChanged;
 
@@ -46,7 +48,9 @@ class Outcome {
       this.startNr,
       this.prevOdds,
       this.popular,
-      this.cashoutStatus});
+      this.cashoutStatus,
+      this.homeScore,
+      this.awayScore});
 
   Outcome.fromJson(Map<String, dynamic> json)
       : this(
@@ -67,6 +71,8 @@ class Outcome {
             scratched: json["scratched"] ?? false,
             startNr: json["startNr"],
             popular: json["popular"],
+            homeScore: json["homeScore"],
+            awayScore: json["awayScore"],
             prevOdds: ((json["prevOdds"] ?? []) as List<dynamic>).map<int>((i) => i).toList());
 
   Outcome withNewOdds(Odds newOdds) {
@@ -88,6 +94,8 @@ class Outcome {
         scratched: scratched,
         startNr: startNr,
         popular: popular,
+        homeScore: homeScore,
+        awayScore: awayScore,
         prevOdds: prevOdds);
     outcome.lastOdds = odds;
     outcome.oddsChanged = DateTime.now();
@@ -117,6 +125,8 @@ class Outcome {
           changedDate == other.changedDate &&
           participantId == other.participantId &&
           status == other.status &&
+          homeScore == other.homeScore &&
+          awayScore == other.awayScore &&
           cashoutStatus == other.cashoutStatus;
 
   @override
@@ -138,10 +148,13 @@ class Outcome {
       changedDate.hashCode ^
       participantId.hashCode ^
       status.hashCode ^
+      homeScore.hashCode ^
+      awayScore.hashCode ^
       cashoutStatus.hashCode;
 
   @override
   String toString() {
-    return 'Outcome{id: $id, label: $label, odds: $odds, line: $line, distance: $distance, scratched: $scratched, startNr: $startNr, prevOdds: $prevOdds, criterion: $criterion, participant: $participant, popular: $popular, type: $type, homeTeamMember: $homeTeamMember, betOfferId: $betOfferId, changedDate: $changedDate, participantId: $participantId, status: $status, cashoutStatus: $cashoutStatus}';
+    return 'Outcome{id: $id, label: $label, odds: $odds, line: $line, distance: $distance, scratched: $scratched, startNr: $startNr, prevOdds: $prevOdds, criterion: $criterion, participant: $participant, popular: $popular, type: $type, homeTeamMember: $homeTeamMember, betOfferId: $betOfferId, changedDate: $changedDate, participantId: $participantId, status: $status, cashoutStatus: $cashoutStatus, homeScore: $homeScore, awayScore: $awayScore, lastOdds: $lastOdds, oddsChanged: $oddsChanged}';
   }
+
 }

@@ -37,7 +37,9 @@ class SectionHeader extends StatelessWidget {
                             leading ?? new EmptyWidget(),
                             new Expanded(child: new Text(title, style: textStyle)),
                             trailing ?? new Text(count.toString(), style: textStyle),
-                            new ExpandIconX(isExpanded: isExpanded, onPressed: (isExpanded) => onTap())
+                            new ExpandIconX(isExpanded: isExpanded,
+                                color: AppTheme.of(context).list.headerForeground,
+                                onPressed: (isExpanded) => onTap())
                           ],
                         )),
                     new Divider(color: appTheme.list.headerDivider, height: 2.0)
