@@ -16,6 +16,7 @@ import 'package:svan_play/models/main_model.dart';
 import 'package:svan_play/models/odds_format.dart';
 import 'package:svan_play/store/app_store.dart';
 import 'package:svan_play/store/store_connector.dart';
+import 'package:svan_play/util/odds_util.dart';
 import 'package:svan_play/widgets/empty_widget.dart';
 
 class OutcomeWidget extends StatefulWidget {
@@ -240,20 +241,7 @@ class _State extends State<OutcomeWidget> {
       return "SP";
     }
 
-    switch (format) {
-      case OddsFormat.Fractional:
-        return model.outcome.odds.fractional ?? "-";
-      case OddsFormat.American:
-        return model.outcome.odds.american ?? "-";
-      case OddsFormat.Decimal:
-      default:
-        if (model.outcome.odds.decimal == null) {
-          return "-";
-        }
-
-        double decimal = model.outcome.odds.decimal / 1000;
-        return decimal.toStringAsFixed(2);
-    }
+    return formatOdds(model.outcome.odds, format);
   }
 }
 

@@ -135,9 +135,11 @@ class _PlayerWidget extends StatelessWidget {
               onTap: () => Navigator.of(context).pop(player),
               child: new Container(
                 alignment: Alignment.centerLeft,
-                child: new Text(player.label,
+                child: new Text(
+                  player.label,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: Colors.white),),
+                  style: TextStyle(color: Colors.white),
+                ),
               )),
         ));
   }
