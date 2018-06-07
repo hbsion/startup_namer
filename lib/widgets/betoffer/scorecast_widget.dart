@@ -1,15 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 import 'package:svan_play/api/offering_api.dart';
 import 'package:svan_play/app_theme.dart';
 import 'package:svan_play/data/betoffer.dart';
 import 'package:svan_play/data/outcome.dart';
 import 'package:svan_play/data/outcome_combination.dart';
-import 'package:svan_play/widgets/betoffer/player_selection_widget.dart';
-import 'package:svan_play/widgets/empty_widget.dart';
 import 'package:svan_play/widgets/outcome_combo_widget.dart';
 import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
+
+import '../empty_widget.dart';
+import 'player_selection_widget.dart';
 
 class ScoreCastWidget extends StatefulWidget {
   final int betOfferId;
@@ -60,7 +62,7 @@ class _ScoreCastWidgetState extends State<ScoreCastWidget> {
       var home = snapshot.data.combinableOutcomes.outcomeCombinations
           .where((oc) => int.parse(oc.resultOutcome.homeScore) > int.parse(oc.resultOutcome.awayScore))
           .toList()
-            ..sort((a, b) => a.resultOutcome.homeScore.compareTo(b.resultOutcome.homeScore));
+            ..sort(_sortOutcomesByHome);
       var away = snapshot.data.combinableOutcomes.outcomeCombinations
           .where((oc) => int.parse(oc.resultOutcome.homeScore) < int.parse(oc.resultOutcome.awayScore))
           .toList()
@@ -68,7 +70,7 @@ class _ScoreCastWidgetState extends State<ScoreCastWidget> {
       var draw = snapshot.data.combinableOutcomes.outcomeCombinations
           .where((oc) => oc.resultOutcome.homeScore == oc.resultOutcome.awayScore)
           .toList()
-            ..sort((a, b) => a.resultOutcome.homeScore.compareTo(b.resultOutcome.homeScore));
+            ..sort(_sortOutcomesByAway);
 
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,16 +90,34 @@ class _ScoreCastWidgetState extends State<ScoreCastWidget> {
     }
   }
 
+  int _sortOutcomesByHome(OutcomeCombination a, OutcomeCombination b) {
+    var result = a.resultOutcome.homeScore.compareTo(b.resultOutcome.homeScore);
+    if (result == 0) {
+      result = a.resultOutcome.awayScore.compareTo(b.resultOutcome.awayScore);
+    }
+    return result;
+  }
+
+  int _sortOutcomesByAway(OutcomeCombination a, OutcomeCombination b) {
+    var result = a.resultOutcome.awayScore.compareTo(b.resultOutcome.awayScore);
+    if (result == 0) {
+      result = a.resultOutcome.homeScore.compareTo(b.resultOutcome.homeScore);
+    }
+    return result;
+  }
+
   Widget _buildOutcomes(BuildContext context, List<OutcomeCombination> outcomes) {
     return new Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: outcomes.map((oc) => new Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 2.0),
-          child: new OutcomeComboWidget(combo: oc),
-        )).toList(),
+        children: outcomes
+            .map((oc) => new Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 2.0),
+                  child: new OutcomeComboWidget(combo: oc),
+                ))
+            .toList(),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:svan_play/app_theme.dart';
 import 'package:svan_play/data/betoffer.dart';

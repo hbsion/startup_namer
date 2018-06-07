@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 
 import 'dart:math' as math;
 
+import 'package:meta/meta.dart';
+
 /// A widget representing a rotating expand/collapse button. The icon rotates
 /// 180 deg when pressed, then reverts the animation on a second press.
 /// The underlying icon is [Icons.expand_more].
