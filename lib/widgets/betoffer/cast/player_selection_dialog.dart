@@ -10,11 +10,11 @@ import 'package:svan_play/data/outcome.dart';
 import 'package:svan_play/store/store_connector.dart';
 import 'package:svan_play/widgets/empty_widget.dart';
 
-class PlayerSelectionWidget extends StatelessWidget {
+class PlayerSelectionDialog extends StatelessWidget {
   final int betOfferId;
   final int eventId;
 
-  const PlayerSelectionWidget({Key key, @required this.betOfferId, @required this.eventId})
+  const PlayerSelectionDialog({Key key, @required this.betOfferId, @required this.eventId})
       : assert(betOfferId != null),
         assert(eventId != null),
         super(key: key);

@@ -21,8 +21,9 @@ import 'package:svan_play/widgets/betoffer/head_to_head_widget.dart';
 import 'package:svan_play/widgets/betoffer/main_betoffer_widget.dart';
 import 'package:svan_play/widgets/betoffer/over_under_widget.dart';
 import 'package:svan_play/widgets/betoffer/position_widget.dart';
-import 'package:svan_play/widgets/betoffer/scorecast_widget.dart';
+import 'package:svan_play/widgets/betoffer/cast/scorecast_widget.dart';
 import 'package:svan_play/widgets/betoffer/three_way_handicap_widget.dart';
+import 'package:svan_play/widgets/betoffer/cast/wincast_widget.dart';
 import 'package:svan_play/widgets/betoffer/winner_widget.dart';
 import 'package:svan_play/widgets/empty_widget.dart';
 import 'package:svan_play/widgets/list_section.dart';
@@ -109,7 +110,6 @@ class MarketsView extends StatelessWidget {
       return Center(child: new PlatformCircularProgressIndicator());
     }
 
-    debugPrint("Rendering marketsview");
     return new StickySectionListView(key: Key("markets-$eventId"), sections: prepareData(context, model));
   }
 
@@ -256,7 +256,7 @@ class _BetOfferSection extends ListSection {
             extra == null
                 ? new EmptyWidget()
                 : new Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
                     child: new Text(extra,
                         style: Theme.of(context).textTheme.caption.merge(TextStyle(fontStyle: FontStyle.italic))),
                   ),
@@ -315,8 +315,9 @@ class _BetOfferSection extends ListSection {
           outcomeIds: group.betOffers.expand((bo) => bo.outcomes).toList(),
         );
       case BetOfferTypes.scoreCast:
+        return new ScoreCastWidget(betOfferId: group.betOffers.first.id, eventId: group.betOffers.first.eventId);
       case BetOfferTypes.winCast:
-        return new ScoreCastWidget(
+        return new WinCastWidget(
           betOfferId: group.betOffers.first.id,
           eventId: group.betOffers.first.eventId
         );

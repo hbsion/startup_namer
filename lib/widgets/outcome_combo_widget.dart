@@ -12,8 +12,9 @@ import 'package:svan_play/util/odds_util.dart';
 
 class OutcomeComboWidget extends StatelessWidget {
   final OutcomeCombination combo;
+  final String label;
 
-  const OutcomeComboWidget({Key key, this.combo}) : super(key: key);
+  const OutcomeComboWidget({Key key, @required this.combo, this.label}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,8 @@ class OutcomeComboWidget extends StatelessWidget {
           children: <Widget>[
             new Expanded(
                 child: Text(
-              combo.resultOutcome.label,
+              label ?? combo.resultOutcome.label,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(color: Colors.white),
             )),
             Text(

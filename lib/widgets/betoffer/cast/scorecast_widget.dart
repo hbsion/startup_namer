@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:svan_play/api/offering_api.dart';
-import 'package:svan_play/app_theme.dart';
 import 'package:svan_play/data/betoffer.dart';
 import 'package:svan_play/data/outcome.dart';
 import 'package:svan_play/data/outcome_combination.dart';
+import 'package:svan_play/widgets/betoffer/cast/player_selector_widget.dart';
+import 'package:svan_play/widgets/empty_widget.dart';
 import 'package:svan_play/widgets/outcome_combo_widget.dart';
 import 'package:svan_play/widgets/platform_circular_progress_indicator.dart';
 
-import '../empty_widget.dart';
-import 'player_selection_widget.dart';
+import 'player_selection_dialog.dart';
 
 class ScoreCastWidget extends StatefulWidget {
   final int betOfferId;
@@ -38,26 +38,25 @@ class _ScoreCastWidgetState extends State<ScoreCastWidget> {
   Widget _buildPlayerSelector(BuildContext context) {
     return new Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
-      child: new RaisedButton(
-          onPressed: () => _showPlayerDialog(context),
-          color: AppTheme.of(context).brandColor,
-          child: Text(
-            _player != null ? _player.label : "Select Player",
-            style: TextStyle(color: Colors.white),
-          )),
+      child: new PlayerSelectorWidget(
+        betOfferId: widget.betOfferId,
+        eventId: widget.eventId,
+        player: _player,
+        onChanged: (player) => setState(() => _player = player),
+      ),
     );
   }
 
   Widget _buildResultOutcomes(BuildContext context) {
     if (_player != null) {
       return new FutureBuilder<BetOffer>(
-          future: fetchPlayerOutcomes(widget.betOfferId, _player.id), builder: _renderResultOutcomes);
+          future: fetchPlayerOutcomes(widget.betOfferId, _player.id), builder: _renderScoreOutcomes);
     }
 
     return new EmptyWidget();
   }
 
-  Widget _renderResultOutcomes(BuildContext context, AsyncSnapshot<BetOffer> snapshot) {
+  Widget _renderScoreOutcomes(BuildContext context, AsyncSnapshot<BetOffer> snapshot) {
     if (snapshot.connectionState == ConnectionState.done) {
       var home = snapshot.data.combinableOutcomes.outcomeCombinations
           .where((oc) => int.parse(oc.resultOutcome.homeScore) > int.parse(oc.resultOutcome.awayScore))
@@ -81,13 +80,17 @@ class _ScoreCastWidgetState extends State<ScoreCastWidget> {
         ],
       );
     } else {
-      return new Container(
-        padding: EdgeInsets.all(8.0),
-        child: new Center(
-          child: new PlatformCircularProgressIndicator(),
-        ),
-      );
+      return _renderSpinner();
     }
+  }
+
+  Container _renderSpinner() {
+    return new Container(
+      padding: EdgeInsets.all(8.0),
+      child: new Center(
+        child: new PlatformCircularProgressIndicator(),
+      ),
+    );
   }
 
   int _sortOutcomesByHome(OutcomeCombination a, OutcomeCombination b) {
@@ -125,7 +128,7 @@ class _ScoreCastWidgetState extends State<ScoreCastWidget> {
   Future _showPlayerDialog(BuildContext context) async {
     Outcome player = await Navigator.of(context).push(MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (ctx) => new PlayerSelectionWidget(betOfferId: widget.betOfferId, eventId: widget.eventId)));
+        builder: (ctx) => new PlayerSelectionDialog(betOfferId: widget.betOfferId, eventId: widget.eventId)));
 
     if (player != null) {
       setState(() => _player = player);
