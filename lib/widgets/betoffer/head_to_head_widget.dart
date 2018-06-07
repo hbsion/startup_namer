@@ -95,10 +95,12 @@ class HeadToHeadWidget extends StatelessWidget {
       var betOfferId = keys[i];
       var outcomes = rows[betOfferId];
       var title = outcomes.map((oc) => oc.participant).where((label) => label != null).join(" - ");
-      widgets.add(new Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Text(title),
-      ));
+      if (title != null && title.isNotEmpty) {
+        widgets.add(new Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(title),
+        ));
+      }
 
       for (var outcome in outcomes) {
         widgets.add(new Padding(
