@@ -77,6 +77,11 @@ EventResponse parseBetOfferResponse(Tuple2<String, EventCollectionKey> tuple) {
   return new EventResponse(key: tuple.item2, events: events, betoffers: betOffers, outcomes: outcomes);
 }
 
+LiveStats parseLiveStatsResponse(String body) {
+  final responseJson = json.decode(body);
+  return LiveStats.fromJson(responseJson["liveData"]);
+}
+
 EventResponse parseLiveOpenResponse(Tuple2<String, EventCollectionKey> tuple) {
   final responseJson = json.decode(tuple.item1);
   List<Event> events = [];

@@ -11,6 +11,7 @@ import 'package:svan_play/data/betoffer_category_response.dart';
 import 'package:svan_play/data/event_collection_key.dart';
 import 'package:svan_play/data/event_group.dart';
 import 'package:svan_play/data/event_response.dart';
+import 'package:svan_play/data/live_stats.dart';
 import 'package:svan_play/data/search_result.dart';
 import 'package:svan_play/data/silk_image.dart';
 import 'package:svan_play/data/silk_response.dart';
@@ -114,6 +115,22 @@ Future<EventResponse> fetchLiveOpen() async {
 
   var body = await response.transform(utf8.decoder).join();
   return compute(parseLiveOpenResponse, Tuple2(body, key));
+}
+
+Future<LiveStats> fetchLiveStats(int eventId) async {
+  var uri = Uri.parse("${ApiConstants.host}/offering/v2018/${ApiConstants
+      .offering}/event/$eventId/livedata.json?lang=${ApiConstants.lang}&market=${ApiConstants.market}");
+  _log.info(uri);
+  var request = await _client.getUrl(uri);
+  var response = await request.close();
+
+  if (response.statusCode != 200) {
+    _log.warning("Failed to fetch status: ${response.statusCode} uri: $uri");
+    return null;
+  }
+
+  var body = await response.transform(utf8.decoder).join();
+  return compute(parseLiveStatsResponse, body);
 }
 
 Future<EventGroup> fetchEventGroups() async {

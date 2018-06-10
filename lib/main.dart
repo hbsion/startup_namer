@@ -6,10 +6,10 @@ import 'package:logging/logging.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:svan_play/api/api_constants.dart';
 import 'package:svan_play/models/main_model.dart';
-import 'package:svan_play/pages/home_page.dart';
 import 'package:svan_play/push/push_client.dart';
 import 'package:svan_play/push/push_hub.dart';
 import 'package:svan_play/push/push_provider.dart';
+import 'package:svan_play/samples/svg_demo.dart';
 import 'package:svan_play/store/actions.dart';
 import 'package:svan_play/store/app_store.dart';
 import 'package:svan_play/store/store_dispatcher.dart';
@@ -41,11 +41,16 @@ class MainApp extends StatelessWidget {
     return new PushProvider(
       pushHub: pushHub,
       child: new StoreProvider(
-          store: store,
-          child: new StoreDispatcher(
-              pollAction: _pollActions,
-              initAction: _initActions,
-              child: new ScopedModel<MainModel>(model: new MainModel(), child: _buildMainApp()))),
+        store: store,
+        child: new StoreDispatcher(
+          pollAction: _pollActions,
+          initAction: _initActions,
+          child: new ScopedModel<MainModel>(
+            model: new MainModel(),
+            child: _buildMainApp(),
+          ),
+        ),
+      ),
     );
   }
 
@@ -55,12 +60,14 @@ class MainApp extends StatelessWidget {
 //              showPerformanceOverlay: true,
 //              checkerboardOffscreenLayers: true,
 //              checkerboardRasterCacheImages: true,
-          title: appTitle,
-          theme: new ThemeData(
-              brightness: model.brightness,
-              primaryColor: Colors.black,
-              accentColor: Color.fromARGB(0xff, 0x00, 0xad, 0xc9)),
-          home: new HomePage());
+        title: appTitle,
+        theme: new ThemeData(
+          brightness: model.brightness,
+          primaryColor: Colors.black,
+          accentColor: Color.fromARGB(0xff, 0x00, 0xad, 0xc9),
+        ),
+        home: new SvgDemo(),
+      );
     });
   }
 

@@ -1,5 +1,6 @@
 import 'package:svan_play/data/event_stats.dart';
 import 'package:svan_play/data/match_clock.dart';
+import 'package:svan_play/data/occurence.dart';
 import 'package:svan_play/data/score.dart';
 
 class LiveStats {
@@ -7,42 +8,22 @@ class LiveStats {
   final MatchClock matchClock;
   final Score score;
   final EventStats eventStats;
+  final List<Occurence> occurences;
 
-  LiveStats({this.eventId, this.matchClock, this.score, this.eventStats});
+  LiveStats({this.eventId, this.matchClock, this.score, this.eventStats, this.occurences});
 
   factory LiveStats.fromJson(Map<String, dynamic> json) {
     if (json != null) {
       return new LiveStats(
-          eventId: json["eventId"],
-          matchClock: new MatchClock.fromJson(json["matchClock"]),
-          score: new Score.fromJson(json["score"]),
-          eventStats: new EventStats.fromJson(json["statistics"])
+        eventId: json["eventId"],
+        matchClock: new MatchClock.fromJson(json["matchClock"]),
+        score: new Score.fromJson(json["score"]),
+        eventStats: new EventStats.fromJson(json["statistics"]),
+        occurences: json.containsKey("occurrences")
+            ? ((json["occurrences"]) as List<dynamic>).map<Occurence>((j) => Occurence.fromJson(j)).toList()
+            : null,
       );
     }
     return null;
   }
-
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is LiveStats &&
-              runtimeType == other.runtimeType &&
-              eventId == other.eventId &&
-              matchClock == other.matchClock &&
-              score == other.score &&
-              eventStats == other.eventStats;
-
-  @override
-  int get hashCode =>
-      eventId.hashCode ^
-      matchClock.hashCode ^
-      score.hashCode ^
-      eventStats.hashCode;
-
-  @override
-  String toString() {
-    return 'LiveStats{eventId: $eventId, matchClock: $matchClock, score: $score, statistics: $eventStats}';
-  }
-
 }

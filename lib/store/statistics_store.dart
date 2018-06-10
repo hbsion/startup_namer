@@ -3,45 +3,38 @@ import 'dart:collection';
 import 'package:rxdart/rxdart.dart';
 import 'package:svan_play/data/event_response.dart';
 import 'package:svan_play/data/event_stats.dart';
+import 'package:svan_play/data/live_stats.dart';
 import 'package:svan_play/data/match_clock.dart';
+import 'package:svan_play/data/occurence.dart';
 import 'package:svan_play/data/push/event_stats_update.dart';
 import 'package:svan_play/data/push/match_clock_update.dart';
 import 'package:svan_play/data/push/score_update.dart';
 import 'package:svan_play/data/score.dart';
 import 'package:svan_play/store/action_type.dart';
 import 'package:svan_play/store/store.dart';
+import 'package:svan_play/store/store_util.dart';
 import 'package:svan_play/util/flowable.dart';
 
 class StatisticsStore implements Store {
   final Map<int, BehaviorSubject<Score>> _scores = new HashMap();
   final Map<int, BehaviorSubject<MatchClock>> _matchClocks = new HashMap();
   final Map<int, BehaviorSubject<EventStats>> _eventStats = new HashMap();
+  final Map<int, BehaviorSubject<List<Occurence>>> _occurences = new HashMap();
 
   SnapshotObservable<Score> score(int eventId) {
-    var subject = _scores[eventId];
-    if (subject == null) {
-      subject = new BehaviorSubject<Score>();
-      _scores[eventId] = subject;
-    }
-    return new SnapshotObservable(subject.value, subject.stream);
+    return getOrCreateSubject(eventId, _scores);
   }
 
   SnapshotObservable<MatchClock> matchClock(int eventId) {
-    var subject = _matchClocks[eventId];
-    if (subject == null) {
-      subject = new BehaviorSubject<MatchClock>();
-      _matchClocks[eventId] = subject;
-    }
-    return new SnapshotObservable(subject.value, subject.stream);
+    return getOrCreateSubject(eventId, _matchClocks);
   }
 
   SnapshotObservable<EventStats> eventStats(int eventId) {
-    var subject = _eventStats[eventId];
-    if (subject == null) {
-      subject = new BehaviorSubject<EventStats>();
-      _eventStats[eventId] = subject;
-    }
-    return new SnapshotObservable(subject.value, subject.stream);
+    return getOrCreateSubject(eventId, _eventStats);
+  }
+
+  SnapshotObservable<List<Occurence>> occurences(int eventId) {
+    return getOrCreateSubject(eventId, _occurences);
   }
 
   @override
@@ -50,59 +43,35 @@ class StatisticsStore implements Store {
       case ActionType.eventResponse:
         EventResponse response = action;
         for (var liveStats in response.liveStats) {
-          _mergeScore(liveStats.eventId, liveStats.score);
-          _mergeMatchClock(liveStats.eventId, liveStats.matchClock);
-          _mergeEventStats(liveStats.eventId, liveStats.eventStats);
+          _mergeLiveStats(liveStats);
         }
+        break;
+      case ActionType.liveStats:
+        _mergeLiveStats(action);
         break;
       case ActionType.matchClockUpdate:
         MatchClockUpdate update = action;
-        _mergeMatchClock(update.eventId, update.matchClock, ignoreIfNotFound: true);
+        merge(update.eventId, update.matchClock, _matchClocks, ignoreIfNotFound: true);
         break;
       case ActionType.scoreUpdate:
         ScoreUpdate update = action;
-        _mergeScore(update.eventId, update.score);
+        merge(update.eventId, update.score, _scores);
         break;
       case ActionType.eventStatsUpdate:
         EventStatsUpdate update = action;
-        _mergeEventStats(update.eventId, update.eventStats);
+        merge(update.eventId, update.eventStats, _eventStats);
         break;
       default:
         break;
     }
   }
 
-  void _mergeScore(int eventId, Score score, {bool ignoreIfNotFound = false}) {
-    var subject = _scores[eventId];
-    if (subject != null) {
-      if (subject.value != score && score != null) {
-        subject.add(score);
-      }
-    } else if (score != null) {
-      _scores[eventId] = new BehaviorSubject<Score>(seedValue: score);
+  void _mergeLiveStats(LiveStats liveStats) {
+    if (liveStats != null) {
+      merge(liveStats.eventId, liveStats.score, _scores);
+      merge(liveStats.eventId, liveStats.matchClock, _matchClocks);
+      merge(liveStats.eventId, liveStats.eventStats, _eventStats);
+      merge(liveStats.eventId, liveStats.occurences, _occurences);
     }
   }
-
-  void _mergeMatchClock(int eventId, MatchClock clock, {bool ignoreIfNotFound = false}) {
-    var subject = _matchClocks[eventId];
-    if (subject != null) {
-      if (subject.value != clock && clock != null) {
-        subject.add(clock);
-      }
-    } else if (clock != null && !ignoreIfNotFound) {
-      _matchClocks[eventId] = new BehaviorSubject<MatchClock>(seedValue: clock);
-    }
-  }
-
-  void _mergeEventStats(int eventId, EventStats eventStats, {bool ignoreIfNotFound = false}) {
-    var subject = _eventStats[eventId];
-    if (subject != null) {
-      if (subject.value != eventStats && eventStats != null) {
-        subject.add(eventStats);
-      }
-    } else if (eventStats != null && !ignoreIfNotFound) {
-      _eventStats[eventId] = new BehaviorSubject<EventStats>(seedValue: eventStats);
-    }
-  }
-
 }

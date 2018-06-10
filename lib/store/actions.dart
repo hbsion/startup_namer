@@ -72,3 +72,10 @@ Callable<Dispatcher> landingPage() {
     }
   };
 }
+
+Callable<Dispatcher> liveStats(int eventId) {
+  return (dispatcher) async {
+    var response = await fetchLiveStats(eventId);
+    dispatcher(ActionType.liveStats, response);
+  };
+}

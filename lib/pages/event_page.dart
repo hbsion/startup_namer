@@ -10,7 +10,7 @@ import 'package:svan_play/push/push_connector.dart';
 import 'package:svan_play/store/store_connector.dart';
 import 'package:svan_play/util/banners.dart';
 import 'package:svan_play/views/markets_view.dart';
-import 'package:svan_play/views/match_events_view.dart';
+import 'package:svan_play/views/match_event_feed_view.dart';
 import 'package:svan_play/views/prematch_stats_view.dart';
 import 'package:svan_play/widgets/PageIndicator.dart';
 import 'package:svan_play/widgets/betslip/bet_slip_fab.dart';
@@ -73,16 +73,17 @@ class _EventPageState extends State<EventPage> {
       titles.add("Stats");
     }
     return new PageIndicator(
-        titles: titles,
-        controller: _pageController,
-        onPageSelected: (index) {
-          _pageController.animateToPage(index, curve: Curves.ease, duration: new Duration(milliseconds: 300));
-        });
+      titles: titles,
+      controller: _pageController,
+      onPageSelected: (index) {
+        _pageController.animateToPage(index, curve: Curves.ease, duration: new Duration(milliseconds: 300));
+      },
+    );
   }
 
   Iterable<Widget> _buildPageViews(Event model) sync* {
     yield new MarketsView(eventId: widget.eventId, sport: model.sport, live: model.state == EventState.STARTED);
-    yield new MatchEventsView();
+    yield new MatchEventFeedView(eventId: widget.eventId);
     if (model.tags.contains(EventTags.prematchStats)) {
       yield new PreMatchStatsView();
     }

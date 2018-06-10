@@ -9,6 +9,7 @@ import 'package:svan_play/data/push/betoffer_added.dart';
 import 'package:svan_play/data/push/odds_update.dart';
 import 'package:svan_play/store/action_type.dart';
 import 'package:svan_play/store/store.dart';
+import 'package:svan_play/store/store_util.dart';
 import 'package:svan_play/util/flowable.dart';
 
 class OutcomeStore implements Store {
@@ -16,12 +17,7 @@ class OutcomeStore implements Store {
   final Map<int, BehaviorSubject<List<Outcome>>> _outcomesByBetOffer = new HashMap();
 
   SnapshotObservable<Outcome> operator [](int id) {
-    var subject = _outcomes[id];
-    if (subject == null) {
-      subject = new BehaviorSubject<Outcome>();
-      _outcomes[id] = subject;
-    }
-    return new SnapshotObservable(subject.value, subject.stream);
+    return getOrCreateSubject(id, _outcomes);
   }
 
   SnapshotObservable<List<Outcome>> byBetOfferId(int id) {
