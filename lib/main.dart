@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:svan_play/api/api_constants.dart';
 import 'package:svan_play/models/main_model.dart';
+import 'package:svan_play/pages/home_page.dart';
 import 'package:svan_play/push/push_client.dart';
 import 'package:svan_play/push/push_hub.dart';
 import 'package:svan_play/push/push_provider.dart';
@@ -66,7 +67,7 @@ class MainApp extends StatelessWidget {
           primaryColor: Colors.black,
           accentColor: Color.fromARGB(0xff, 0x00, 0xad, 0xc9),
         ),
-        home: new SvgDemo(),
+        home: new HomePage(),
       );
     });
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:svan_play/api/api_constants.dart';
 import 'package:svan_play/data/event.dart';
 import 'package:svan_play/data/event_state.dart';
@@ -33,7 +32,6 @@ class _EventPageState extends State<EventPage> {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<Event>(
-      stream: (store) => new Observable.empty(),
       initalData: (store) => store.eventStore[widget.eventId].latest,
       widgetBuilder: _buildWidget,
     );
@@ -42,27 +40,45 @@ class _EventPageState extends State<EventPage> {
   Widget _buildWidget(BuildContext context, Event model) {
     return new PushConnector(
       topics: ["ev.${widget.eventId}", "${ApiConstants.pushLang}.ev.${widget.eventId}"],
-      child: new Scaffold(
-        appBar: new AppBar(
-          flexibleSpace: bannerFor(model.sport, fallbackAsset: "assets/aqua.jpg"),
-          title: new Theme(
-              data: ThemeData.dark(),
-              child:
-                  new Center(child: new EventPageHeader(key: Key(widget.eventId.toString()), eventId: widget.eventId))),
-        ),
-        body: new PageView.builder(
-          physics: new AlwaysScrollableScrollPhysics(),
-          controller: _pageController,
-          //onPageChanged: _handlePageChanged,
-          itemCount: model.tags.contains(EventTags.prematchStats) ? 3 : 2,
-          itemBuilder: (context, index) {
-            if (_pages == null) _pages = _buildPageViews(model).toList();
-            return _pages[index];
-          },
-        ),
-        bottomNavigationBar: _buildBottomAppBar(context, model),
+      child: _buildScaffold(model, context),
+    );
+  }
+
+  Scaffold _buildScaffold(Event model, BuildContext context) {
+    bool hasFeed = model.sport == "TENNIS" || model.sport == "VOLLEYBALL" || model.sport == "FOOTBALL";
+    if (!hasFeed && !model.tags.contains(EventTags.prematchStats)) {
+      return new Scaffold(
+        appBar: _buildAppBar(model),
         floatingActionButton: new BetSlipFab(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        body: new MarketsView(eventId: widget.eventId, sport: model.sport, live: model.state == EventState.STARTED),
+      );
+    }
+    return new Scaffold(
+      appBar: _buildAppBar(model),
+      body: new PageView.builder(
+        physics: new AlwaysScrollableScrollPhysics(),
+        controller: _pageController,
+        //onPageChanged: _handlePageChanged,
+        itemCount: model.tags.contains(EventTags.prematchStats) ? 3 : 2,
+        itemBuilder: (context, index) {
+          if (_pages == null) _pages = _buildPageViews(model).toList();
+          return _pages[index];
+        },
+      ),
+      bottomNavigationBar: _buildBottomAppBar(context, model),
+      floatingActionButton: new BetSlipFab(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+    );
+  }
+
+  AppBar _buildAppBar(Event model) {
+    return new AppBar(
+      flexibleSpace: bannerFor(model.sport, fallbackAsset: "assets/aqua.jpg"),
+      title: new Theme(
+        data: ThemeData.dark(),
+        child: new Center(
+          child: new EventPageHeader(key: Key(widget.eventId.toString()), eventId: widget.eventId),
+        ),
       ),
     );
   }
