@@ -1,4 +1,4 @@
-class Occurence {
+class MatchOccurence {
   final int id;
   final int eventId;
   final String occurrenceTypeId; // "CARDS_YELLOW_AWAY",
@@ -8,7 +8,7 @@ class Occurence {
   final String action; // "ADDED", DELETED, MODIFIED
   final int periodIndex;
 
-  Occurence(
+  MatchOccurence(
       {this.id,
       this.eventId,
       this.occurrenceTypeId,
@@ -18,7 +18,7 @@ class Occurence {
       this.action,
       this.periodIndex});
 
-  Occurence.fromJson(Map<String, dynamic> json)
+  MatchOccurence.fromJson(Map<String, dynamic> json)
       : this(
           id: json["id"],
           eventId: json["eventId"],
@@ -33,7 +33,7 @@ class Occurence {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Occurence &&
+      other is MatchOccurence &&
           runtimeType == other.runtimeType &&
           id == other.id &&
           eventId == other.eventId &&

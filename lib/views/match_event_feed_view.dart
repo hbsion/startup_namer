@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/src/observable.dart';
 import 'package:svan_play/data/event.dart';
-import 'package:svan_play/data/occurence.dart';
+import 'package:svan_play/data/match_occurence.dart';
 import 'package:svan_play/store/actions.dart';
 import 'package:svan_play/store/app_store.dart';
 import 'package:svan_play/store/store_connector.dart';
@@ -25,12 +25,12 @@ class MatchEventFeedView extends StatelessWidget {
   }
 
   _ViewModel _mapStateToInitalData(AppStore appStore) {
-    return _ViewModel(appStore.eventStore[eventId].latest, appStore.statisticsStore.occurences(eventId).latest);
+    return _ViewModel(appStore.eventStore[eventId].latest, appStore.statisticsStore.matchOccurences(eventId).latest);
   }
 
   Observable<_ViewModel> _mapStateToStream(AppStore appStore) {
     return ObservableEx.combineLatestEager2(appStore.eventStore[eventId].observable,
-        appStore.statisticsStore.occurences(eventId).observable, (event, occurences) => _ViewModel(event, occurences));
+        appStore.statisticsStore.matchOccurences(eventId).observable, (event, occurences) => _ViewModel(event, occurences));
   }
 
   Widget _buildWidget(BuildContext context, _ViewModel model) {
@@ -42,7 +42,7 @@ class MatchEventFeedView extends StatelessWidget {
 
 class _ViewModel {
   final Event event;
-  final List<Occurence> occurences;
+  final List<MatchOccurence> occurences;
 
   _ViewModel(this.event, this.occurences);
 }

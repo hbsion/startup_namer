@@ -72,6 +72,9 @@ class PushHub extends WidgetsBindingObserver {
       case PushMessageType.eventStatsUpdate:
         dispatcher(ActionType.eventStatsUpdate, msg.eventStatsUpdate);
         break;
+      case PushMessageType.matchOccurenceAdded:
+        dispatcher(ActionType.matchOccurenceAdded, msg.matchOccurence);
+        break;
       default:
         break;
     }

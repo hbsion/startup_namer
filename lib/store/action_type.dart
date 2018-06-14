@@ -13,5 +13,6 @@ enum ActionType {
   betOfferRemoved,
   silkResponse,
   categoryResponse,
-  liveStats
+  liveStats,
+  matchOccurenceAdded
 }

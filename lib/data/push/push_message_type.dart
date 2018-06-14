@@ -6,6 +6,7 @@ enum PushMessageType {
   betOfferStatusUpdate,
   betOfferAdded,
   betOfferRemoved,
+  matchOccurenceAdded,
   unknown
 }
 
@@ -25,6 +26,8 @@ PushMessageType toPushMessageType(int type) {
       return PushMessageType.scoreUpdate;
     case 17:
       return PushMessageType.eventStatsUpdate;
+    case 25:
+      return PushMessageType.matchOccurenceAdded;
     default:
       return PushMessageType.unknown;
   }

@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:svan_play/data/match_occurence.dart';
 import 'package:svan_play/data/push/betOffer_status_update.dart';
 import 'package:svan_play/data/push/betoffer_added.dart';
 import 'package:svan_play/data/push/betoffer_removed.dart';
@@ -17,6 +18,7 @@ class PushMessage {
   final BetOfferStatusUpdate betOfferStatusUpdate;
   final BetOfferAdded betOfferAdded;
   final BetOfferRemoved betOfferRemoved;
+  final MatchOccurence matchOccurence;
 
   PushMessage({
     @required this.type,
@@ -26,7 +28,8 @@ class PushMessage {
     this.eventStatsUpdate,
     this.betOfferStatusUpdate,
     this.betOfferAdded,
-    this.betOfferRemoved
+    this.betOfferRemoved,
+    this.matchOccurence
   });
 
   factory PushMessage.fromJson(Map<String, dynamic> json) {
@@ -46,6 +49,8 @@ class PushMessage {
         return new PushMessage(type: type, scoreUpdate: new ScoreUpdate.fromJson(json["score"]));
       case PushMessageType.eventStatsUpdate:
         return new PushMessage(type: type, eventStatsUpdate: new EventStatsUpdate.fromJson(json["stats"]));
+      case PushMessageType.matchOccurenceAdded:
+        return new PushMessage(type: type, matchOccurence: new MatchOccurence.fromJson(json["mo"]));
       case PushMessageType.unknown:
       default:
         return null;
@@ -54,7 +59,7 @@ class PushMessage {
 
   @override
   String toString() {
-    return 'PushMessage{type: $type, oddsUpdate: $oddsUpdate}';
+    return 'PushMessage{type: $type, oddsUpdate: $oddsUpdate, matchClockUpdate: $matchClockUpdate, scoreUpdate: $scoreUpdate, eventStatsUpdate: $eventStatsUpdate, betOfferStatusUpdate: $betOfferStatusUpdate, betOfferAdded: $betOfferAdded, betOfferRemoved: $betOfferRemoved, matchOccurence: $matchOccurence}';
   }
 
 }

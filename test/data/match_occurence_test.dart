@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:svan_play/data/occurence.dart';
+import 'package:svan_play/data/match_occurence.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -15,7 +15,7 @@ void main() {
     "action": "ADDED",
     "periodIndex": 0
     }''';
-    var c = Occurence.fromJson(json.decode(text));
+    var c = MatchOccurence.fromJson(json.decode(text));
 
     expect(c.id, 277099480);
     expect(c.eventId, 1004706808);

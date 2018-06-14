@@ -5,7 +5,7 @@ import 'package:svan_play/data/event_response.dart';
 import 'package:svan_play/data/event_stats.dart';
 import 'package:svan_play/data/live_stats.dart';
 import 'package:svan_play/data/match_clock.dart';
-import 'package:svan_play/data/occurence.dart';
+import 'package:svan_play/data/match_occurence.dart';
 import 'package:svan_play/data/push/event_stats_update.dart';
 import 'package:svan_play/data/push/match_clock_update.dart';
 import 'package:svan_play/data/push/score_update.dart';
@@ -19,7 +19,7 @@ class StatisticsStore implements Store {
   final Map<int, BehaviorSubject<Score>> _scores = new HashMap();
   final Map<int, BehaviorSubject<MatchClock>> _matchClocks = new HashMap();
   final Map<int, BehaviorSubject<EventStats>> _eventStats = new HashMap();
-  final Map<int, BehaviorSubject<List<Occurence>>> _occurences = new HashMap();
+  final Map<int, BehaviorSubject<List<MatchOccurence>>> _matchOccurences = new HashMap();
 
   SnapshotObservable<Score> score(int eventId) {
     return getOrCreateSubject(eventId, _scores);
@@ -33,8 +33,8 @@ class StatisticsStore implements Store {
     return getOrCreateSubject(eventId, _eventStats);
   }
 
-  SnapshotObservable<List<Occurence>> occurences(int eventId) {
-    return getOrCreateSubject(eventId, _occurences);
+  SnapshotObservable<List<MatchOccurence>> matchOccurences(int eventId) {
+    return getOrCreateSubject(eventId, _matchOccurences);
   }
 
   @override
@@ -61,6 +61,10 @@ class StatisticsStore implements Store {
         EventStatsUpdate update = action;
         merge(update.eventId, update.eventStats, _eventStats);
         break;
+      case ActionType.matchOccurenceAdded:
+        MatchOccurence mo = action;
+        _mergeMatchOccurence(mo);
+        break;
       default:
         break;
     }
@@ -71,7 +75,16 @@ class StatisticsStore implements Store {
       merge(liveStats.eventId, liveStats.score, _scores);
       merge(liveStats.eventId, liveStats.matchClock, _matchClocks);
       merge(liveStats.eventId, liveStats.eventStats, _eventStats);
-      merge(liveStats.eventId, liveStats.occurences, _occurences);
+      merge(liveStats.eventId, liveStats.occurences, _matchOccurences);
+    }
+  }
+
+  void _mergeMatchOccurence(MatchOccurence mo) {
+    if (mo != null) {
+      var occurences = _matchOccurences[mo.eventId];
+      if (occurences?.value != null) {
+        merge(mo.eventId, List.from(occurences.value)..add(mo), _matchOccurences);
+      }
     }
   }
 }
